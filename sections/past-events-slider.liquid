@@ -1,0 +1,846 @@
+{% comment %}
+  Past Events Slider
+  - Instrument Serif is applied only to the main Past Events heading
+  - Event card titles use the theme's regular body font
+  - Four cards per page on desktop
+  - Two cards per page on tablet
+  - One card per page on mobile
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+  rel="stylesheet"
+>
+
+<section
+  id="PastEvents-{{ section.id }}"
+  class="past-events"
+  style="
+    --past-events-background-start: {{ section.settings.background_start }};
+    --past-events-background-end: {{ section.settings.background_end }};
+    --past-events-accent: {{ section.settings.accent_color }};
+    --past-events-text: {{ section.settings.text_color }};
+    --past-events-card-gap: {{ section.settings.card_gap }}px;
+    --past-events-image-ratio: {{ section.settings.image_ratio }};
+  "
+>
+  <div class="past-events__container">
+    <header class="past-events__header">
+      {% if section.settings.heading != blank %}
+        <h2 class="past-events__heading">
+          {{ section.settings.heading }}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.show_heading_line %}
+        <span class="past-events__heading-line"></span>
+      {% endif %}
+    </header>
+
+    {% if section.blocks.size > 0 %}
+      <div
+        class="past-events__slider"
+        data-past-events-slider
+      >
+        <div class="past-events__viewport">
+          <div
+            class="past-events__track"
+            data-past-events-track
+          >
+            {% for block in section.blocks %}
+              <article
+                class="past-events__card"
+                data-past-event-card
+                {{ block.shopify_attributes }}
+              >
+                {% if block.settings.link != blank %}
+                  <a
+                    href="{{ block.settings.link }}"
+                    class="past-events__card-link"
+                    aria-label="{{ block.settings.title | default: 'View event' | escape }}"
+                  >
+                {% else %}
+                  <div class="past-events__card-link">
+                {% endif %}
+
+                  <div class="past-events__image-wrapper">
+                    {% if block.settings.image != blank %}
+                      {{
+                        block.settings.image
+                        | image_url: width: 1200
+                        | image_tag:
+                          class: 'past-events__image',
+                          loading: 'lazy',
+                          widths: '300, 450, 600, 750, 900, 1200',
+                          sizes: '(min-width: 990px) 25vw, (min-width: 750px) 50vw, 100vw',
+                          alt: block.settings.title
+                      }}
+                    {% else %}
+                      <div class="past-events__placeholder">
+                        {{
+                          'image'
+                          | placeholder_svg_tag: 'past-events__placeholder-svg'
+                        }}
+                      </div>
+                    {% endif %}
+                  </div>
+
+                  {% if block.settings.title != blank %}
+                    <h3 class="past-events__card-title">
+                      {{ block.settings.title }}
+                    </h3>
+                  {% endif %}
+
+                {% if block.settings.link != blank %}
+                  </a>
+                {% else %}
+                  </div>
+                {% endif %}
+              </article>
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if section.blocks.size > 1 %}
+          <div class="past-events__navigation">
+            <button
+              type="button"
+              class="past-events__next"
+              data-past-events-next
+              aria-label="Show the next events"
+            >
+              <svg
+                viewBox="0 0 70 20"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M1 10H66M59 3L66 10L59 17"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        {% endif %}
+      </div>
+    {% else %}
+      <div class="past-events__empty">
+        Add event blocks to display past events.
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<style>
+  #PastEvents-{{ section.id }} {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    color: var(--past-events-text);
+    background:
+      radial-gradient(
+        circle at 48% 34%,
+        rgba(255, 255, 255, 0.95) 0%,
+        rgba(255, 255, 255, 0.5) 36%,
+        rgba(255, 255, 255, 0) 70%
+      ),
+      linear-gradient(
+        110deg,
+        var(--past-events-background-start) 0%,
+        var(--past-events-background-end) 100%
+      );
+  }
+
+  #PastEvents-{{ section.id }},
+  #PastEvents-{{ section.id }} *,
+  #PastEvents-{{ section.id }} *::before,
+  #PastEvents-{{ section.id }} *::after {
+    box-sizing: border-box;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__container {
+    width: 100%;
+    max-width: {{ section.settings.maximum_width }}px;
+    margin: 0 auto;
+    padding:
+      {{ section.settings.padding_top }}px
+      clamp(24px, 3.1vw, 48px)
+      {{ section.settings.padding_bottom }}px;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__header {
+    margin: 0 0 25px;
+    padding: 0;
+  }
+
+  /*
+    Instrument Serif is forced only on Past Events.
+    The !important rules prevent Shopify theme typography from overriding it.
+  */
+  #PastEvents-{{ section.id }} h2.past-events__heading,
+  #PastEvents-{{ section.id }} .past-events__heading {
+    margin: 0 !important;
+    padding: 0 !important;
+    color: var(--past-events-accent) !important;
+    font-family: "Instrument Serif", Georgia, "Times New Roman", serif !important;
+    font-size: clamp(
+      {{ section.settings.mobile_heading_size }}px,
+      4.4vw,
+      {{ section.settings.desktop_heading_size }}px
+    ) !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    letter-spacing: -0.025em !important;
+    text-transform: none !important;
+    text-decoration: none !important;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__heading-line {
+    display: block;
+    width: {{ section.settings.heading_line_width }}px;
+    height: 2px;
+    margin-top: 31px;
+    background-color: var(--past-events-accent);
+  }
+
+  #PastEvents-{{ section.id }} .past-events__slider {
+    position: relative;
+    width: 100%;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__viewport {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__track {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--past-events-card-gap);
+    width: 100%;
+    transform: translate3d(0, 0, 0);
+    transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__card {
+    flex: 0 0 calc(
+      (100% - (var(--past-events-card-gap) * 3)) / 4
+    );
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__card-link {
+    display: block;
+    width: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--past-events-image-ratio);
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.48);
+  }
+
+  #PastEvents-{{ section.id }} .past-events__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 450ms ease;
+  }
+
+  #PastEvents-{{ section.id }}
+  .past-events__card-link:hover
+  .past-events__image {
+    transform: scale(1.035);
+  }
+
+  #PastEvents-{{ section.id }} .past-events__placeholder {
+    width: 100%;
+    height: 100%;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__placeholder-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.48);
+  }
+
+  /*
+    Card titles use the theme's normal body font.
+    Instrument Serif is explicitly removed here.
+  */
+  #PastEvents-{{ section.id }} h3.past-events__card-title,
+  #PastEvents-{{ section.id }} .past-events__card-title {
+    margin: 14px 0 0 !important;
+    padding: 0 !important;
+    color: var(--past-events-accent) !important;
+    font-family:
+      var(--font-body-family),
+      Arial,
+      Helvetica,
+      sans-serif !important;
+    font-size: {{ section.settings.card_title_size }}px !important;
+    font-style: normal !important;
+    font-weight: 400 !important;
+    line-height: 1.3 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    text-decoration: none !important;
+  }
+
+  #PastEvents-{{ section.id }}
+  .past-events__card-link:hover
+  .past-events__card-title {
+    text-decoration: none !important;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 51px;
+    padding-top: 21px;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__next {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 30px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    color: {{ section.settings.arrow_color }};
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
+    appearance: none;
+    transition:
+      transform 200ms ease,
+      opacity 200ms ease;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__next svg {
+    display: block;
+    width: 52px;
+    height: auto;
+    overflow: visible;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__next:hover {
+    transform: translateX(5px);
+  }
+
+  #PastEvents-{{ section.id }} .past-events__next:focus-visible {
+    outline: 2px solid var(--past-events-accent);
+    outline-offset: 5px;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__next[hidden] {
+    display: none;
+  }
+
+  #PastEvents-{{ section.id }} .past-events__empty {
+    padding: 40px 20px;
+    border: 1px dashed rgba(0, 0, 0, 0.25);
+    font-family:
+      var(--font-body-family),
+      Arial,
+      Helvetica,
+      sans-serif;
+    text-align: center;
+  }
+
+  @media screen and (max-width: 989px) {
+    #PastEvents-{{ section.id }} .past-events__card {
+      flex-basis: calc(
+        (100% - var(--past-events-card-gap)) / 2
+      );
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    #PastEvents-{{ section.id }} .past-events__container {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+
+    #PastEvents-{{ section.id }} .past-events__header {
+      margin-bottom: 22px;
+    }
+
+    #PastEvents-{{ section.id }} h2.past-events__heading,
+    #PastEvents-{{ section.id }} .past-events__heading {
+      font-size: {{ section.settings.mobile_heading_size }}px !important;
+    }
+
+    #PastEvents-{{ section.id }} .past-events__heading-line {
+      width: min(
+        {{ section.settings.heading_line_width }}px,
+        95px
+      );
+      margin-top: 22px;
+    }
+
+    #PastEvents-{{ section.id }} .past-events__card {
+      flex-basis: 100%;
+    }
+
+    #PastEvents-{{ section.id }} h3.past-events__card-title,
+    #PastEvents-{{ section.id }} .past-events__card-title {
+      margin-top: 12px !important;
+      font-size: {{ section.settings.mobile_card_title_size }}px !important;
+    }
+
+    #PastEvents-{{ section.id }} .past-events__navigation {
+      min-height: 42px;
+      padding-top: 14px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #PastEvents-{{ section.id }} .past-events__track,
+    #PastEvents-{{ section.id }} .past-events__image,
+    #PastEvents-{{ section.id }} .past-events__next {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    function initializePastEvents(sectionElement) {
+      if (!sectionElement) {
+        return;
+      }
+
+      if (sectionElement.dataset.pastEventsInitialized === 'true') {
+        return;
+      }
+
+      sectionElement.dataset.pastEventsInitialized = 'true';
+
+      const track = sectionElement.querySelector(
+        '[data-past-events-track]'
+      );
+
+      const cards = Array.from(
+        sectionElement.querySelectorAll('[data-past-event-card]')
+      );
+
+      const nextButton = sectionElement.querySelector(
+        '[data-past-events-next]'
+      );
+
+      if (!track || cards.length === 0) {
+        return;
+      }
+
+      let currentPage = 0;
+      let resizeTimer = null;
+
+      function getCardsPerPage() {
+        if (window.matchMedia('(max-width: 749px)').matches) {
+          return 1;
+        }
+
+        if (window.matchMedia('(max-width: 989px)').matches) {
+          return 2;
+        }
+
+        return 4;
+      }
+
+      function getGap() {
+        const trackStyles = window.getComputedStyle(track);
+
+        const gapValue =
+          trackStyles.columnGap ||
+          trackStyles.gap ||
+          '0';
+
+        return parseFloat(gapValue) || 0;
+      }
+
+      function getTotalPages() {
+        return Math.max(
+          1,
+          Math.ceil(cards.length / getCardsPerPage())
+        );
+      }
+
+      function getMaximumStartIndex() {
+        return Math.max(
+          0,
+          cards.length - getCardsPerPage()
+        );
+      }
+
+      function updateButtonVisibility() {
+        if (!nextButton) {
+          return;
+        }
+
+        nextButton.hidden =
+          cards.length <= getCardsPerPage();
+      }
+
+      function moveSlider(animate) {
+        const cardsPerPage = getCardsPerPage();
+        const totalPages = getTotalPages();
+
+        if (currentPage >= totalPages) {
+          currentPage = 0;
+        }
+
+        let startIndex = currentPage * cardsPerPage;
+
+        startIndex = Math.min(
+          startIndex,
+          getMaximumStartIndex()
+        );
+
+        const cardWidth =
+          cards[0].getBoundingClientRect().width;
+
+        const movement =
+          startIndex * (cardWidth + getGap());
+
+        if (!animate) {
+          track.style.transition = 'none';
+        }
+
+        track.style.transform =
+          'translate3d(-' + movement + 'px, 0, 0)';
+
+        if (!animate) {
+          window.requestAnimationFrame(function () {
+            window.requestAnimationFrame(function () {
+              track.style.transition = '';
+            });
+          });
+        }
+
+        updateButtonVisibility();
+      }
+
+      function showNextPage() {
+        currentPage =
+          (currentPage + 1) % getTotalPages();
+
+        moveSlider(true);
+      }
+
+      function handleResize() {
+        window.clearTimeout(resizeTimer);
+
+        resizeTimer = window.setTimeout(function () {
+          currentPage = 0;
+          moveSlider(false);
+        }, 120);
+      }
+
+      if (nextButton) {
+        nextButton.addEventListener(
+          'click',
+          showNextPage
+        );
+      }
+
+      window.addEventListener(
+        'resize',
+        handleResize
+      );
+
+      moveSlider(false);
+    }
+
+    initializePastEvents(
+      document.getElementById(
+        'PastEvents-{{ section.id }}'
+      )
+    );
+
+    if (window.Shopify && Shopify.designMode) {
+      document.addEventListener(
+        'shopify:section:load',
+        function (event) {
+          const loadedSection =
+            event.target.querySelector('.past-events') ||
+            (
+              event.target.classList &&
+              event.target.classList.contains('past-events')
+                ? event.target
+                : null
+            );
+
+          initializePastEvents(loadedSection);
+        }
+      );
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Past events slider",
+  "tag": "section",
+  "class": "past-events-section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Past Events"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading_line",
+      "label": "Show heading line",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "desktop_heading_size",
+      "min": 40,
+      "max": 90,
+      "step": 2,
+      "unit": "px",
+      "label": "Desktop heading size",
+      "default": 66
+    },
+    {
+      "type": "range",
+      "id": "mobile_heading_size",
+      "min": 30,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "label": "Mobile heading size",
+      "default": 46
+    },
+    {
+      "type": "range",
+      "id": "heading_line_width",
+      "min": 40,
+      "max": 200,
+      "step": 5,
+      "unit": "px",
+      "label": "Heading line width",
+      "default": 125
+    },
+    {
+      "type": "range",
+      "id": "card_title_size",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "label": "Desktop card title size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_title_size",
+      "min": 12,
+      "max": 26,
+      "step": 1,
+      "unit": "px",
+      "label": "Mobile card title size",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Heading and event title color",
+      "default": "#ff1717"
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "General text color",
+      "default": "#111111"
+    },
+    {
+      "type": "color",
+      "id": "background_start",
+      "label": "Background start",
+      "default": "#e9f4fb"
+    },
+    {
+      "type": "color",
+      "id": "background_end",
+      "label": "Background end",
+      "default": "#dce8ed"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "default": "260 / 357",
+      "options": [
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait"
+        },
+        {
+          "value": "260 / 357",
+          "label": "Tall portrait"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Classic portrait"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "min": 8,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "label": "Space between cards",
+      "default": 28
+    },
+    {
+      "type": "range",
+      "id": "maximum_width",
+      "min": 1000,
+      "max": 1800,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum section width",
+      "default": 1500
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Top spacing",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom spacing",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "event",
+      "name": "Event card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Event image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Event title",
+          "default": "Event title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Event link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "Past events slider",
+      "blocks": [
+        {
+          "type": "event",
+          "settings": {
+            "title": "Slumber Party"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "Lovestreet: House of Beauty"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "De:maf Workshop"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "Suzie K Masterclass"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "Beauty Social"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "Kollab Workshop"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "Creative Session"
+          }
+        },
+        {
+          "type": "event",
+          "settings": {
+            "title": "Kollab Community Night"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

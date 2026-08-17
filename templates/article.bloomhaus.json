@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main": {
+      "type": "bloomhaus-article",
+      "settings": {
+        "show_article_details": false,
+        "show_article_content": false
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

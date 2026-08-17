@@ -1,0 +1,451 @@
+{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'image-banner.js' | asset_url }}" defer="defer"></script>
+
+{% style %}
+	{% render 'section-margin' %}
+
+	#shopify-section-{{ section.id }} .have-overlay {
+		--overlay-alpha: {{ section.settings.overlay_opacity }}%;
+	}
+
+	#shopify-section-{{ section.id }} .image-banner,
+	#shopify-section-{{ section.id }} .image-banner-box,
+	#shopify-section-{{ section.id }} .image-banner__img {
+		background: transparent !important;
+	}
+
+	#shopify-section-{{ section.id }} .image-banner {
+		width: 100%;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+
+	#shopify-section-{{ section.id }} .image-banner-box {
+		position: relative;
+		width: 100%;
+		overflow: hidden;
+		margin: 0;
+		padding: 0;
+	}
+
+	#shopify-section-{{ section.id }} .image-banner__img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		min-height: 100%;
+		overflow: hidden;
+		line-height: 0;
+		z-index: 1;
+	}
+
+	#shopify-section-{{ section.id }} .kollab-slide-video {
+		position: absolute;
+		inset: 0;
+		display: block;
+		width: 100% !important;
+		height: 100% !important;
+		min-width: 100%;
+		min-height: 100%;
+		object-fit: cover !important;
+		object-position: center center !important;
+		background: transparent !important;
+		border: 0;
+		margin: 0;
+		padding: 0;
+		line-height: 0;
+		vertical-align: top;
+		transform: scale(1.01);
+	}
+
+	#shopify-section-{{ section.id }} .image-banner__wrapper {
+		position: relative;
+		z-index: 2;
+		width: 100%;
+		height: 100%;
+		min-height: inherit;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0 2rem;
+		text-align: center;
+		overflow: hidden;
+	}
+
+	#shopify-section-{{ section.id }} .kollab-hero-text {
+		position: relative;
+		z-index: 3;
+		width: 100%;
+		max-width: 1500px;
+		margin: 0 auto;
+		transform: translateY(-2%);
+	}
+
+	#shopify-section-{{ section.id }} .kollab-hero-top,
+	#shopify-section-{{ section.id }} .kollab-hero-experience {
+		font-family: "Instrument Serif", "Times New Roman", serif !important;
+		font-weight: 400;
+		color: #ffffff;
+		text-shadow: 0 3px 15px rgba(0, 0, 0, 0.35);
+	}
+
+	#shopify-section-{{ section.id }} .kollab-hero-top {
+		font-size: clamp(4.5rem, 8vw, 12rem);
+		line-height: 0.9;
+		letter-spacing: -0.04em;
+		margin-bottom: clamp(0.4rem, 1vw, 1.2rem);
+	}
+
+	#shopify-section-{{ section.id }} .kollab-hero-bottom {
+		display: flex;
+		align-items: baseline;
+		justify-content: center;
+		gap: clamp(1rem, 2vw, 3rem);
+		width: 100%;
+		white-space: nowrap;
+	}
+
+	#shopify-section-{{ section.id }} .kollab-hero-brand {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: clamp(5.2rem, 12vw, 16rem);
+		font-weight: 900;
+		line-height: 0.8;
+		color: #e31818;
+		letter-spacing: -0.08em;
+		text-transform: uppercase;
+		text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+	}
+
+	#shopify-section-{{ section.id }} .kollab-hero-experience {
+		font-size: clamp(4.8rem, 9vw, 13rem);
+		line-height: 0.82;
+		letter-spacing: -0.05em;
+		text-transform: uppercase;
+	}
+{% endstyle %}
+
+{% liquid
+	case section.settings.image_size
+		when 'adapt'
+			assign section_size = 'clamp(360px, 56.25vw, 820px)'
+			assign section_size_tablet = 'clamp(340px, 68svh, 680px)'
+			assign section_size_mobile = 'clamp(320px, 125vw, 620px)'
+		when 'small'
+			assign section_size = 'clamp(300px, 42vw, 640px)'
+			assign section_size_tablet = 'clamp(300px, 56svh, 560px)'
+			assign section_size_mobile = 'clamp(280px, 105vw, 520px)'
+		when 'medium'
+			assign section_size = 'clamp(360px, 56.25vw, 820px)'
+			assign section_size_tablet = 'clamp(340px, 68svh, 680px)'
+			assign section_size_mobile = 'clamp(320px, 125vw, 620px)'
+		when 'large'
+			assign section_size = 'clamp(480px, 100svh, 960px)'
+			assign section_size_tablet = 'clamp(420px, 84svh, 800px)'
+			assign section_size_mobile = 'clamp(360px, 135vw, 700px)'
+		else
+			assign section_size = 'clamp(480px, 100svh, 960px)'
+			assign section_size_tablet = 'clamp(420px, 84svh, 800px)'
+			assign section_size_mobile = 'clamp(360px, 135vw, 700px)'
+	endcase
+%}
+
+{%- style -%}
+	#shopify-section-{{ section.id }} {
+		--image-height: {{ section_size }};
+	}
+
+	#shopify-section-{{ section.id }} .image-banner {
+		height: var(--image-height) !important;
+		min-height: var(--image-height) !important;
+	}
+
+	#shopify-section-{{ section.id }} .image-banner-box,
+	#shopify-section-{{ section.id }} .image-banner__wrapper {
+		height: var(--image-height) !important;
+		min-height: var(--image-height) !important;
+	}
+
+	@media screen and (max-width: 1173px) {
+		#shopify-section-{{ section.id }} .kollab-slide-video {
+			object-fit: cover !important;
+			object-position: center center !important;
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-top {
+			font-size: clamp(4rem, 8.8vw, 8rem);
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-brand {
+			font-size: clamp(5rem, 13vw, 11rem);
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-experience {
+			font-size: clamp(4.5rem, 10vw, 9rem);
+		}
+	}
+
+	@media screen and (max-width: 989px) {
+		#shopify-section-{{ section.id }} {
+			--image-height: {{ section_size_tablet }};
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-bottom {
+			gap: clamp(0.8rem, 1.4vw, 1.5rem);
+		}
+	}
+
+	@media screen and (max-width: 749px) {
+		#shopify-section-{{ section.id }} .image-banner__wrapper {
+			padding: 0 1.2rem;
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-text {
+			transform: translateY(-1%);
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-top {
+			font-size: clamp(3.4rem, 12vw, 6rem);
+			line-height: 0.95;
+			margin-bottom: 0.4rem;
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-bottom {
+			flex-direction: column;
+			align-items: center;
+			gap: 0.4rem;
+			white-space: normal;
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-brand {
+			font-size: clamp(5rem, 20vw, 8rem);
+			line-height: 0.85;
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-experience {
+			font-size: clamp(3.8rem, 14vw, 6.8rem);
+			line-height: 0.88;
+		}
+	}
+
+	@media screen and (max-width: 560px) {
+		#shopify-section-{{ section.id }} {
+			--image-height: {{ section_size_mobile }};
+		}
+
+		#shopify-section-{{ section.id }} .kollab-slide-video {
+			object-fit: cover !important;
+			object-position: center center !important;
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-top {
+			font-size: clamp(3rem, 13vw, 5rem);
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-brand {
+			font-size: clamp(4.8rem, 22vw, 7rem);
+		}
+
+		#shopify-section-{{ section.id }} .kollab-hero-experience {
+			font-size: clamp(3.4rem, 15vw, 5.8rem);
+		}
+	}
+{%- endstyle -%}
+
+<div class="image-banner">
+	{% if section.settings.section_layout == "container" %}
+		<div class="container">
+	{% endif %}
+
+		<div class="image-banner-box color-{{ section.settings.color_scheme }} background">
+			<div class="image-banner__img have-overlay">
+				<video class="kollab-slide-video" autoplay muted loop playsinline preload="auto">
+					<source src="https://cdn.shopify.com/videos/c/o/v/500278fd69c445a897d8c7f8e52c90b0.mp4" type="video/mp4">
+				</video>
+			</div>
+
+			<div class="image-banner__wrapper">
+				<div class="kollab-hero-text">
+					<div class="kollab-hero-top">
+						Welcome to the
+					</div>
+
+					<div class="kollab-hero-bottom">
+						<span class="kollab-hero-brand">KOLLAB</span>
+						<span class="kollab-hero-experience">EXPERIENCE</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	{% if section.settings.section_layout == "container" %}
+		</div>
+	{% endif %}
+</div>
+
+{% schema %}
+{
+	"name": "t:sections.image-banner.name",
+	"tag": "section",
+	"class": "image-banner-section spaced-section",
+	"enabled_on": {
+		"templates": ["*"]
+	},
+	"settings": [
+		{
+			"type": "select",
+			"id": "section_layout",
+			"default": "full",
+			"label": "t:sections.all.section_size.full_label",
+			"options": [
+				{
+					"value": "full",
+					"label": "t:sections.all.section_size.options.options__1.label"
+				},
+				{
+					"value": "container",
+					"label": "t:sections.all.section_size.options.options__2.label"
+				}
+			]
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"default": "background-2",
+			"label": "t:sections.all.color_scheme.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.all.image.header.content"
+		},
+		{
+			"type": "image_picker",
+			"id": "image",
+			"label": "t:sections.all.image.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "image_second",
+			"label": "t:sections.all.image.label"
+		},
+		{
+			"type": "video",
+			"id": "video",
+			"label": "t:sections.all.video.label"
+		},
+		{
+			"type": "video",
+			"id": "video_second",
+			"label": "t:sections.all.video.label"
+		},
+		{
+			"type": "image_picker",
+			"id": "mobile_image",
+			"label": "t:sections.all.image.mobile_image_first"
+		},
+		{
+			"type": "image_picker",
+			"id": "mobile_image_second",
+			"label": "t:sections.all.image.mobile_image_second"
+		},
+		{
+			"type": "select",
+			"id": "image_size",
+			"options": [
+				{
+					"value": "adapt",
+					"label": "t:sections.all.image.size.options__1.label"
+				},
+				{
+					"value": "small",
+					"label": "t:sections.all.image.size.options__2.label"
+				},
+				{
+					"value": "medium",
+					"label": "t:sections.all.image.size.options__3.label"
+				},
+				{
+					"value": "large",
+					"label": "t:sections.all.image.size.options__4.label"
+				}
+			],
+			"default": "medium",
+			"label": "t:sections.all.image.size.label"
+		},
+		{
+			"type": "range",
+			"id": "overlay_opacity",
+			"min": 0,
+			"max": 100,
+			"default": 20,
+			"unit": "%",
+			"label": "t:sections.all.overlay_opacity.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.all.section-margin.header.content"
+		},
+		{
+			"type": "select",
+			"id": "margin_top",
+			"options": [
+				{
+					"value": "no-indent",
+					"label": "t:sections.all.section-margin.options__1.label"
+				},
+				{
+					"value": "xs",
+					"label": "t:sections.all.section-margin.options__2.label"
+				},
+				{
+					"value": "s",
+					"label": "t:sections.all.section-margin.options__3.label"
+				},
+				{
+					"value": "m",
+					"label": "t:sections.all.section-margin.options__4.label"
+				},
+				{
+					"value": "l",
+					"label": "t:sections.all.section-margin.options__5.label"
+				}
+			],
+			"default": "no-indent",
+			"label": "t:sections.all.section-margin.margin_top.label"
+		},
+		{
+			"type": "select",
+			"id": "margin_bottom",
+			"options": [
+				{
+					"value": "no-indent",
+					"label": "t:sections.all.section-margin.options__1.label"
+				},
+				{
+					"value": "xs",
+					"label": "t:sections.all.section-margin.options__2.label"
+				},
+				{
+					"value": "s",
+					"label": "t:sections.all.section-margin.options__3.label"
+				},
+				{
+					"value": "m",
+					"label": "t:sections.all.section-margin.options__4.label"
+				},
+				{
+					"value": "l",
+					"label": "t:sections.all.section-margin.options__5.label"
+				}
+			],
+			"default": "no-indent",
+			"label": "t:sections.all.section-margin.margin_bottom.label"
+		}
+	],
+	"presets": [
+		{
+			"name": "t:sections.image-banner.presets.name"
+		}
+	]
+}
+{% endschema %}

@@ -1,0 +1,102 @@
+{% if product.metafields.custom.trivia_text != blank or product.metafields.custom.trivia_image != blank %}
+  <section class="product-trivia">
+
+    <div class="trivia-grid">
+
+      <div class="trivia-text" style="background-color: {{ section.settings.bg_color }};">
+          <div class="trivia-text-inner">
+              {{ product.metafields.custom.trivia_text | metafield_tag }}
+          </div>
+      </div>
+
+      <div
+        class="trivia-image"
+        style="background-image:url('{{ product.metafields.custom.trivia_image | image_url: width: 2000 }}')"
+      ></div>
+
+    </div>
+
+  </section>
+
+  <style>
+  .product-trivia{
+    width:100%;
+  }
+
+  .trivia-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-height:500px;
+  }
+
+  .trivia-text{
+    padding:80px 0;
+    display:flex;
+    color: {{ section.settings.text_color }};
+    align-items:center;
+  }
+
+  .trivia-text-inner {
+    max-width: calc(var(--container-width) / 2);
+    margin-left: auto;
+    margin-right: 0;
+    padding-left: 8rem;
+    padding-right: 5rem;
+    width: 100%;
+  }
+
+  .trivia-image{
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+  }
+
+  @media (max-width:768px){
+    .trivia-grid{
+      grid-template-columns:1fr;
+    }
+
+    .trivia-image{
+      min-height:300px;
+    }
+
+    .trivia-text{
+      padding:40px 20px;
+    }
+
+    .trivia-text-inner {
+      padding-left: 0px;
+      padding-right: 0px;
+    }
+  }
+  </style>
+
+{% endif %}
+
+{% schema %}
+{
+  "name": "Product Trivia",
+  "enabled_on": {
+	 "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Trivia"
+    }
+  ]
+}
+{% endschema %}

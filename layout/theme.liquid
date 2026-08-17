@@ -1,0 +1,616 @@
+<!doctype html>
+<html
+	class="no-js"
+	data-scheme="{{ settings.color_scheme }}"
+	lang="{{ request.locale.iso_code }}"
+	dir="{% render 'direction' %}"
+>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<meta name="theme-color" content="">
+		<link rel="canonical" href="{{ canonical_url }}">
+		<link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+
+		{% style %}
+		  html, body {
+			scrollbar-gutter: stable;
+		  }
+
+		  body {
+			margin: 0;
+		  }
+
+		  .content-for-layout {
+			width: 100%;
+		  }
+
+		  #MainContent > .shopify-section:last-child,
+		  #MainContent > .shopify-section.kollab-last-main-section {
+			margin-bottom: 0 !important;
+			padding-bottom: 0 !important;
+		  }
+
+		  #MainContent > .shopify-section:last-child [class*="section-"][class*="-padding"],
+		  #MainContent > .shopify-section.kollab-last-main-section [class*="section-"][class*="-padding"] {
+			padding-bottom: 1.2rem !important;
+		  }
+		{% endstyle %}
+
+		{%- if settings.favicon != blank -%}
+			<link
+				rel="icon"
+				type="image/png"
+				href="{{ settings.favicon | img_url: '32x32' }}"
+			>
+		{%- endif -%}
+
+		{%- unless settings.type_header_font.system? -%}
+			<link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+		{%- endunless -%}
+
+		<title>{{ page_title }}</title>
+
+		{% if page_description %}
+			<meta name="description" content="{{ page_description | escape }}">
+		{% endif %}
+
+		{% render 'meta-tags' %}
+
+		<script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
+
+		<script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+		{{ content_for_header }}
+
+		{% render 'vars' %}
+
+		{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+		{{ 'base.css' | asset_url | stylesheet_tag }}
+		{%- if request.page_type != 'cart' and settings.cart_type == 'drawer' -%}
+			{{ 'component-cart-drawer.css' | asset_url | stylesheet_tag }}
+		{%- endif -%}
+
+		{%- if settings.predictive_search_enabled -%}
+			<link
+				rel="stylesheet"
+				href="{{ 'component-predictive-search.css' | asset_url }}"
+				media="print"
+				onload="this.media='all'"
+			>
+		{%- endif -%}
+
+		{%- unless settings.type_body_font.system? -%}
+			<link
+				rel="preload"
+				as="font"
+				href="{{ settings.type_body_font | font_url }}"
+				type="font/woff2"
+				crossorigin
+			>
+		{%- endunless -%}
+		{%- unless settings.type_header_font.system? -%}
+			<link
+				rel="preload"
+				as="font"
+				href="{{ settings.type_header_font | font_url }}"
+				type="font/woff2"
+				crossorigin
+			>
+		{%- endunless -%}
+
+		<script>
+			document.documentElement.className =
+				document.documentElement.className.replace('no-js', 'js');
+			if (Shopify.designMode) {
+				document.documentElement.classList.add('shopify-design-mode');
+			}
+		</script>
+
+		<script src="{{ 'jquery-3.6.0.js' | asset_url }}" defer="defer"></script>
+		<script
+			src="{{ 'swiper-bundle.min.js' | asset_url }}"
+			defer="defer"
+		></script>
+
+		<script src="{{ 'jquery-marquee.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'gsap.min.js' | asset_url }}" defer="defer"></script>
+		<script src="{{ 'parallax.js' | asset_url }}" defer="defer"></script>
+		{% comment %}<script src="{{ 'hammer.js' | asset_url }}" defer="defer"></script>{% endcomment %}
+		<script src="{{ 'observer.min.js' | asset_url }}" defer="defer"></script>
+		<script
+			src="{{ 'ScrollTrigger.min.js' | asset_url }}"
+			defer="defer"
+		></script>
+		{%- if request.page_type != 'search' and settings.enable_search_modal -%}
+			<script src="{{ 'search-modal.js' | asset_url }}" defer="defer"></script>
+		{%- endif -%}
+		<script src="{{ 'popup.js' | asset_url }}" defer="defer"></script>
+		{% if settings.show_back_to_top %}
+			<script src="{{ 'scroll-top.js' | asset_url }}" defer="defer"></script>
+		{% endif %}
+		<script src="{{ 'product-card.js' | asset_url }}" defer="defer"></script>
+		<style>
+			@font-face {
+				font-family: "OfficiallyFunky";
+				src: url("{{ 'OfficiallyFunky.otf' | asset_url }}") format("opentype");
+				font-weight: 400;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Light.otf' | asset_url }}") format("opentype");
+				font-weight: 300;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-LightItalic.otf' | asset_url }}") format("opentype");
+				font-weight: 300;
+				font-style: italic;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Regular.otf' | asset_url }}") format("opentype");
+				font-weight: 400;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Italic.otf' | asset_url }}") format("opentype");
+				font-weight: 400;
+				font-style: italic;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Medium.otf' | asset_url }}") format("opentype");
+				font-weight: 500;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-MediumItalic.otf' | asset_url }}") format("opentype");
+				font-weight: 500;
+				font-style: italic;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Semibold.otf' | asset_url }}") format("opentype");
+				font-weight: 600;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-SemiboldItalic.otf' | asset_url }}") format("opentype");
+				font-weight: 600;
+				font-style: italic;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Bold.otf' | asset_url }}") format("opentype");
+				font-weight: 700;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-BoldItalic.otf' | asset_url }}") format("opentype");
+				font-weight: 700;
+				font-style: italic;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-Extrabold.otf' | asset_url }}") format("opentype");
+				font-weight: 800;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "EthicSerif";
+				src: url("{{ 'EthicSerif-ExtraboldItalic.otf' | asset_url }}") format("opentype");
+				font-weight: 800;
+				font-style: italic;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-Thin.otf' | asset_url }}") format("opentype");
+				font-weight: 100;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-ThinOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 100;
+				font-style: oblique;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-ExtraLight.otf' | asset_url }}") format("opentype");
+				font-weight: 200;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-ExtraLightOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 200;
+				font-style: oblique;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-Light.otf' | asset_url }}") format("opentype");
+				font-weight: 300;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-LightOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 300;
+				font-style: oblique;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-Regular.otf' | asset_url }}") format("opentype");
+				font-weight: 400;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-RegularOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 400;
+				font-style: oblique;
+				font-display: swap;
+				}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-Medium.otf' | asset_url }}") format("opentype");
+				font-weight: 500;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-MediumOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 500;
+				font-style: oblique;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-SemiBold.otf' | asset_url }}") format("opentype");
+				font-weight: 600;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-SemiBoldOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 600;
+				font-style: oblique;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-Bold.otf' | asset_url }}") format("opentype");
+				font-weight: 700;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-BoldOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 700;
+				font-style: oblique;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-Black.otf' | asset_url }}") format("opentype");
+				font-weight: 900;
+				font-style: normal;
+				font-display: swap;
+			}
+
+			@font-face {
+				font-family: "Enkel";
+				src: url("{{ 'Enkel-BlackOblique.otf' | asset_url }}") format("opentype");
+				font-weight: 900;
+				font-style: oblique;
+				font-display: swap;
+			}
+		</style>
+	</head>
+
+	<body class="body-template-{{ template.name }} body-template-{{ template | replace: '.', '-' }}">
+		<a
+			class="skip-to-content-link button visually-hidden button--simple"
+			href="#MainContent"
+		>
+			<span>
+				<span class="button-label">
+					{{ 'accessibility.skip_to_text' | t }}
+				</span>
+				<span class="button-label">
+					{{ 'accessibility.skip_to_text' | t }}
+				</span>
+			</span>
+		</a>
+
+		{% sections 'header-group' %}
+		{% sections 'overlay-group' %}
+
+		<main
+			id="MainContent"
+			class="content-for-layout focus-none"
+			role="main"
+			tabindex="-1"
+		>
+			{% if settings.show_breadcrumbs %}
+				{% if template != 'page.about' %}
+					{% render 'breadcrumbs' %}
+				{% endif %}
+			{% endif %}
+			{{ content_for_layout }}
+		</main>
+		{% sections 'footer-group' %}
+
+		{% if settings.show_back_to_top %}
+			{% render 'scroll-top' %}
+		{% endif %}
+
+		{%- if request.page_type != 'cart' and settings.cart_type == 'drawer' -%}
+			{%- render 'cart-drawer' -%}
+		{%- endif -%}
+
+		{% if settings.enable_search_modal %}
+			{% render 'search-modal' %}
+		{% endif %}
+
+		{%- if request.page_type != 'customers/account' and settings.account_type == 'drawer' -%}
+      {% render 'account-modal' %}
+    {%- endif -%}
+
+		<ul hidden>
+			<li id="a11y-refresh-page-message">
+				{{ 'accessibility.refresh_page' | t }}
+			</li>
+		</ul>
+
+		<script>
+			{% capture content %}{% include 'quickview' %}{% endcapture %}
+			let content = {{ content | json }};
+		</script>
+
+		<script>
+			let cscoDarkMode = {};
+
+			(function () {
+				const body = document.querySelector('html[data-scheme]');
+
+				cscoDarkMode = {
+          init: function (e) {
+            this.initMode(e);
+            window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+              this.initMode(e);
+            });
+
+            window.addEventListener('load', () => {
+              const toggleBtns = document.querySelectorAll('.header__toggle-scheme');
+              toggleBtns.forEach((btn) => {
+                btn.addEventListener('click', (e) => {
+                  e.preventDefault();
+
+                  if ('auto' === body.getAttribute('data-scheme')) {
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                      cscoDarkMode.changeScheme('light', true);
+                    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+                      cscoDarkMode.changeScheme('dark', true);
+                    }
+                  } else {
+                    if ('dark' === body.getAttribute('data-scheme')) {
+                      cscoDarkMode.changeScheme('light', true);
+                    } else {
+                      cscoDarkMode.changeScheme('dark', true);
+                    }
+                  }
+                });
+              });
+            });
+          },
+          initMode: function (e) {
+            let siteScheme = false;
+            switch (
+              '{{ settings.color_scheme }}' // Field. User’s system preference.
+            ) {
+              case 'dark':
+                siteScheme = 'dark';
+                break;
+              case 'light':
+                siteScheme = 'light';
+                break;
+              case 'system':
+                siteScheme = 'auto';
+                break;
+            }
+            if ('{{ settings.dark_mode_toggle }}') {
+              // Field. Enable dark/light mode toggle.
+              if ('light' === localStorage.getItem('_color_schema')) {
+                siteScheme = 'light';
+              }
+              if ('dark' === localStorage.getItem('_color_schema')) {
+                siteScheme = 'dark';
+              }
+            }
+            if (siteScheme && siteScheme !== body.getAttribute('data-scheme')) {
+              this.changeScheme(siteScheme, false);
+            }
+          },
+          changeScheme: function (siteScheme, cookie) {
+            body.classList.add('scheme-toggled');
+            body.setAttribute('data-scheme', siteScheme);
+            if (cookie) {
+              localStorage.setItem('_color_schema', siteScheme);
+            }
+            setTimeout(() => {
+              body.classList.remove('scheme-toggled');
+            }, 100);
+          },
+        };
+			})();
+
+			cscoDarkMode.init();
+
+			document.addEventListener('shopify:section:load', function () {
+				setTimeout(() => {
+					cscoDarkMode.init();
+				}, 100);
+			});
+		</script>
+
+		<script>
+			
+			
+			
+			
+			
+			
+			window.routes = {
+				cart_add_url: '{{ routes.cart_add_url }}',
+				cart_change_url: '{{ routes.cart_change_url }}',
+				cart_update_url: '{{ routes.cart_update_url }}',
+				cart_url: '{{ routes.cart_url }}',
+				predictive_search_url: '{{ routes.predictive_search_url }}'
+			};
+
+			window.cartStrings = {
+				error: `{{ 'sections.cart.cart_error' | t }}`,
+				quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t }}`,
+				empty: `{{ 'general.cart.empty_cart' | t }}`,
+				shop_now: `{{ 'customer.account.account_button_shop' | t }}`,
+				collections_url: `{{ routes.collections_url | sort_by: 'best-selling' }}`
+			}
+
+			window.variantStrings = {
+				addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+				soldOut: `{{ 'products.product.sold_out' | t }}`,
+				unavailable: `{{ 'products.product.unavailable' | t }}`,
+				unavailable_with_option: `{{ 'products.product.value_unavailable' | t: option_value: '[value]' }}`
+			}
+
+			window.theme = {
+				moneyFormat: {{ shop.money_format | json }},
+				quickviewText: `{{ settings.quickview }}`,
+				quickviewMore: `{{ 'general.card.view__more' | t }}`
+			}
+
+
+
+
+
+
+		</script>
+
+		{%- if settings.predictive_search_enabled -%}
+			<script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
+			<script
+				src="{{ 'predictive-search.js' | asset_url }}"
+				defer="defer"
+			></script>
+		{%- endif -%}
+		
+		<script>
+			if (window.Shopify && window.Shopify.theme && navigator && navigator.sendBeacon && window.Shopify.designMode) {
+			  const themeKey = `dataSent_{{ theme.name }}`;
+			  if (!localStorage.getItem(themeKey)) {
+				navigator.sendBeacon('https://cdn.ashstonestudios.com/shopify-beacon/sent/', new URLSearchParams({
+				  shop: window.Shopify.shop,
+				  role: window.Shopify.theme.role,
+				  route: window.location.pathname,
+				  themeId: window.Shopify.theme.id,
+				  themeStoreId: window.Shopify.theme.theme_store_id || 0,
+				  isThemeEditor: !!window.Shopify.designMode,
+				  themeName: "{{ theme.name }}",
+				  shopName: "{{ shop.name }}",
+				  shopEmail: "{{ shop.email }}"
+				}));
+				localStorage.setItem(themeKey, 'true');
+			  }
+			}
+	  </script>
+
+		<script>
+			(() => {
+				const syncLastMainSection = () => {
+					const sections = Array.from(
+						document.querySelectorAll('#MainContent > .shopify-section')
+					);
+					sections.forEach((section) => {
+						section.classList.remove('kollab-last-main-section');
+					});
+
+					const lastSection = sections[sections.length - 1];
+					if (lastSection) {
+						lastSection.classList.add('kollab-last-main-section');
+					}
+				};
+
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', syncLastMainSection);
+				} else {
+					syncLastMainSection();
+				}
+
+				document.addEventListener('shopify:section:load', syncLastMainSection);
+				document.addEventListener('shopify:section:unload', syncLastMainSection);
+			})();
+		</script>
+	</body>
+</html>

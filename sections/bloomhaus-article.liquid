@@ -1,0 +1,1250 @@
+{% comment %}
+  Custom Bloomhaus Shopify Blog Article
+  File: sections/bloomhaus-article.liquid
+{% endcomment %}
+
+<section
+  id="BloomhausArticle-{{ section.id }}"
+  class="bh-blog-article"
+  style="
+    --bh-background: {{ section.settings.background_color }};
+    --bh-heading-color: {{ section.settings.heading_color }};
+    --bh-text-color: {{ section.settings.text_color }};
+  "
+>
+
+  {% if section.settings.show_article_details %}
+    <header class="bh-article-details">
+      <div class="bh-article-details-inner">
+
+        {% if blog.title != blank %}
+          <p class="bh-article-category">
+            {{ blog.title | escape }}
+          </p>
+        {% endif %}
+
+        <h1 class="bh-article-main-title">
+          {{ article.title | escape }}
+        </h1>
+
+        <div class="bh-article-meta">
+          {% if article.author != blank %}
+            <span>{{ article.author | escape }}</span>
+          {% endif %}
+
+          {% if article.published_at != blank %}
+            <span>
+              {{ article.published_at | date: "%B %d, %Y" }}
+            </span>
+          {% endif %}
+        </div>
+
+      </div>
+    </header>
+  {% endif %}
+
+
+  <!-- =========================================
+       SECTION 1: BLOOMHAUS DALLAS
+  ========================================== -->
+
+  <div class="bh-content-section bh-intro-section">
+    <div class="bh-container bh-intro-grid">
+
+      <div class="bh-intro-content">
+
+        <h2 class="bh-heading bh-intro-heading">
+          {{ section.settings.intro_heading_line_1 | escape }}
+
+          {% if section.settings.intro_heading_line_2 != blank %}
+            <br>
+            {{ section.settings.intro_heading_line_2 | escape }}
+          {% endif %}
+        </h2>
+
+        <div class="bh-body-copy">
+
+          {% if section.settings.intro_text_1 != blank %}
+            {{ section.settings.intro_text_1 }}
+          {% endif %}
+
+          {% if section.settings.intro_text_2 != blank %}
+            {{ section.settings.intro_text_2 }}
+          {% endif %}
+
+          {% if section.settings.intro_text_3 != blank %}
+            <div class="bh-highlight">
+              {{ section.settings.intro_text_3 }}
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+
+      <div class="bh-poster-wrapper">
+
+        {% if section.settings.poster_image != blank %}
+          {{
+            section.settings.poster_image
+            | image_url: width: 1000
+            | image_tag:
+              class: 'bh-poster-image',
+              loading: 'eager',
+              widths: '360, 540, 720, 900, 1000',
+              sizes: '(max-width: 749px) calc(100vw - 40px), 382px',
+              alt: section.settings.poster_alt
+          }}
+        {% else %}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0588/2088/6577/files/Dallas_Poster.png?v=1782275645"
+            alt="{{ section.settings.poster_alt | escape }}"
+            class="bh-poster-image"
+            width="764"
+            height="1098"
+            loading="eager"
+          >
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       SECTION 2: WHY BLOOMHAUS
+  ========================================== -->
+
+  <div class="bh-content-section bh-why-section">
+    <div class="bh-container bh-why-grid">
+
+      <div class="bh-collage-wrapper">
+
+        {% if section.settings.collage_image != blank %}
+          {{
+            section.settings.collage_image
+            | image_url: width: 1500
+            | image_tag:
+              class: 'bh-collage-image',
+              loading: 'lazy',
+              widths: '540, 750, 1000, 1250, 1500',
+              sizes: '(max-width: 749px) calc(100vw - 40px), 600px',
+              alt: section.settings.collage_alt
+          }}
+        {% else %}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0588/2088/6577/files/ABOUT_US_12.png?v=1782275644"
+            alt="{{ section.settings.collage_alt | escape }}"
+            class="bh-collage-image"
+            width="1200"
+            height="1200"
+            loading="lazy"
+          >
+        {% endif %}
+
+      </div>
+
+      <div class="bh-why-content">
+
+        <h2 class="bh-heading bh-why-heading">
+          {{ section.settings.why_heading | escape }}
+        </h2>
+
+        <div class="bh-body-copy">
+
+          {% if section.settings.why_text_1 != blank %}
+            {{ section.settings.why_text_1 }}
+          {% endif %}
+
+          {% if section.settings.why_text_2 != blank %}
+            {{ section.settings.why_text_2 }}
+          {% endif %}
+
+          {% if section.settings.why_text_3 != blank %}
+            {{ section.settings.why_text_3 }}
+          {% endif %}
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       SECTION 3: INTRODUCING BRANDS
+  ========================================== -->
+
+  <div class="bh-content-section bh-brands-section">
+    <div class="bh-container bh-brands-grid">
+
+      <div class="bh-brands-content">
+
+        <h2 class="bh-heading bh-brands-heading">
+          {{ section.settings.brands_heading_line_1 | escape }}
+
+          {% if section.settings.brands_heading_line_2 != blank %}
+            <br>
+            {{ section.settings.brands_heading_line_2 | escape }}
+          {% endif %}
+        </h2>
+
+        <div class="bh-body-copy">
+
+          {% if section.settings.brands_text_1 != blank %}
+            {{ section.settings.brands_text_1 }}
+          {% endif %}
+
+          {% if section.settings.brands_text_2 != blank %}
+            {{ section.settings.brands_text_2 }}
+          {% endif %}
+
+        </div>
+
+      </div>
+
+      <div class="bh-brands-image-wrapper">
+
+        {% if section.settings.brands_image != blank %}
+          {{
+            section.settings.brands_image
+            | image_url: width: 1200
+            | image_tag:
+              class: 'bh-brands-image',
+              loading: 'lazy',
+              widths: '400, 600, 800, 1000, 1200',
+              sizes: '(max-width: 749px) calc(100vw - 40px), 470px',
+              alt: section.settings.brands_image_alt
+          }}
+        {% else %}
+          <img
+            src="https://cdn.shopify.com/s/files/1/0588/2088/6577/files/kollab-dallas-brands.gif?v=1782275647"
+            alt="{{ section.settings.brands_image_alt | escape }}"
+            class="bh-brands-image"
+            width="940"
+            height="1096"
+            loading="lazy"
+          >
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       SECTION 4: WE CAN'T WAIT TO MEET YOU
+  ========================================== -->
+
+  <div class="bh-content-section bh-meet-section">
+    <div class="bh-container bh-meet-grid">
+
+      <div class="bh-video-wrapper">
+
+        <video
+          class="bh-meet-video"
+          controls
+          playsinline
+          preload="metadata"
+          {% if section.settings.meet_video_loop %}
+            loop
+          {% endif %}
+          {% if section.settings.meet_video_autoplay %}
+            autoplay
+            muted
+          {% endif %}
+          {% if section.settings.meet_video_poster != blank %}
+            poster="{{ section.settings.meet_video_poster | image_url: width: 900 }}"
+          {% endif %}
+        >
+          <source
+            src="{{ section.settings.meet_video_url | escape }}"
+            type="video/mp4"
+          >
+
+          Your browser does not support the video tag.
+        </video>
+
+      </div>
+
+      <div class="bh-meet-content">
+
+        <h2 class="bh-heading bh-meet-heading">
+          {{ section.settings.meet_heading | escape }}
+        </h2>
+
+        <div class="bh-body-copy bh-meet-copy">
+
+          {% if section.settings.meet_text_1 != blank %}
+            {{ section.settings.meet_text_1 }}
+          {% endif %}
+
+          {% if section.settings.meet_text_2 != blank %}
+            {{ section.settings.meet_text_2 }}
+          {% endif %}
+
+          {% if section.settings.meet_closing_text != blank %}
+            <div class="bh-meet-closing">
+              {{ section.settings.meet_closing_text }}
+            </div>
+          {% endif %}
+
+          {% if section.settings.meet_event_details != blank %}
+            <div class="bh-meet-event-details">
+              {{ section.settings.meet_event_details }}
+            </div>
+          {% endif %}
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- =========================================
+       OPTIONAL SHOPIFY ARTICLE CONTENT
+  ========================================== -->
+
+  {% if section.settings.show_article_content and article.content != blank %}
+    <div class="bh-standard-article-content">
+      <div class="bh-standard-article-inner rte">
+        {{ article.content }}
+      </div>
+    </div>
+  {% endif %}
+
+</section>
+
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap");
+
+  /* =========================================
+     GENERAL
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }},
+  #BloomhausArticle-{{ section.id }} * {
+    box-sizing: border-box;
+  }
+
+  #BloomhausArticle-{{ section.id }} {
+    position: relative;
+    left: 50%;
+    width: 100vw;
+    max-width: 100vw;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    background-color: var(--bh-background);
+    color: var(--bh-text-color);
+    overflow: hidden;
+  }
+
+  #BloomhausArticle-{{ section.id }} h1,
+  #BloomhausArticle-{{ section.id }} h2,
+  #BloomhausArticle-{{ section.id }} h3,
+  #BloomhausArticle-{{ section.id }} p,
+  #BloomhausArticle-{{ section.id }} div,
+  #BloomhausArticle-{{ section.id }} span,
+  #BloomhausArticle-{{ section.id }} strong {
+    writing-mode: horizontal-tb !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
+    hyphens: none !important;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-container {
+    width: calc(100% - 80px);
+    max-width: 1220px;
+    margin: 0 auto;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-content-section {
+    display: block;
+    width: 100%;
+    background-color: var(--bh-background);
+  }
+
+
+  /* =========================================
+     OPTIONAL ARTICLE HEADER
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-article-details {
+    width: 100%;
+    padding: 60px 40px 15px;
+    text-align: center;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-article-details-inner {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-article-category {
+    margin: 0 0 12px;
+    color: var(--bh-text-color);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    line-height: 1.3;
+    text-transform: uppercase;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-article-main-title {
+    margin: 0;
+    color: var(--bh-heading-color);
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(48px, 6vw, 82px);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 20px;
+    margin-top: 18px;
+    color: var(--bh-text-color);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+
+  /* =========================================
+     SHARED TYPOGRAPHY
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-heading {
+    margin: 0;
+    padding: 0;
+    color: var(--bh-heading-color);
+    font-family: "Instrument Serif", Georgia, serif !important;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.03;
+    letter-spacing: -0.7px;
+    text-align: left;
+    text-transform: none;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-body-copy {
+    width: 100%;
+    color: var(--bh-text-color);
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.37;
+    letter-spacing: 0;
+    text-align: left;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-body-copy p {
+    display: block;
+    width: 100%;
+    margin: 0 0 27px;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+    line-height: inherit;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-body-copy p:last-child {
+    margin-bottom: 0;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-body-copy strong {
+    font-weight: 700;
+  }
+
+
+  /* =========================================
+     SECTION 1: INTRODUCTION
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-intro-section {
+    padding: 35px 0 65px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-intro-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 382px);
+    align-items: center;
+    gap: clamp(55px, 7vw, 105px);
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-intro-content {
+    width: 100%;
+    max-width: 620px;
+    min-width: 0;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-intro-heading {
+    margin-bottom: 38px;
+    font-size: clamp(44px, 3.3vw, 56px);
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-highlight {
+    display: block;
+    width: 100%;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-highlight p {
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-poster-wrapper {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-poster-image {
+    display: block !important;
+    width: 100% !important;
+    max-width: 382px !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border: 0;
+  }
+
+
+  /* =========================================
+     SECTION 2: WHY BLOOMHAUS
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-why-section {
+    padding: 40px 0 60px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-why-grid {
+    display: grid !important;
+    grid-template-columns: minmax(480px, 1.08fr) minmax(400px, 0.92fr);
+    align-items: center;
+    gap: clamp(50px, 6vw, 90px);
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-collage-wrapper {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-collage-image {
+    display: block !important;
+    width: 100% !important;
+    max-width: 600px !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border: 0;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-why-content {
+    width: 100%;
+    max-width: 520px;
+    min-width: 0;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-why-heading {
+    margin-bottom: 43px;
+    font-size: clamp(42px, 3.3vw, 52px);
+  }
+
+
+  /* =========================================
+     SECTION 3: INTRODUCING BRANDS
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-brands-section {
+    padding: 45px 0 70px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-brands-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1.08fr) minmax(400px, 0.92fr);
+    align-items: center;
+    gap: clamp(55px, 7vw, 100px);
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-brands-content {
+    width: 100%;
+    max-width: 580px;
+    min-width: 0;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-brands-heading {
+    margin-bottom: 42px;
+    font-size: clamp(42px, 3.3vw, 52px);
+    line-height: 1.03;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-brands-image-wrapper {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-brands-image {
+    display: block !important;
+    width: 100% !important;
+    max-width: 470px !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    border: 0;
+  }
+
+
+  /* =========================================
+     SECTION 4: MEET YOU
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-section {
+    padding: 45px 0 70px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-grid {
+    display: grid !important;
+    grid-template-columns: minmax(280px, 310px) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(70px, 9vw, 120px);
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-video-wrapper {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-video {
+    display: block !important;
+    width: 100% !important;
+    max-width: 310px !important;
+    aspect-ratio: 9 / 16;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    background-color: #f1c4d8;
+    border: 0;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-content {
+    width: 100%;
+    max-width: 670px;
+    min-width: 0;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-heading {
+    margin-bottom: 42px;
+    font-size: clamp(42px, 3.3vw, 52px);
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-copy {
+    max-width: 670px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-closing {
+    display: block;
+    margin-top: 29px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-closing p {
+    margin-bottom: 0;
+    font-weight: 700;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-event-details {
+    display: block;
+    margin-top: 28px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-meet-event-details p {
+    margin-bottom: 0;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+
+  /* =========================================
+     OPTIONAL ARTICLE CONTENT
+  ========================================== */
+
+  #BloomhausArticle-{{ section.id }} .bh-standard-article-content {
+    width: 100%;
+    padding: 20px 40px 70px;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-standard-article-inner {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    color: var(--bh-text-color);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    line-height: 1.65;
+  }
+
+  #BloomhausArticle-{{ section.id }} .bh-standard-article-inner img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  /* =========================================
+     TABLET
+  ========================================== */
+
+  @media screen and (max-width: 1050px) {
+
+    #BloomhausArticle-{{ section.id }} .bh-container {
+      width: calc(100% - 56px);
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 340px);
+      gap: 45px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-why-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+      gap: 42px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 0.9fr);
+      gap: 42px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-grid {
+      grid-template-columns: minmax(250px, 290px) minmax(0, 1fr);
+      gap: 55px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-heading,
+    #BloomhausArticle-{{ section.id }} .bh-why-heading,
+    #BloomhausArticle-{{ section.id }} .bh-brands-heading,
+    #BloomhausArticle-{{ section.id }} .bh-meet-heading {
+      font-size: 44px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-body-copy {
+      font-size: 17px;
+      line-height: 1.43;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-image {
+      max-width: 430px !important;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-video {
+      max-width: 290px !important;
+    }
+
+  }
+
+
+  /* =========================================
+     MOBILE
+  ========================================== */
+
+  @media screen and (max-width: 749px) {
+
+    #BloomhausArticle-{{ section.id }} {
+      left: 50%;
+      width: 100vw;
+      max-width: 100vw;
+      margin-left: -50vw;
+      margin-right: -50vw;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-container {
+      width: calc(100% - 40px);
+      max-width: 600px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-article-details {
+      padding: 42px 20px 5px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-article-main-title {
+      font-size: clamp(42px, 13vw, 62px);
+    }
+
+
+    /* Introduction */
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-section {
+      padding: 42px 0 55px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-grid {
+      display: flex !important;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 38px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-content {
+      max-width: none;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-heading {
+      margin-bottom: 28px;
+      font-size: clamp(38px, 10vw, 48px);
+      line-height: 1.04;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-heading br {
+      display: none;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-body-copy {
+      max-width: none;
+      font-size: 17px;
+      line-height: 1.47;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-body-copy p {
+      margin-bottom: 23px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-poster-wrapper {
+      justify-content: center;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-poster-image {
+      max-width: 430px !important;
+    }
+
+
+    /* Why Bloomhaus */
+
+    #BloomhausArticle-{{ section.id }} .bh-why-section {
+      padding: 38px 0 50px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-why-grid {
+      display: flex !important;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 38px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-collage-wrapper {
+      justify-content: center;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-collage-image {
+      max-width: 600px !important;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-why-content {
+      max-width: none;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-why-heading {
+      margin-bottom: 27px;
+      font-size: clamp(38px, 10vw, 48px);
+      line-height: 1.04;
+    }
+
+
+    /* Introducing Brands */
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-section {
+      padding: 38px 0 50px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-grid {
+      display: flex !important;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 38px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-content {
+      max-width: none;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-heading {
+      margin-bottom: 27px;
+      font-size: clamp(38px, 10vw, 48px);
+      line-height: 1.04;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-heading br {
+      display: none;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-image-wrapper {
+      justify-content: center;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-image {
+      width: 100% !important;
+      max-width: 500px !important;
+    }
+
+
+    /* Meet You */
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-section {
+      padding: 38px 0 50px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-grid {
+      display: flex !important;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 38px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-video-wrapper {
+      justify-content: center;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-video {
+      width: 100% !important;
+      max-width: 360px !important;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-content {
+      max-width: none;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-heading {
+      margin-bottom: 27px;
+      font-size: clamp(38px, 10vw, 48px);
+      line-height: 1.04;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-closing {
+      margin-top: 25px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-event-details {
+      margin-top: 24px;
+    }
+
+
+    /* Standard article content */
+
+    #BloomhausArticle-{{ section.id }} .bh-standard-article-content {
+      padding: 10px 20px 50px;
+    }
+
+  }
+
+
+  /* =========================================
+     SMALL MOBILE
+  ========================================== */
+
+  @media screen and (max-width: 420px) {
+
+    #BloomhausArticle-{{ section.id }} .bh-container {
+      width: calc(100% - 32px);
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-heading,
+    #BloomhausArticle-{{ section.id }} .bh-why-heading,
+    #BloomhausArticle-{{ section.id }} .bh-brands-heading,
+    #BloomhausArticle-{{ section.id }} .bh-meet-heading {
+      font-size: 38px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-body-copy {
+      font-size: 16px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-intro-section {
+      padding-top: 35px;
+      padding-bottom: 48px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-why-section {
+      padding-top: 32px;
+      padding-bottom: 42px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-brands-section {
+      padding-top: 32px;
+      padding-bottom: 42px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-section {
+      padding-top: 32px;
+      padding-bottom: 42px;
+    }
+
+    #BloomhausArticle-{{ section.id }} .bh-meet-video {
+      max-width: 320px !important;
+    }
+
+  }
+</style>
+
+
+{% schema %}
+{
+  "name": "Bloomhaus blog article",
+  "tag": "section",
+  "class": "bloomhaus-blog-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Article information"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_article_details",
+      "label": "Show blog title, article title and date",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_article_content",
+      "label": "Show content from the blog post editor",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Introduction"
+    },
+    {
+      "type": "text",
+      "id": "intro_heading_line_1",
+      "label": "Heading first line",
+      "default": "We're Bringing Kollab"
+    },
+    {
+      "type": "text",
+      "id": "intro_heading_line_2",
+      "label": "Heading second line",
+      "default": "BLOOMHAUS to Dallas!"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text_1",
+      "label": "Introduction paragraph one",
+      "default": "<p>When we first started planning KOLLAB's next pop-up, one city kept coming up in our conversations: <strong>Dallas.</strong></p>"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text_2",
+      "label": "Introduction paragraph two",
+      "default": "<p>Over the past few years, we've seen a growing interest in Korean culture across the U.S., and Dallas has become one of the most exciting places for that growth. From K-beauty lovers and food enthusiasts to people who are simply curious about discovering something new, the community here has shown incredible enthusiasm for Korean brands and experiences. That's what inspired us to bring KOLLAB to Texas.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "intro_text_3",
+      "label": "Bold introduction paragraph",
+      "default": "<p><strong>On June 19–20, we'll be opening the doors to BLOOMHAUS, our newest pop-up experience, and we couldn't be more excited.</strong></p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Dallas poster"
+    },
+    {
+      "type": "text",
+      "id": "poster_alt",
+      "label": "Poster alternative text",
+      "default": "Kollab Bloomhaus Dallas pop-up event"
+    },
+    {
+      "type": "header",
+      "content": "Why Bloomhaus"
+    },
+    {
+      "type": "text",
+      "id": "why_heading",
+      "label": "Heading",
+      "default": "Why BLOOMHAUS?"
+    },
+    {
+      "type": "richtext",
+      "id": "why_text_1",
+      "label": "Paragraph one",
+      "default": "<p>For Dallas, we wanted to create something completely different from our Los Angeles location.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "why_text_2",
+      "label": "Paragraph two",
+      "default": "<p>While KOLLAB LA reflects the energy of Downtown Los Angeles, our Dallas pop-up is inspired by the feeling of spring—fresh blooms, new discoveries, and meaningful connections. That's how the name BLOOMHAUS came to life.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "why_text_3",
+      "label": "Paragraph three",
+      "default": "<p>To us, blooming represents growth, creativity, and the excitement of discovering something for the first time. That's exactly what we hope guests will experience as they explore the space.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "collage_image",
+      "label": "Bloomhaus interior collage"
+    },
+    {
+      "type": "text",
+      "id": "collage_alt",
+      "label": "Collage alternative text",
+      "default": "Kollab Bloomhaus Dallas pop-up interior"
+    },
+    {
+      "type": "header",
+      "content": "Introducing Brands"
+    },
+    {
+      "type": "text",
+      "id": "brands_heading_line_1",
+      "label": "Heading first line",
+      "default": "Introducing Brands You May"
+    },
+    {
+      "type": "text",
+      "id": "brands_heading_line_2",
+      "label": "Heading second line",
+      "default": "Not Have Seen Before"
+    },
+    {
+      "type": "richtext",
+      "id": "brands_text_1",
+      "label": "Paragraph one",
+      "default": "<p>One thing we're especially excited about is introducing Dallas to a collection of Korean brands that many people may not have discovered yet.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "brands_text_2",
+      "label": "Paragraph two",
+      "default": "<p>While major K-beauty brands continue to gain popularity in the U.S., there are so many innovative emerging brands that deserve the spotlight. Through BLOOMHAUS, we're creating a space where visitors can experience these brands up close, learn their stories, and find new favorites.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "brands_image",
+      "label": "Brands GIF or image"
+    },
+    {
+      "type": "text",
+      "id": "brands_image_alt",
+      "label": "Image alternative text",
+      "default": "Kollab Bloomhaus featured Korean beauty brand"
+    },
+    {
+      "type": "header",
+      "content": "Meet You Section"
+    },
+    {
+      "type": "text",
+      "id": "meet_heading",
+      "label": "Heading",
+      "default": "We Can't Wait to Meet You"
+    },
+    {
+      "type": "richtext",
+      "id": "meet_text_1",
+      "label": "Paragraph one",
+      "default": "<p>We're currently expecting up to 1,500 guests throughout the two-day event, making BLOOMHAUS one of our biggest pop-up experiences yet.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "meet_text_2",
+      "label": "Paragraph two",
+      "default": "<p>Most importantly, we're excited to meet the Dallas community and continue building a space where Korean brands, culture, and creativity can connect with people in meaningful ways.<br>If you're in Dallas, we'd love for you to stop by, explore, and bloom with us.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "meet_closing_text",
+      "label": "Closing message",
+      "default": "<p><strong>See you at BLOOMHAUS. 🌸</strong></p>"
+    },
+    {
+      "type": "richtext",
+      "id": "meet_event_details",
+      "label": "Event date and location",
+      "default": "<p><strong>June 19–20<br>Dallas, Texas</strong></p>"
+    },
+    {
+      "type": "text",
+      "id": "meet_video_url",
+      "label": "MP4 video URL",
+      "default": "https://cdn.shopify.com/videos/c/o/v/a62a558385d945f09f273cf5e8d1d172.mp4"
+    },
+    {
+      "type": "image_picker",
+      "id": "meet_video_poster",
+      "label": "Video cover image"
+    },
+    {
+      "type": "checkbox",
+      "id": "meet_video_autoplay",
+      "label": "Autoplay video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "meet_video_loop",
+      "label": "Loop video",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading",
+      "default": "#f52222"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#080808"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bloomhaus blog article"
+    }
+  ]
+}
+{% endschema %}

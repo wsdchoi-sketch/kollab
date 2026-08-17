@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "main": {
+      "type": "k-beauty-workshops-article",
+      "settings": {
+        "show_article_details": false,
+        "show_author": false,
+        "show_date": false,
+        "show_article_content": false,
+        "heading_line_1": "Learning Beyond the Product:",
+        "heading_line_2": "Why We Host K-Beauty Workshops",
+        "paragraph_1": "<p>At KOLLAB, we believe the best way to discover a brand is to experience it firsthand.</p>",
+        "paragraph_2": "<p>That's why workshops and masterclasses have become such an important part of what we do. Beyond introducing products, these events create opportunities for deeper learning, meaningful conversations, and genuine connections between brands and consumers.</p>",
+        "paragraph_3": "<p>As K-beauty continues to grow globally, we want to create spaces where people can learn directly from industry experts, explore the techniques behind Korean beauty trends, and gain hands-on experience with products in a way that goes beyond traditional retail.</p>",
+        "workshops_image_alt": "Kollab K-Beauty workshops and masterclasses",
+        "background_color": "#ffffff",
+        "heading_color": "#f52222",
+        "text_color": "#080808",
+        "padding_top": 55,
+        "padding_bottom": 55
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

@@ -1,0 +1,140 @@
+{% if product.metafields.custom.single_review != blank %}
+    
+    {%- style -%}
+        {% render 'section-padding' %}
+
+        .product-single-review p{
+            margin-top: 0;
+        }
+
+        .single-review-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .single-review-content * {
+            color: {{ section.settings.text_color }};
+        }
+        a.single-review-link {
+            cursor: pointer;
+        }
+    {%- endstyle -%}
+    
+    <section class="section-{{ section.id }}-padding product-single-review" style="background-color: {{ section.settings.bg_color }};">
+        <div class="container">
+            <div class="single-review-content">
+            {{ product.metafields.custom.single_review | metafield_tag }}
+            </div>
+            <a style="text-align:center;color: {{ section.settings.text_color }};display: block;text-decoration: underline;" class="single-review-link">SEE ALL REVIEWS</a>
+        </div>
+    </section>
+{% endif %}
+
+{% javascript %}
+    document.addEventListener("DOMContentLoaded", function () {
+        // Select all single review links
+        const reviewLinks = document.querySelectorAll(".single-review-link");
+
+        reviewLinks.forEach(link => {
+            link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            // Find the first element whose ID starts with "reviews-panel-"
+            const reviewsPanel = document.querySelector('[id^="reviews-panel-"]');
+
+            if (reviewsPanel) {
+                // Smooth scroll to it
+                reviewsPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+            });
+        });
+    });
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Product Single Review",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section-padding.header.content"
+    },
+    {
+      "type": "select",
+      "id": "padding_top",
+      "options": [
+        {
+            "value": "no-indent",
+            "label": "t:sections.all.section-padding.options__1.label"
+        },
+        {
+            "value": "xs",
+            "label": "t:sections.all.section-padding.options__2.label"
+        },
+        {
+            "value": "s",
+            "label": "t:sections.all.section-padding.options__3.label"
+        },
+        {
+            "value": "m",
+            "label": "t:sections.all.section-padding.options__4.label"
+        },
+        {
+            "value": "l",
+            "label": "t:sections.all.section-padding.options__5.label"
+        }
+      ],
+      "default": "s",
+      "label": "t:sections.all.section-padding.padding_top.label"
+    },
+    {
+      "type": "select",
+      "id": "padding_bottom",
+      "options": [
+        {
+            "value": "no-indent",
+            "label": "t:sections.all.section-padding.options__1.label"
+        },
+        {
+            "value": "xs",
+            "label": "t:sections.all.section-padding.options__2.label"
+        },
+        {
+            "value": "s",
+            "label": "t:sections.all.section-padding.options__3.label"
+        },
+        {
+            "value": "m",
+            "label": "t:sections.all.section-padding.options__4.label"
+        },
+        {
+            "value": "l",
+            "label": "t:sections.all.section-padding.options__5.label"
+        }
+      ],
+      "default": "s",
+      "label": "t:sections.all.section-padding.padding_bottom.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Single Review"
+    }
+  ]
+}
+{% endschema %}

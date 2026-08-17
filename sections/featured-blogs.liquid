@@ -1,0 +1,573 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap"
+  rel="stylesheet"
+>
+
+{% style %}
+  {% render 'section-margin' %}
+
+  #shopify-section-{{ section.id }} .kollab-events {
+    --kollab-red: #ff2028;
+    --kollab-black: #111111;
+
+    position: relative;
+    padding: 70px 0 78px;
+    background-color: #eef3f5;
+    color: #000000;
+    overflow: hidden;
+    isolation: isolate;
+    border-top: 3px solid var(--kollab-red);
+  }
+
+  #shopify-section-{{ section.id }} .kollab-events__inner {
+    position: relative;
+    z-index: 1;
+    width: min(calc(100% - 30px), 1200px);
+    margin: 0 auto;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-events__heading {
+    margin: 0 0 32px;
+    color: var(--kollab-red);
+    font-family: "Instrument Serif", Georgia, serif !important;
+    font-size: clamp(52px, 6vw, 78px);
+    font-weight: 400 !important;
+    line-height: 0.95;
+    letter-spacing: 0;
+    text-align: center;
+    text-transform: none !important;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-events__heading * {
+    font-family: "Instrument Serif", Georgia, serif !important;
+    font-weight: 400 !important;
+    text-transform: none !important;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-events__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 330px);
+    justify-content: center;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card {
+    display: grid;
+    grid-template-rows: 230px 210px 42px;
+    width: 100%;
+    min-width: 0;
+    height: 482px;
+    margin: 0 auto;
+    padding: 0;
+    background: #ffffff;
+    border: 2px solid var(--kollab-black);
+    color: #000000;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    padding: 19px 14px 0;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__title {
+    display: -webkit-box;
+    min-height: 96px;
+    max-height: 96px;
+    margin: 0 0 14px;
+    padding: 0;
+    color: var(--kollab-red);
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 26px;
+    font-weight: 800 !important;
+    line-height: 0.95;
+    letter-spacing: -0.6px;
+    text-transform: none !important;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__title a {
+    color: inherit;
+    font-family: inherit !important;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-decoration: none;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__title a:hover {
+    color: var(--kollab-red);
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__excerpt {
+    display: -webkit-box;
+    min-height: 52px;
+    max-height: 52px;
+    margin: 0 0 13px;
+    padding: 0;
+    color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.35;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin-top: auto;
+    margin-bottom: 18px;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-height: 28px;
+    padding: 7px 11px;
+    background: #000000;
+    color: #ffffff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__date {
+    flex-shrink: 0;
+    color: var(--kollab-red);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: right;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__media {
+    display: block;
+    width: 100%;
+    height: 210px;
+    margin: 0;
+    padding: 0;
+    background: #f3f0e8;
+    border: 0;
+    overflow: hidden;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 450ms ease;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card:hover .kollab-event-card__media img {
+    transform: scale(1.035);
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 42px;
+    margin: 0;
+    padding: 8px 12px;
+    background: var(--kollab-red);
+    color: #ffffff;
+    border: 0;
+    border-radius: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    transition:
+      background-color 250ms ease,
+      color 250ms ease;
+  }
+
+  #shopify-section-{{ section.id }} .kollab-event-card__button:hover {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  #shopify-section-{{ section.id }}
+  .kollab-events.is-motion-ready
+  .kollab-events__heading,
+  #shopify-section-{{ section.id }}
+  .kollab-events.is-motion-ready
+  .kollab-event-card {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+
+  #shopify-section-{{ section.id }}
+  .kollab-events.is-motion-ready.is-visible
+  .kollab-events__heading,
+  #shopify-section-{{ section.id }}
+  .kollab-events.is-motion-ready.is-visible
+  .kollab-event-card {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 720ms ease,
+      transform 720ms ease;
+  }
+
+  #shopify-section-{{ section.id }}
+  .kollab-events.is-motion-ready.is-visible
+  .kollab-events__heading {
+    transition-delay: 80ms;
+  }
+
+  #shopify-section-{{ section.id }}
+  .kollab-events.is-motion-ready.is-visible
+  .kollab-event-card {
+    transition-delay: 160ms;
+  }
+
+  @media screen and (max-width: 600px) {
+    #shopify-section-{{ section.id }} .kollab-events {
+      padding: 48px 0 56px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-events__inner {
+      width: min(calc(100% - 28px), 430px);
+    }
+
+    #shopify-section-{{ section.id }} .kollab-events__heading {
+      margin-bottom: 25px;
+      font-size: clamp(45px, 15vw, 62px);
+    }
+
+    #shopify-section-{{ section.id }} .kollab-events__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card {
+      grid-template-rows: 240px 280px 44px;
+      width: 100%;
+      height: 564px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__body {
+      padding: 19px 14px 0;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__title {
+      min-height: 100px;
+      max-height: 100px;
+      font-size: 26px;
+      -webkit-line-clamp: 4;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__excerpt {
+      min-height: 56px;
+      max-height: 56px;
+      -webkit-line-clamp: 3;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__date {
+      font-size: 22px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__media {
+      height: 280px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__button {
+      min-height: 44px;
+      font-size: 16px;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    #shopify-section-{{ section.id }} .kollab-event-card__title {
+      font-size: 23px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__date {
+      font-size: 19px;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__badge {
+      padding-right: 8px;
+      padding-left: 8px;
+      font-size: 11px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #shopify-section-{{ section.id }}
+    .kollab-events.is-motion-ready
+    .kollab-events__heading,
+    #shopify-section-{{ section.id }}
+    .kollab-events.is-motion-ready
+    .kollab-event-card,
+    #shopify-section-{{ section.id }}
+    .kollab-events.is-motion-ready.is-visible
+    .kollab-events__heading,
+    #shopify-section-{{ section.id }}
+    .kollab-events.is-motion-ready.is-visible
+    .kollab-event-card {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card__media img {
+      transition: none;
+    }
+
+    #shopify-section-{{ section.id }} .kollab-event-card:hover .kollab-event-card__media img {
+      transform: none;
+    }
+  }
+{% endstyle %}
+
+{% liquid
+  assign default_event_link = 'https://luma.com/1sxkb4ss'
+  assign card_link = section.settings.event_link
+
+  if card_link == blank
+    assign card_link = default_event_link
+  endif
+
+  assign card_image = 'https://cdn.shopify.com/s/files/1/0588/2088/6577/files/3a801e7f-3178-4ccd-acee-e9484a75f38d.avif?v=1782968591'
+  assign card_title = 'KOREAN MARKETPLACE in Beverly Hills 🇰🇷'
+  assign card_description = 'Experience a curated Korean Marketplace at the Beverly Center featuring Korean beauty, fashion, and lifestyle brands✨'
+  assign card_badge = 'Free Entry'
+  assign card_date_label = 'JULY 25'
+%}
+
+<section class="kollab-events">
+  <div class="kollab-events__inner">
+    {% if section.settings.show_heading %}
+      <h2 class="kollab-events__heading">
+        {{ section.settings.heading }}
+      </h2>
+    {% endif %}
+
+    <div class="kollab-events__grid">
+      <article class="kollab-event-card">
+        <div class="kollab-event-card__body">
+          <h3 class="kollab-event-card__title">
+            <a
+              href="{{ card_link }}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {{ card_title }}
+            </a>
+          </h3>
+
+          <p class="kollab-event-card__excerpt">
+            {{ card_description }}
+          </p>
+
+          <div class="kollab-event-card__meta">
+            <span class="kollab-event-card__badge">
+              {{ card_badge }}
+            </span>
+
+            <span class="kollab-event-card__date">
+              {{ card_date_label }}
+            </span>
+          </div>
+        </div>
+
+        <a
+          class="kollab-event-card__media"
+          href="{{ card_link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View {{ card_title | escape }}"
+        >
+          <img
+            src="{{ card_image }}"
+            alt="{{ card_title | escape }}"
+            width="600"
+            height="420"
+            loading="lazy"
+          >
+        </a>
+
+        <a
+          class="kollab-event-card__button"
+          href="{{ card_link }}"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Join Event&nbsp; &rarr;
+        </a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var section = document.querySelector(
+      "#shopify-section-{{ section.id }} .kollab-events"
+    );
+
+    if (!section) {
+      return;
+    }
+
+    var reducedMotion =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    section.classList.add("is-motion-ready");
+
+    if (reducedMotion || !("IntersectionObserver" in window)) {
+      section.classList.add("is-visible");
+      return;
+    }
+
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            section.classList.add("is-visible");
+            observer.disconnect();
+          }
+        });
+      },
+      {
+        rootMargin: "0px 0px -12% 0px",
+        threshold: 0.18
+      }
+    );
+
+    observer.observe(section);
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Kollab events",
+  "tag": "section",
+  "class": "spaced-section section-kollab-events",
+  "enabled_on": {
+    "templates": ["*"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "default": true,
+      "label": "Show heading"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Upcoming Events",
+      "label": "Heading"
+    },
+    {
+      "type": "header",
+      "content": "Event link"
+    },
+    {
+      "type": "url",
+      "id": "event_link",
+      "label": "Korean Marketplace link"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.section-margin.header.content"
+    },
+    {
+      "type": "select",
+      "id": "margin_top",
+      "options": [
+        {
+          "value": "no-indent",
+          "label": "t:sections.all.section-margin.options__1.label"
+        },
+        {
+          "value": "xs",
+          "label": "t:sections.all.section-margin.options__2.label"
+        },
+        {
+          "value": "s",
+          "label": "t:sections.all.section-margin.options__3.label"
+        },
+        {
+          "value": "m",
+          "label": "t:sections.all.section-margin.options__4.label"
+        },
+        {
+          "value": "l",
+          "label": "t:sections.all.section-margin.options__5.label"
+        }
+      ],
+      "default": "no-indent",
+      "label": "t:sections.all.section-margin.margin_top.label"
+    },
+    {
+      "type": "select",
+      "id": "margin_bottom",
+      "options": [
+        {
+          "value": "no-indent",
+          "label": "t:sections.all.section-margin.options__1.label"
+        },
+        {
+          "value": "xs",
+          "label": "t:sections.all.section-margin.options__2.label"
+        },
+        {
+          "value": "s",
+          "label": "t:sections.all.section-margin.options__3.label"
+        },
+        {
+          "value": "m",
+          "label": "t:sections.all.section-margin.options__4.label"
+        },
+        {
+          "value": "l",
+          "label": "t:sections.all.section-margin.options__5.label"
+        }
+      ],
+      "default": "l",
+      "label": "t:sections.all.section-margin.margin_bottom.label"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kollab events"
+    }
+  ]
+}
+{% endschema %}

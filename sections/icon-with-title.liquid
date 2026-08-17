@@ -1,0 +1,213 @@
+{%- style -%}
+  {% render 'section-padding' %}
+{%- endstyle -%}
+
+
+<section class="section-{{ section.id }}-padding icon-title-grid" id="IconTitleGrid-{{ section.id }}" data-section="{{ section.id }}" style="background-color:{{ section.settings.bg_color }};">
+   <div class="container"> 
+    {% if section.settings.title != blank %}
+      <h2 class="section-title h2">{{ section.settings.title }}</h2>
+    {% endif %}
+
+    <div class="grid" style="grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);">
+
+      {% for block in section.blocks %}
+        <div class="grid-item" {{ block.shopify_attributes }}>
+
+            <div class="icon-wrapper" style="max-width: {{ section.settings.image_size }}px;">
+                {% if block.settings.image != blank %}
+                    <img
+                        src="{{ block.settings.image | image_url: width: 200 }}"
+                        alt="{{ block.settings.title | strip_html | escape }}"
+                        loading="lazy" width="auto" height="auto"
+                    >
+                {% else %}
+                    {% render 'icon-image' %} 
+                {% endif %}  
+            </div>
+
+          {% if block.settings.title != blank %}
+            <div class="item-title {{ section.settings.heading_size }}">
+              {{ block.settings.title }}
+            </div>
+          {% endif %}
+
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<style>
+.section-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.icon-title-grid .grid {
+  display: grid;
+  gap: 30px;
+}
+
+.grid-item {
+  text-align: center;
+}
+
+.icon-wrapper {
+  margin: 0 auto 20px auto;
+}
+
+.icon-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.item-title {
+  margin-top: 12px;
+  text-transform: none !important;
+  font-family: 'Enkel', sans-serif !important;
+}
+
+@media (max-width: 768px) {
+  .icon-title-grid .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+</style>
+
+{% schema %}
+{
+  "name": "Icon Title Grid",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Our Features"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Desktop Columns",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Header Size",
+      "default": "h4",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "image_size",
+      "label": "Icon Width (px)",
+      "min": 50,
+      "max": 500,
+      "step": 10,
+      "default": 150
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#f5f5f5"
+    },
+    {
+        "type": "header",
+        "content": "t:sections.all.section-padding.header.content"
+    },
+    {
+        "type": "select",
+        "id": "padding_top",
+        "options": [
+            {
+                "value": "no-indent",
+                "label": "t:sections.all.section-padding.options__1.label"
+            },
+            {
+                "value": "xs",
+                "label": "t:sections.all.section-padding.options__2.label"
+            },
+            {
+                "value": "s",
+                "label": "t:sections.all.section-padding.options__3.label"
+            },
+            {
+                "value": "m",
+                "label": "t:sections.all.section-padding.options__4.label"
+            },
+            {
+                "value": "l",
+                "label": "t:sections.all.section-padding.options__5.label"
+            }
+        ],
+        "default": "s",
+        "label": "t:sections.all.section-padding.padding_top.label"
+    },
+    {
+        "type": "select",
+        "id": "padding_bottom",
+        "options": [
+            {
+                "value": "no-indent",
+                "label": "t:sections.all.section-padding.options__1.label"
+            },
+            {
+                "value": "xs",
+                "label": "t:sections.all.section-padding.options__2.label"
+            },
+            {
+                "value": "s",
+                "label": "t:sections.all.section-padding.options__3.label"
+            },
+            {
+                "value": "m",
+                "label": "t:sections.all.section-padding.options__4.label"
+            },
+            {
+                "value": "l",
+                "label": "t:sections.all.section-padding.options__5.label"
+            }
+        ],
+        "default": "s",
+        "label": "t:sections.all.section-padding.padding_bottom.label"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Icon Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Item Title"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Icon Title Grid"
+    }
+  ]
+}
+{% endschema %}

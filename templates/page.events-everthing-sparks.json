@@ -1,0 +1,1 @@
+{"sections":{"main":{"type":"main-page","settings":{"padding_top":"no-indent","padding_bottom":"no-indent"}},"custom_liquid_CR8nQe":{"type":"custom-liquid","name":"t:sections.custom-liquid.presets.name","settings":{"custom_liquid":"{%- render 'gallery-popup-events' -%}"}}},"order":["main","custom_liquid_CR8nQe"]}

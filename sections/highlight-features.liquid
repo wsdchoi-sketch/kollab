@@ -1,0 +1,486 @@
+	{% style %}
+		{% render 'section-margin' %}
+		@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+		#shopify-section-{{ section.id }} .highlight-features {
+			padding: 48px 0 58px;
+			background-color: #000000;
+			background-image: url("https://cdn.shopify.com/s/files/1/0588/2088/6577/files/2.png?v=1781167498");
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+			color: #ffffff;
+			overflow: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__inner {
+			width: min(100% - 54px, 980px);
+			margin: 0 auto;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__heading {
+			margin: 0;
+			color: #fff;
+			font-family: "Instrument Serif", Georgia, serif !important;
+			font-size: clamp(42px, 4.2vw, 58px);
+			font-weight: 400 !important;
+			line-height: 1;
+			letter-spacing: 0;
+			text-transform: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__heading * {
+			font-family: "Instrument Serif", Georgia, serif !important;
+			font-weight: 400 !important;
+			text-transform: none !important;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__toolbar {
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			gap: 24px;
+			margin: 0 0 34px;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__controls {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			flex: 0 0 auto;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__arrow {
+			width: 42px;
+			height: 42px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+			border: 1px solid rgba(255, 255, 255, 0.6);
+			border-radius: 50%;
+			background: rgba(0, 0, 0, 0.42);
+			color: #ffffff;
+			cursor: pointer;
+			transition: background 180ms ease, border-color 180ms ease, color 180ms ease, opacity 180ms ease;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__arrow:hover,
+		#shopify-section-{{ section.id }} .highlight-features__arrow:focus-visible {
+			background: #F12C18;
+			border-color: #F12C18;
+			color: #ffffff;
+			outline: 0;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__arrow:disabled {
+			opacity: 0.35;
+			cursor: default;
+			pointer-events: none;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__arrow svg {
+			width: 18px;
+			height: 18px;
+			stroke: currentColor;
+			stroke-width: 2;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__grid {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: clamp(22px, 3vw, 32px);
+			align-items: start;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__viewport {
+			overflow: visible;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__stage.is-slider .highlight-features__viewport {
+			overflow: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__stage.is-slider .highlight-features__grid {
+			display: flex;
+			gap: clamp(22px, 3vw, 32px);
+			align-items: start;
+			overflow-x: auto;
+			scroll-behavior: smooth;
+			scroll-snap-type: x mandatory;
+			scrollbar-width: none;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__stage.is-slider .highlight-features__grid::-webkit-scrollbar {
+			display: none;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__stage.is-slider .highlight-feature-card {
+			flex: 0 0 calc((100% - clamp(22px, 3vw, 32px)) / 2);
+			scroll-snap-align: start;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card {
+			display: flex;
+			flex-direction: column;
+			min-width: 0;
+			color: #ffffff;
+			text-decoration: none;
+			transition: transform 180ms ease, opacity 180ms ease;
+			cursor: pointer;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card:hover,
+		#shopify-section-{{ section.id }} .highlight-feature-card:focus-visible {
+			color: #ffffff;
+			opacity: 0.92;
+			transform: translateY(-4px);
+			outline: 0;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card__media {
+			display: block;
+			width: 100%;
+			aspect-ratio: 1 / 0.92;
+			background: #161616;
+			overflow: hidden;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card__media img,
+		#shopify-section-{{ section.id }} .highlight-feature-card__placeholder {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card__placeholder {
+			background: #161616;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card__title {
+			margin: 12px 0 7px;
+			color: #ffffff;
+			font-family: "ENKEL", "Enkel", Georgia, serif !important;
+			font-size: clamp(19px, 2vw, 24px);
+			font-weight: 700;
+			line-height: 0.98;
+			letter-spacing: 0;
+			text-transform: uppercase;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-feature-card__excerpt {
+			display: grid;
+			gap: 4px;
+			margin: 0;
+			color: #ffffff;
+			font-size: clamp(12px, 1.05vw, 14px);
+			font-weight: 400;
+			line-height: 1.35;
+			letter-spacing: 0;
+		}
+
+		#shopify-section-{{ section.id }} .highlight-features__empty {
+			margin: 22px 0 0;
+			color: #ffffff;
+			font-size: 15px;
+			font-weight: 700;
+		}
+
+		@media screen and (max-width: 749px) {
+			#shopify-section-{{ section.id }} .highlight-features {
+				padding: 36px 0 44px;
+			}
+
+			#shopify-section-{{ section.id }} .highlight-features__inner {
+				width: min(100% - 32px, 520px);
+			}
+
+			#shopify-section-{{ section.id }} .highlight-features__toolbar {
+				align-items: start;
+				flex-direction: column;
+				gap: 18px;
+			}
+
+			#shopify-section-{{ section.id }} .highlight-features__grid {
+				grid-template-columns: 1fr;
+				gap: 24px;
+			}
+
+			#shopify-section-{{ section.id }} .highlight-features__stage.is-slider .highlight-features__grid {
+				gap: 24px;
+			}
+
+			#shopify-section-{{ section.id }} .highlight-features__stage.is-slider .highlight-feature-card {
+				flex-basis: min(86vw, 420px);
+			}
+
+			#shopify-section-{{ section.id }} .highlight-feature-card__media {
+				aspect-ratio: 1 / 0.82;
+			}
+		}
+	{% endstyle %}
+
+	{% liquid
+		assign highlight_blog = section.settings.blog
+		if highlight_blog == blank
+			assign highlight_blog = blogs.event
+		endif
+		assign highlight_tag = 'event'
+		assign highlight_tag_downcase = 'event'
+		assign matching_highlights = 0
+		if highlight_blog != blank
+			for article in highlight_blog.articles
+				assign article_tags_downcase = article.tags | join: ',' | downcase
+				if article_tags_downcase contains highlight_tag_downcase
+					assign matching_highlights = matching_highlights | plus: 1
+				endif
+			endfor
+		endif
+		assign enable_highlight_slider = false
+		if matching_highlights > 2
+			assign enable_highlight_slider = true
+		endif
+	%}
+
+	<section class="highlight-features">
+		<div class="highlight-features__inner">
+			<div class="highlight-features__toolbar">
+				<h2 class="highlight-features__heading">{{ section.settings.heading }}</h2>
+
+				{% if enable_highlight_slider %}
+					<div class="highlight-features__controls" aria-label="Event slider controls">
+						<button class="highlight-features__arrow" type="button" data-highlight-prev aria-label="Previous events">
+							<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+								<path d="M15 5L8 12L15 19" stroke-linecap="round" stroke-linejoin="round"></path>
+							</svg>
+						</button>
+						<button class="highlight-features__arrow" type="button" data-highlight-next aria-label="Next events">
+							<svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+								<path d="M9 5L16 12L9 19" stroke-linecap="round" stroke-linejoin="round"></path>
+							</svg>
+						</button>
+					</div>
+				{% endif %}
+			</div>
+
+			{% if highlight_blog != blank and matching_highlights > 0 %}
+				<div class="highlight-features__stage{% if enable_highlight_slider %} is-slider{% endif %}" data-highlight-slider>
+					<div class="highlight-features__viewport">
+						<div class="highlight-features__grid" data-highlight-track>
+							{% for article in highlight_blog.articles %}
+								{% assign article_tags_downcase = article.tags | join: ',' | downcase %}
+								{% if article_tags_downcase contains highlight_tag_downcase %}
+									{% assign card_link = article.url %}
+									{% if article.metafields.custom.event_link != blank %}
+										{% assign card_link = article.metafields.custom.event_link.value | default: article.metafields.custom.event_link %}
+									{% elsif article.metafields.custom.dedicated_link != blank %}
+										{% assign card_link = article.metafields.custom.dedicated_link.value | default: article.metafields.custom.dedicated_link %}
+									{% elsif article.metafields.custom.link != blank %}
+										{% assign card_link = article.metafields.custom.link.value | default: article.metafields.custom.link %}
+									{% endif %}
+
+									{% assign card_datetime = article.metafields.custom.event_datetime.value | default: article.metafields.custom.event_datetime %}
+									{% if card_datetime == blank %}
+										{% assign card_datetime = article.metafields.custom.event_date.value | default: article.metafields.custom.event_date %}
+									{% endif %}
+									{% if card_datetime == blank %}
+										{% assign card_datetime = article.published_at | date: '%A %-d %B' %}
+									{% endif %}
+
+									{% assign card_location = article.metafields.custom.event_location.value | default: article.metafields.custom.event_location %}
+									{% if card_location == blank %}
+										{% assign card_location = article.metafields.custom.location.value | default: article.metafields.custom.location %}
+									{% endif %}
+									{% if card_location == blank and article.excerpt_or_content != blank %}
+										{% assign card_location = article.excerpt_or_content | strip_html | truncate: 92 %}
+									{% endif %}
+									{% assign article_image_alt = article.image.alt | default: article.title %}
+
+									<a class="highlight-feature-card" href="{{ card_link }}" target="_blank" rel="noopener">
+										<span class="highlight-feature-card__media">
+											{% if article.image != blank %}
+												{{ article.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 750px) 481px, 100vw', alt: article_image_alt }}
+											{% else %}
+												<span class="highlight-feature-card__placeholder" aria-hidden="true"></span>
+											{% endif %}
+										</span>
+										<h3 class="highlight-feature-card__title">
+											{{ article.title }}
+										</h3>
+										<p class="highlight-feature-card__excerpt">
+											<span>{{ card_datetime }}</span>
+											{% if card_location != blank %}
+												<span>{{ card_location }}</span>
+											{% endif %}
+										</p>
+									</a>
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			{% elsif highlight_blog != blank %}
+				<p class="highlight-features__empty">No event articles found. Add the "{{ highlight_tag }}" tag to blog articles.</p>
+			{% else %}
+				<p class="highlight-features__empty">Select a blog for this event section.</p>
+			{% endif %}
+		</div>
+	</section>
+
+	{% if enable_highlight_slider %}
+		<script>
+			(function () {
+				var slider = document.querySelector("#shopify-section-{{ section.id }} [data-highlight-slider]");
+
+				if (!slider) {
+					return;
+				}
+
+				var track = slider.querySelector("[data-highlight-track]");
+				var previousButton = document.querySelector("#shopify-section-{{ section.id }} [data-highlight-prev]");
+				var nextButton = document.querySelector("#shopify-section-{{ section.id }} [data-highlight-next]");
+
+				if (!track || !previousButton || !nextButton) {
+					return;
+				}
+
+				var getScrollStep = function () {
+					var card = track.querySelector(".highlight-feature-card");
+					var styles = window.getComputedStyle(track);
+					var gap = parseFloat(styles.columnGap || styles.gap || "0");
+
+					if (Number.isNaN(gap)) {
+						gap = 0;
+					}
+
+					return card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+				};
+
+				var updateButtons = function () {
+					var maxScroll = track.scrollWidth - track.clientWidth - 2;
+
+					previousButton.disabled = track.scrollLeft <= 2;
+					nextButton.disabled = track.scrollLeft >= maxScroll;
+				};
+
+				previousButton.addEventListener("click", function () {
+					track.scrollBy({
+						left: -getScrollStep(),
+						behavior: "smooth"
+					});
+				});
+
+				nextButton.addEventListener("click", function () {
+					track.scrollBy({
+						left: getScrollStep(),
+						behavior: "smooth"
+					});
+				});
+
+				track.addEventListener("scroll", updateButtons, {
+					passive: true
+				});
+
+				window.addEventListener("resize", updateButtons);
+				updateButtons();
+			}());
+		</script>
+	{% endif %}
+
+	{% schema %}
+	{
+		"name": "Highlight Features",
+		"tag": "section",
+		"class": "section-highlight-features",
+		"enabled_on": {
+			"templates": ["*"]
+		},
+		"settings": [
+			{
+				"type": "inline_richtext",
+				"id": "heading",
+				"default": "This Month's Highlight",
+				"label": "Heading"
+			},
+			{
+				"type": "blog",
+				"id": "blog",
+				"label": "Blog source"
+			},
+			{
+				"type": "text",
+				"id": "highlight_tag",
+				"default": "event",
+				"label": "Event tag",
+				"info": "This section is fixed to the event tag."
+			},
+			{
+				"type": "header",
+				"content": "t:sections.all.section-margin.header.content"
+			},
+			{
+				"type": "select",
+				"id": "margin_top",
+				"options": [
+					{
+						"value": "no-indent",
+						"label": "t:sections.all.section-margin.options__1.label"
+					},
+					{
+						"value": "xs",
+						"label": "t:sections.all.section-margin.options__2.label"
+					},
+					{
+						"value": "s",
+						"label": "t:sections.all.section-margin.options__3.label"
+					},
+					{
+						"value": "m",
+						"label": "t:sections.all.section-margin.options__4.label"
+					},
+					{
+						"value": "l",
+						"label": "t:sections.all.section-margin.options__5.label"
+					}
+				],
+				"default": "no-indent",
+				"label": "t:sections.all.section-margin.margin_top.label"
+			},
+			{
+				"type": "select",
+				"id": "margin_bottom",
+				"options": [
+					{
+						"value": "no-indent",
+						"label": "t:sections.all.section-margin.options__1.label"
+					},
+					{
+						"value": "xs",
+						"label": "t:sections.all.section-margin.options__2.label"
+					},
+					{
+						"value": "s",
+						"label": "t:sections.all.section-margin.options__3.label"
+					},
+					{
+						"value": "m",
+						"label": "t:sections.all.section-margin.options__4.label"
+					},
+					{
+						"value": "l",
+						"label": "t:sections.all.section-margin.options__5.label"
+					}
+				],
+				"default": "no-indent",
+				"label": "t:sections.all.section-margin.margin_bottom.label"
+			}
+		],
+		"presets": [
+			{
+				"name": "Highlight Features"
+			}
+		]
+	}
+	{% endschema %}

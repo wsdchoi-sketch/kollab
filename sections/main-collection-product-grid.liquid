@@ -1,0 +1,2021 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-loading-overlay.css' | asset_url | stylesheet_tag }}
+{%- if settings.pagination_type == 'load_more'
+	or settings.pagination_type == 'infinite_scroll'
+-%}
+	<script src='{{ 'load-more.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+
+<link
+	rel='preload'
+	href='{{ 'component-card.css' | asset_url }}'
+	as='style'
+	onload="this.onload=null;this.rel='stylesheet'"
+>
+<link
+	rel='preload'
+	href='{{ 'component-price.css' | asset_url }}'
+	as='style'
+	onload="this.onload=null;this.rel='stylesheet'"
+>
+<link
+	rel='preload'
+	href='{{ 'component-rte.css' | asset_url }}'
+	as='style'
+	onload="this.onload=null;this.rel='stylesheet'"
+>
+
+<noscript>{{ 'component-price.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-badge.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-rte.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
+	{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+	{% if section.settings.filter_type == 'horizontal' %}
+		<script src='{{ 'product-grid.js' | asset_url }}' defer='defer'></script>
+	{% endif %}
+	<script src='{{ 'facets.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+
+{%- if settings.quickview_show -%}
+	<link
+		rel='preload'
+		href='{{ 'section-main-product.css' | asset_url }}'
+		as='style'
+		onload="this.onload=null;this.rel='stylesheet'"
+	>
+	<link
+		rel='stylesheet'
+		href='{{ 'component-deferred-media.css' | asset_url }}'
+		media='all'
+	>
+	<link
+		rel='preload'
+		href='{{ 'quick-add.css' | asset_url }}'
+		as='style'
+		onload="this.onload=null;this.rel='stylesheet'"
+	>
+
+	<script src='{{ 'quick-add.js' | asset_url }}' defer='defer'></script>
+	<script src='{{ 'product-form.js' | asset_url }}' defer='defer'></script>
+	<script src='{{ 'products-per-row.js' | asset_url }}' defer='defer'></script>
+{%- endif -%}
+{%- if settings.quickview_show == false -%}
+	{{ 'section-main-product.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{%- style -%}
+	{% render 'section-padding' %}
+	@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+	.collection-grid-section {
+		overflow-x: clip;
+	}
+
+	@supports not (overflow: clip) {
+		.collection-grid-section {
+			overflow-x: hidden;
+		}
+	}
+
+	.collection-grid-section .container.section-{{ section.id }}-padding {
+		max-width: 100%;
+	}
+
+	.collection-grid-section .kollab-collection-shell {
+		display: grid;
+		grid-template-columns: 260px minmax(0, 1fr);
+		gap: 28px;
+		align-items: start;
+		width: 100%;
+		max-width: 100%;
+		overflow: hidden;
+	}
+
+	.collection-grid-section .kollab-collection-sidebar {
+		position: sticky;
+		top: 18px;
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+		width: 100%;
+		min-width: 0;
+		padding: 0;
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+	}
+
+	.collection-grid-section .kollab-filter-toggle,
+	.collection-grid-section .kollab-filter-close,
+	.collection-grid-section .kollab-filter-overlay {
+		display: none;
+	}
+
+	.collection-grid-section .kollab-collection-sidebar__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 14px;
+	}
+
+	.collection-grid-section .kollab-collection-sidebar__title {
+		margin: 0;
+		color: #000000;
+		font-size: 18px;
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.collection-grid-section .kollab-collection-search {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.collection-grid-section .kollab-collection-search label,
+	.collection-grid-section .kollab-filter-group__summary {
+		color: #000000;
+		font-size: 11px;
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.collection-grid-section .kollab-collection-search input {
+		width: 100%;
+		min-height: 44px;
+		padding: 10px 16px;
+		color: #000000;
+		background: #ffffff;
+		border: 1px solid #787878;
+		border-radius: 999px;
+		font-size: 14px;
+		outline: 0;
+		transition: border-color 0.18s ease, box-shadow 0.18s ease;
+	}
+
+	.collection-grid-section .kollab-collection-search input:focus {
+		border-color: #000000;
+		box-shadow: 0 0 0 3px rgba(241, 44, 24, 0.14);
+	}
+
+	.collection-grid-section .kollab-filter-group {
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	.collection-grid-section .kollab-filter-group:first-of-type {
+		padding-top: 0;
+		border-top: 0;
+	}
+
+	.collection-grid-section .kollab-filter-group__summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px;
+		width: 100%;
+		cursor: pointer;
+		list-style: none;
+	}
+
+	.collection-grid-section .kollab-filter-group--plain .kollab-filter-group__summary {
+		cursor: pointer;
+		pointer-events: auto;
+		font-size: 20px;
+		font-weight: 800;
+		line-height: 1.15;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	.collection-grid-section .kollab-filter-group__summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.collection-grid-section .kollab-filter-group__summary::after {
+		content: '+';
+		color: #000000;
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 1;
+	}
+
+	.collection-grid-section .kollab-filter-group[open] .kollab-filter-group__summary::after {
+		content: '-';
+	}
+
+	.collection-grid-section .kollab-filter-group--plain .kollab-filter-group__summary::after {
+		content: '+';
+	}
+
+	.collection-grid-section .kollab-filter-group--plain[open] .kollab-filter-group__summary::after {
+		content: '-';
+	}
+
+	.collection-grid-section .kollab-filter-group__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 9px 8px;
+		margin-top: 13px;
+	}
+
+	.collection-grid-section .kollab-filter-group--plain .kollab-filter-group__list {
+		display: grid;
+		gap: 14px;
+		margin-top: 18px;
+	}
+
+	.collection-grid-section .kollab-collection-tag {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 34px;
+		padding: 8px 13px;
+		color: #000000;
+		background: #ffffff;
+		border: 1px solid #787878;
+		border-radius: 999px;
+		font-size: 10px;
+		font-weight: 400;
+		line-height: 1;
+		letter-spacing: 0;
+		text-decoration: none;
+		text-transform: uppercase;
+		transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+		cursor: pointer;
+	}
+
+	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag {
+		display: block;
+		width: max-content;
+		max-width: 100%;
+		min-height: 0;
+		padding: 0;
+		color: #222222;
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		font-size: 20px;
+		font-weight: 400;
+		line-height: 1.15;
+		text-align: left;
+		text-transform: none;
+		transition: color 0.18s ease, transform 0.18s ease;
+	}
+
+	.collection-grid-section .kollab-collection-tag:hover,
+	.collection-grid-section .kollab-collection-tag.is-active,
+	.collection-grid-section .kollab-collection-tag[aria-pressed='true'] {
+		color: #ffffff;
+		background: #F12C18;
+		border-color: #F12C18;
+	}
+
+	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag:hover,
+	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag.is-active,
+	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag[aria-pressed='true'] {
+		color: #F12C18;
+		background: transparent;
+		border-color: transparent;
+		transform: translateX(4px);
+	}
+
+	.collection-grid-section .kollab-collection-tag:focus-visible {
+		outline: 0;
+		box-shadow: 0 0 0 3px rgba(241, 44, 24, 0.18);
+	}
+
+	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag:focus-visible {
+		box-shadow: none;
+		text-decoration: underline;
+		text-underline-offset: 4px;
+	}
+
+	.collection-grid-section .kollab-filter-price {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 10px;
+		margin-top: 13px;
+	}
+
+	.collection-grid-section .kollab-filter-price label {
+		display: flex;
+		flex-direction: column;
+		gap: 7px;
+		color: #000000;
+		font-size: 10px;
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.collection-grid-section .kollab-filter-price input {
+		width: 100%;
+		min-height: 38px;
+		padding: 9px 11px;
+		color: #000000;
+		background: #ffffff;
+		border: 1px solid #787878;
+		border-radius: 999px;
+		font-size: 13px;
+		outline: 0;
+	}
+
+	.collection-grid-section .kollab-filter-price input:focus {
+		border-color: #000000;
+		box-shadow: 0 0 0 3px rgba(241, 44, 24, 0.14);
+	}
+
+	.collection-grid-section .kollab-collection-main {
+		min-width: 0;
+		overflow: hidden;
+	}
+
+	.collection-grid-section .kollab-product-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+		gap: 0;
+		width: 100%;
+		max-width: 100%;
+		overflow: hidden;
+		border-top: 1px solid #787878;
+		border-left: 1px solid #787878;
+	}
+
+	.collection-grid-section .kollab-product-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		min-width: 0;
+		height: auto;
+		min-height: 610px;
+		background: #ffffff;
+		border: 0;
+		border-right: 1px solid #787878;
+		border-bottom: 1px solid #787878;
+		border-radius: 0;
+		overflow: hidden;
+		box-shadow: none;
+		color: #000000;
+	}
+
+	.collection-grid-section .kollab-product-card[hidden] {
+		display: none !important;
+	}
+
+	.collection-grid-section .kollab-product-card__badge {
+		display: none;
+	}
+
+	.collection-grid-section .kollab-product-card__media {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 310px;
+		min-height: 310px;
+		background: #eeeeee;
+		border-bottom: 0;
+		overflow: hidden;
+	}
+
+	.collection-grid-section .kollab-product-card__track {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		transform: translateX(calc(var(--active-slide, 0) * -100%));
+		transition: transform 0.35s ease;
+	}
+
+	.collection-grid-section .kollab-product-card:hover .kollab-product-card__track--has-hover {
+		transform: translateX(-100%) !important;
+	}
+
+	.collection-grid-section .kollab-product-card__slide {
+		flex: 0 0 100%;
+		width: 100%;
+		height: 100%;
+		min-width: 100%;
+	}
+
+	.collection-grid-section .kollab-product-card__media img,
+	.collection-grid-section .kollab-product-card__placeholder {
+		display: block;
+		width: 100%;
+		height: 100%;
+		max-height: none !important;
+		object-fit: cover;
+	}
+
+	.collection-grid-section .kollab-product-card__placeholder {
+		background: #f3f0e8;
+	}
+
+	.collection-grid-section .kollab-product-card__arrow {
+		display: none !important;
+	}
+
+	.collection-grid-section .kollab-product-card__arrow:hover,
+	.collection-grid-section .kollab-product-card__arrow:focus,
+	.collection-grid-section .kollab-product-card__arrow:active {
+		background: transparent !important;
+		color: #000000 !important;
+		border: 0 !important;
+		box-shadow: none !important;
+		transform: translateY(-50%) !important;
+		transition: none !important;
+		animation: none !important;
+	}
+
+	.collection-grid-section .kollab-product-card__arrow--prev {
+		left: 10px;
+	}
+
+	.collection-grid-section .kollab-product-card__arrow--next {
+		right: 10px;
+	}
+
+	.collection-grid-section .kollab-product-card__quick {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		justify-self: center;
+		align-self: end;
+		width: auto;
+		min-width: 132px;
+		min-height: 38px !important;
+		padding: 9px 18px !important;
+		background: #000000 !important;
+		color: #ffffff !important;
+		border: 0 !important;
+		border-radius: 999px !important;
+		box-shadow: none;
+		font-family: Arial, Helvetica, sans-serif !important;
+		font-size: 14px !important;
+		font-weight: 400;
+		line-height: 1;
+		text-align: center;
+		text-decoration: none;
+		text-transform: none;
+		transition: none;
+		cursor: pointer;
+	}
+
+	.collection-grid-section .kollab-product-card__quick:hover {
+		background: #000000 !important;
+		color: #ffffff !important;
+		transform: none;
+	}
+
+	.collection-grid-section .kollab-product-card__quick:focus,
+	.collection-grid-section .kollab-product-card__quick:active {
+		background: #000000 !important;
+		color: #ffffff !important;
+		box-shadow: none;
+		transform: none;
+		transition: none;
+		animation: none;
+	}
+
+	.collection-grid-section .kollab-product-card__form {
+		align-self: end;
+		justify-self: center;
+		margin: 0;
+		text-align: center;
+	}
+
+	.collection-grid-section .kollab-product-card__body {
+		display: grid;
+		flex: 1;
+		grid-template-rows: auto 74px 40px 20px 38px;
+		row-gap: 13px;
+		min-height: 0;
+		padding: 24px 28px 20px;
+		background: #ffffff;
+	}
+
+	.collection-grid-section .kollab-product-card__title {
+		margin: 0;
+		color: #000000 !important;
+		font-family: Arial, Helvetica, sans-serif !important;
+		font-size: 16px !important;
+		font-weight: 800 !important;
+		line-height: 1.12 !important;
+		min-height: 0;
+		max-height: none;
+		overflow: visible;
+		text-transform: none;
+		display: block;
+	}
+
+	.collection-grid-section .kollab-product-card__title a {
+		color: inherit !important;
+		font-family: inherit !important;
+		font-size: inherit !important;
+		font-weight: inherit !important;
+		line-height: inherit !important;
+		text-decoration: none;
+		text-transform: none !important;
+	}
+
+	.collection-grid-section .kollab-product-card__description {
+		margin: 0;
+		color: #000000 !important;
+		font-family: Arial, Helvetica, sans-serif !important;
+		font-size: 16px !important;
+		font-weight: 400 !important;
+		line-height: 1.32 !important;
+		min-height: 74px;
+		max-height: 74px;
+		overflow: hidden;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 3;
+	}
+
+	.collection-grid-section .kollab-product-card__price {
+		display: flex;
+		justify-content: flex-start;
+		gap: 14px;
+		align-items: baseline;
+		width: 100%;
+		min-height: 40px;
+		margin: 0;
+		color: #000000;
+		font-size: 20px;
+		font-weight: 400;
+	}
+
+	.collection-grid-section .kollab-product-card__price--sale {
+		justify-content: space-between;
+	}
+
+	.collection-grid-section .kollab-product-card__regular {
+		color: #000000;
+		font-weight: 400;
+	}
+
+	.collection-grid-section .kollab-product-card__compare {
+		color: rgba(0, 0, 0, 0.58);
+		font-weight: 400;
+		text-decoration: line-through;
+		text-decoration-thickness: 2px;
+		text-decoration-color: #F12C18;
+		text-underline-offset: 3px;
+	}
+
+	.collection-grid-section .kollab-product-card__sale {
+		color: #F12C18;
+		font-weight: 400;
+		margin-left: auto;
+	}
+
+	.collection-grid-section .kollab-product-card__inventory {
+		margin: 0;
+		color: rgba(0, 0, 0, 0.68);
+		font-family: Arial, Helvetica, sans-serif !important;
+		font-size: 12px;
+		font-weight: 700;
+		line-height: 1;
+		text-align: left;
+		text-transform: uppercase;
+	}
+
+	.collection-grid-section .kollab-product-empty {
+		margin: 24px 0 0;
+		color: #000000;
+		font-size: 15px;
+		font-weight: 900;
+		text-transform: uppercase;
+	}
+
+	.kollab-quick-view {
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 20px;
+		background: rgba(0, 0, 0, 0.56);
+	}
+
+	.kollab-quick-view[hidden] {
+		display: none;
+	}
+
+	.kollab-quick-view__panel {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		width: min(920px, 100%);
+		max-height: min(760px, calc(100vh - 40px));
+		background: #ffffff;
+		border: 2px solid #000000;
+		border-radius: 18px;
+		overflow: hidden;
+		color: #000000;
+	}
+
+	.kollab-quick-view__close {
+		position: absolute;
+		top: 14px;
+		right: 14px;
+		z-index: 2;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		padding: 0;
+		background: #000000 !important;
+		color: #ffffff !important;
+		border: 0 !important;
+		border-radius: 50%;
+		box-shadow: none !important;
+		font-size: 22px;
+		line-height: 1;
+		cursor: pointer;
+		transition: none !important;
+		animation: none !important;
+	}
+
+	.kollab-quick-view__close:hover,
+	.kollab-quick-view__close:focus,
+	.kollab-quick-view__close:active {
+		background: #000000 !important;
+		color: #ffffff !important;
+		transform: none !important;
+		transition: none !important;
+		animation: none !important;
+	}
+
+	.kollab-quick-view [data-quick-view-content] {
+		display: contents;
+	}
+
+	.kollab-quick-view__image {
+		min-height: 420px;
+		background: #f3f0e8;
+		overflow: hidden;
+	}
+
+	.kollab-quick-view__image img,
+	.kollab-quick-view__placeholder {
+		display: block;
+		width: 100%;
+		height: 100%;
+		min-height: 420px;
+		object-fit: cover;
+	}
+
+	.kollab-quick-view__content {
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		padding: 42px 34px 34px;
+		overflow: auto;
+	}
+
+	.kollab-quick-view__title {
+		margin: 0;
+		color: #000000;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 28px;
+		font-weight: 800;
+		line-height: 1.05;
+		text-transform: none;
+	}
+
+	.kollab-quick-view__price {
+		display: flex;
+		gap: 10px;
+		align-items: baseline;
+		color: #000000;
+		font-size: 18px;
+		font-weight: 400;
+	}
+
+	.kollab-quick-view__compare {
+		color: rgba(0, 0, 0, 0.58);
+		text-decoration: line-through;
+		text-decoration-thickness: 1.5px;
+	}
+
+	.kollab-quick-view__sale {
+		color: #F12C18;
+	}
+
+	.kollab-quick-view__description {
+		color: rgba(0, 0, 0, 0.76);
+		font-size: 14px;
+		line-height: 1.55;
+	}
+
+	.kollab-quick-view__link {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: max-content;
+		min-width: 180px;
+		min-height: 44px;
+		margin-top: auto;
+		padding: 12px 22px;
+		background: #F12C18;
+		color: #ffffff;
+		border: 2px solid #F12C18;
+		border-radius: 999px;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 13px;
+		font-weight: 400;
+		line-height: 1;
+		text-decoration: none;
+		text-transform: none;
+		transition: none;
+	}
+
+	.kollab-quick-view__link:hover {
+		background: #000000;
+		border-color: #000000;
+		color: #ffffff;
+	}
+
+	@media screen and (max-width: 900px) {
+		html,
+		body {
+			max-width: 100%;
+			overflow-x: hidden;
+		}
+
+		html.kollab-filter-lock,
+		html.kollab-filter-lock body {
+			overflow: hidden;
+		}
+
+		.collection-grid-section .container.section-{{ section.id }}-padding {
+			padding-right: 0;
+			padding-bottom: 1.2rem;
+			padding-left: 0;
+		}
+
+		.collection-grid-section .kollab-collection-shell {
+			display: block;
+			overflow: hidden;
+		}
+
+		.collection-grid-section .kollab-collection-sidebar {
+			position: fixed;
+			z-index: 1001;
+			inset: 0 auto 0 0;
+			width: min(86vw, 340px);
+			max-width: calc(100vw - 42px);
+			height: 100dvh;
+			padding: 24px 20px 28px;
+			background: #ffffff;
+			border-right: 1px solid #787878;
+			box-shadow: none;
+			visibility: hidden;
+			overflow-y: auto;
+			overflow-x: hidden;
+			pointer-events: none;
+			transform: translate3d(calc(-100% - 24px), 0, 0);
+			transition: transform 0.24s ease;
+		}
+
+		.collection-grid-section .kollab-collection-shell.is-filter-open .kollab-collection-sidebar {
+			box-shadow: 18px 0 36px rgba(0, 0, 0, 0.18);
+			visibility: visible;
+			pointer-events: auto;
+			transform: translate3d(0, 0, 0);
+		}
+
+		.collection-grid-section .kollab-filter-toggle {
+			position: fixed;
+			left: max(12px, env(safe-area-inset-left));
+			bottom: max(12px, env(safe-area-inset-bottom));
+			z-index: 998;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			isolation: isolate;
+			overflow: hidden;
+			min-width: 74px;
+			min-height: 44px;
+			padding: 0 16px;
+			background:
+				linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.08) 46%),
+				#F12C18;
+			color: #ffffff;
+			border: 1px solid rgba(255, 255, 255, 0.42);
+			border-radius: 999px;
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 10px 24px rgba(241, 44, 24, 0.3);
+			backdrop-filter: blur(10px) saturate(1.25);
+			-webkit-backdrop-filter: blur(10px) saturate(1.25);
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 13px;
+			font-weight: 800;
+			line-height: 1;
+			text-transform: uppercase;
+		}
+
+		.collection-grid-section .kollab-filter-toggle::before {
+			content: '';
+			position: absolute;
+			inset: -35% auto -35% -80%;
+			z-index: -1;
+			width: 58%;
+			background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.74), rgba(255, 255, 255, 0));
+			transform: translateX(-130%) skewX(-18deg);
+			animation: kollabMobileFilterReflect 3s ease-in-out infinite;
+			pointer-events: none;
+		}
+
+		.collection-grid-section .kollab-filter-close {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 34px;
+			height: 34px;
+			padding: 0;
+			background: #000000;
+			color: #ffffff;
+			border: 0;
+			border-radius: 50%;
+			font-size: 22px;
+			line-height: 1;
+		}
+
+		.collection-grid-section .kollab-filter-overlay {
+			position: fixed;
+			inset: 0;
+			z-index: 1000;
+			display: block;
+			background: rgba(0, 0, 0, 0.42);
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.24s ease;
+		}
+
+		.collection-grid-section .kollab-collection-shell.is-filter-open .kollab-filter-overlay {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+
+	@keyframes kollabMobileFilterReflect {
+		0%,
+		45% {
+			transform: translateX(-130%) skewX(-18deg);
+		}
+
+		72%,
+		100% {
+			transform: translateX(430%) skewX(-18deg);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.collection-grid-section .kollab-filter-toggle::before {
+			animation: none;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		.collection-grid-section .kollab-product-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 0;
+		}
+
+		.collection-grid-section .kollab-product-card {
+			height: auto;
+			min-height: 585px;
+		}
+
+		.collection-grid-section .kollab-product-card__media {
+			height: 280px;
+			min-height: 280px;
+		}
+
+		.collection-grid-section .kollab-product-card__body {
+			grid-template-rows: auto 62px 38px 20px 38px;
+			row-gap: 13px;
+			padding: 22px 22px 18px;
+		}
+
+		.collection-grid-section .kollab-product-card__title {
+			font-size: 15px !important;
+			min-height: 0;
+			max-height: none;
+			overflow: visible;
+			display: block;
+		}
+
+		.collection-grid-section .kollab-product-card__description {
+			font-size: 15px !important;
+			min-height: 62px;
+			max-height: 62px;
+		}
+
+		.collection-grid-section .kollab-product-card__price {
+			font-size: 18px;
+		}
+
+		.kollab-quick-view__panel {
+			grid-template-columns: 1fr;
+			overflow: auto;
+		}
+
+		.kollab-quick-view__image,
+		.kollab-quick-view__image img,
+		.kollab-quick-view__placeholder {
+			min-height: 280px;
+			max-height: 320px;
+		}
+
+		.kollab-quick-view__content {
+			padding: 28px 20px 22px;
+		}
+
+		.kollab-quick-view__title {
+			font-size: 22px;
+		}
+	}
+
+	@media screen and (max-width: 560px) {
+		.collection-grid-section .kollab-product-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.collection-grid-section .kollab-product-card {
+			min-height: 0;
+		}
+
+		.collection-grid-section .kollab-product-card__media {
+			height: auto;
+			min-height: 0;
+			aspect-ratio: 1 / 1;
+		}
+
+		.collection-grid-section .kollab-product-card__body {
+			grid-template-rows: auto 38px 34px 16px 34px;
+			row-gap: 8px;
+			padding: 12px 10px 14px;
+		}
+
+		.collection-grid-section .kollab-product-card__title {
+			font-size: 12px !important;
+			line-height: 1.16 !important;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+		}
+
+		.collection-grid-section .kollab-product-card__description {
+			font-size: 11px !important;
+			line-height: 1.2 !important;
+			min-height: 38px;
+			max-height: 38px;
+			-webkit-line-clamp: 2;
+		}
+
+		.collection-grid-section .kollab-product-card__price {
+			align-items: flex-start;
+			flex-direction: column;
+			gap: 2px;
+			min-height: 34px;
+			font-size: 13px;
+			line-height: 1.15;
+		}
+
+		.collection-grid-section .kollab-product-card__sale {
+			margin-left: 0;
+		}
+
+		.collection-grid-section .kollab-product-card__inventory {
+			font-size: 9px;
+			line-height: 1.2;
+			white-space: nowrap;
+		}
+
+		.collection-grid-section .kollab-product-card__form {
+			width: 100%;
+		}
+
+		.collection-grid-section .kollab-product-card__quick {
+			width: 100%;
+			min-width: 0;
+			min-height: 34px !important;
+			padding: 8px 9px !important;
+			font-size: 11px !important;
+		}
+	}
+{%- endstyle -%}
+
+{%- assign sort_by = collection.sort_by
+	| default: collection.default_sort_by
+-%}
+{% assign kollab_products_per_page = section.settings.products_per_page | default: 50 | plus: 0 %}
+{% if kollab_products_per_page < 50 %}
+	{% assign kollab_products_per_page = 50 %}
+{% endif %}
+{% if kollab_products_per_page > 50 %}
+	{% assign kollab_products_per_page = 50 %}
+{% endif %}
+{% assign kollab_filter_categories = 'Moisturizers|Cleansers & Exfoliators|Serums & Essence|Masks & Treatments|Eye Care|Primer & Makeup|Lip Care|SPF|Body Care|Blotting Papers & Tools' | split: '|' %}
+
+<div class='container section-{{ section.id }}-padding'>
+	<div class='kollab-collection-shell'>
+		<button class='kollab-filter-toggle' type='button' aria-controls='KollabCollectionFilters-{{ section.id }}' aria-expanded='false' data-filter-toggle>Filter</button>
+		<div class='kollab-filter-overlay' data-filter-overlay></div>
+		<aside class='kollab-collection-sidebar' id='KollabCollectionFilters-{{ section.id }}' aria-label='Collection filters'>
+			<div class='kollab-collection-sidebar__header'>
+				<h2 class='kollab-collection-sidebar__title'>Filter</h2>
+				<button class='kollab-filter-close' type='button' aria-label='Close filters' data-filter-close>&times;</button>
+			</div>
+			<div class='kollab-collection-search'>
+				<label for='KollabCollectionSearch-{{ section.id }}'>Search products</label>
+				<input
+					id='KollabCollectionSearch-{{ section.id }}'
+					type='search'
+					placeholder='Search'
+					autocomplete='off'
+					data-collection-search
+				>
+			</div>
+			<details class='kollab-filter-group kollab-filter-group--plain' open>
+				<summary class='kollab-filter-group__summary'>Category</summary>
+				<div class='kollab-filter-group__list'>
+					{% for category in kollab_filter_categories %}
+						{% assign category_handle = category | handleize %}
+						{% assign category_terms = category_handle %}
+						{% case category_handle %}
+							{% when 'moisturizers' %}
+								{% assign category_terms = 'moisturizers||moisturizer||face-moisturizers||face-moisturizer||cream||hydrating||hydration' %}
+							{% when 'cleansers-exfoliators' %}
+								{% assign category_terms = 'cleansers-exfoliators||cleanser||cleansers||face-cleanser||exfoliator||exfoliators||exfoliating||scrub' %}
+							{% when 'serums-essence' %}
+								{% assign category_terms = 'serums-essence||serum||serums||essence||essences||ampoule||treatment-serum' %}
+							{% when 'masks-treatments' %}
+								{% assign category_terms = 'masks-treatments||mask||masks||treatment||treatments||sheet-mask||sleeping-mask' %}
+							{% when 'eye-care' %}
+								{% assign category_terms = 'eye-care||eye||eye-cream||eye-serum||eye-treatment' %}
+							{% when 'primer-makeup' %}
+								{% assign category_terms = 'primer-makeup||primer||makeup||base||foundation||concealer||tint' %}
+							{% when 'lip-care' %}
+								{% assign category_terms = 'lip-care||lip||lips||lip-balm||balm||lip-treatment' %}
+							{% when 'spf' %}
+								{% assign category_terms = 'spf||sunscreen||sun-screen||sun-care||sun-protection||uv' %}
+							{% when 'body-care' %}
+								{% assign category_terms = 'body-care||body||body-lotion||body-cream||hand-cream||lotion' %}
+							{% when 'blotting-papers-tools' %}
+								{% assign category_terms = 'blotting-papers-tools||blotting||blotting-paper||blotting-papers||tool||tools||accessories' %}
+						{% endcase %}
+						<button class='kollab-collection-tag' type='button' data-filter-tag='{{ category_handle }}' data-filter-terms='{{ category_terms | escape }}' aria-pressed='false'>{{ category }}</button>
+					{% endfor %}
+				</div>
+			</details>
+			{% if collection.all_vendors.size > 0 %}
+				{% assign sorted_collection_vendors = collection.all_vendors | sort_natural %}
+				<details class='kollab-filter-group kollab-filter-group--plain' open>
+					<summary class='kollab-filter-group__summary'>Vendor</summary>
+					<div class='kollab-filter-group__list'>
+						{% for vendor in sorted_collection_vendors limit: 18 %}
+							<button class='kollab-collection-tag' type='button' data-filter-vendor='{{ vendor | downcase | escape }}' aria-pressed='false'>{{ vendor }}</button>
+						{% endfor %}
+					</div>
+				</details>
+			{% endif %}
+			<details class='kollab-filter-group'>
+				<summary class='kollab-filter-group__summary'>Price Range</summary>
+				<div class='kollab-filter-price'>
+					<label>
+						Min
+						<input type='number' inputmode='decimal' min='0' step='0.01' placeholder='0' data-price-min>
+					</label>
+					<label>
+						Max
+						<input type='number' inputmode='decimal' min='0' step='0.01' placeholder='Any' data-price-max>
+					</label>
+				</div>
+			</details>
+		</aside>
+
+		<main class='kollab-collection-main' id='ProductGridContainer'>
+			{%- paginate collection.products by kollab_products_per_page -%}
+				{%- if collection.products.size == 0 -%}
+					<div class='title-wrapper center title-wrapper-empty'>
+						<h2 class='title title--primary'>
+							{% if collection.all_products_count == 0 %}
+								{{ 'sections.collection_template.empty' | t -}}
+							{% else %}
+								{{ 'sections.collection_template.empty_results' | t -}}
+							{% endif %}
+						</h2>
+					</div>
+				{%- else -%}
+					<div
+						class='kollab-product-grid load-more-grid'
+						id='product-grid'
+						data-id='{{ section.id }}'
+						data-collection-product-grid
+						data-current-page='{{ paginate.current_page }}'
+						data-total-pages='{{ paginate.pages }}'
+					>
+						{%- for product in collection.products -%}
+							{%- if product.available -%}
+							{% assign product_image_alt = product.featured_media.alt | default: product.title %}
+							{% assign add_to_cart_variant = blank %}
+							{% assign product_inventory_quantity = 0 %}
+							{% assign product_inventory_tracked = false %}
+							{% for variant in product.variants %}
+								{% assign variant_inventory_quantity = variant.inventory_quantity | default: 0 %}
+								{% if variant.inventory_management != blank %}
+									{% assign product_inventory_tracked = true %}
+									{% if variant_inventory_quantity > 0 %}
+										{% assign product_inventory_quantity = product_inventory_quantity | plus: variant_inventory_quantity %}
+									{% endif %}
+									{% if add_to_cart_variant == blank %}
+										{% if variant_inventory_quantity > 0 or variant.inventory_policy == 'continue' %}
+											{% assign add_to_cart_variant = variant %}
+										{% endif %}
+									{% endif %}
+								{% elsif add_to_cart_variant == blank %}
+									{% assign add_to_cart_variant = variant %}
+								{% endif %}
+							{% endfor %}
+							{% if add_to_cart_variant == blank and product.selected_or_first_available_variant.available %}
+								{% assign add_to_cart_variant = product.selected_or_first_available_variant %}
+							{% endif %}
+							{% if add_to_cart_variant == blank %}
+								{% assign add_to_cart_variant = product.variants.first %}
+							{% endif %}
+							{% assign add_to_cart_available = false %}
+							{% if add_to_cart_variant.id != blank %}
+								{% assign add_to_cart_variant_quantity = add_to_cart_variant.inventory_quantity | default: 0 %}
+								{% if add_to_cart_variant.inventory_management == blank or add_to_cart_variant.inventory_policy == 'continue' or add_to_cart_variant_quantity > 0 or add_to_cart_variant.available %}
+									{% assign add_to_cart_available = true %}
+								{% endif %}
+							{% endif %}
+							{% assign product_tags_text = product.tags | join: ' ' %}
+							{% assign product_tag_handles = '' %}
+							{% for product_tag in product.tags %}
+								{% assign product_tag_handle = product_tag | handleize %}
+								{% assign product_tag_handles = product_tag_handles | append: product_tag_handle | append: '||' %}
+							{% endfor %}
+							{% for product_collection in product.collections %}
+								{% assign product_collection_handle = product_collection.title | handleize %}
+								{% assign product_tag_handles = product_tag_handles | append: product_collection_handle | append: '||' %}
+							{% endfor %}
+							{% if product.type != blank %}
+								{% assign product_type_handle = product.type | handleize %}
+								{% assign product_tag_handles = product_tag_handles | append: product_type_handle | append: '||' %}
+							{% endif %}
+							{% assign product_collection_titles = product.collections | map: 'title' | join: ' ' %}
+							{% assign product_search_text = product.title | append: ' ' | append: product.vendor | append: ' ' | append: product.type | append: ' ' | append: product_tags_text | append: ' ' | append: product_collection_titles | downcase | escape %}
+							<article
+								class='kollab-product-card'
+								data-collection-product-card
+								data-product-id="{{ product.id }}"
+								data-search="{{ product_search_text }}"
+								data-tags="{{ product_tag_handles | escape }}"
+								data-vendor="{{ product.vendor | downcase | escape }}"
+								data-price="{{ product.price }}"
+								data-product-available="{{ product.available }}"
+								data-variant-available="{{ add_to_cart_variant.available }}"
+								data-variant-inventory-management="{{ add_to_cart_variant.inventory_management }}"
+								data-variant-inventory-policy="{{ add_to_cart_variant.inventory_policy }}"
+								data-variant-inventory-quantity="{{ add_to_cart_variant.inventory_quantity | default: 0 }}"
+							>
+								<span class='kollab-product-card__badge'>
+									{% if forloop.first %}Best Seller{% else %}Top Rated{% endif %}
+								</span>
+								<div class='kollab-product-card__media' data-product-slider>
+									<div class='kollab-product-card__track{% if product.media.size > 1 %} kollab-product-card__track--has-hover{% endif %}' data-product-slider-track>
+										{% if product.media.size > 0 %}
+											{% for media in product.media limit: 4 %}
+												{% if media.media_type == 'image' %}
+													{% assign media_alt = media.alt | default: product.title %}
+													<a class='kollab-product-card__slide' href='{{ product.url }}'>
+														{{ media.preview_image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', alt: media_alt }}
+													</a>
+												{% endif %}
+											{% endfor %}
+										{% elsif product.featured_media != blank %}
+											<a class='kollab-product-card__slide' href='{{ product.url }}'>
+												{{ product.featured_media.preview_image | image_url: width: 700 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 25vw, 50vw', alt: product_image_alt }}
+											</a>
+										{% else %}
+											<span class='kollab-product-card__placeholder' aria-hidden='true'></span>
+										{% endif %}
+									</div>
+									{% if product.media.size > 1 %}
+										<button class='kollab-product-card__arrow kollab-product-card__arrow--prev' type='button' aria-label='Previous image' data-product-slider-prev>&larr;</button>
+										<button class='kollab-product-card__arrow kollab-product-card__arrow--next' type='button' aria-label='Next image' data-product-slider-next>&rarr;</button>
+									{% endif %}
+								</div>
+								<div class='kollab-product-card__body'>
+									<h3 class='kollab-product-card__title'>
+										<a href='{{ product.url }}'>{{ product.title }}</a>
+									</h3>
+									<p class='kollab-product-card__description'>
+										{% if product.description != blank %}
+											{{ product.description | strip_html | truncate: 70 }}
+										{% else %}
+											Product description
+										{% endif %}
+									</p>
+									{% if product.compare_at_price > product.price %}
+										<div class='kollab-product-card__price kollab-product-card__price--sale'>
+											<span class='kollab-product-card__compare'>{{ product.compare_at_price | money }}</span>
+											<span class='kollab-product-card__sale'>{{ product.price | money }}</span>
+										</div>
+									{% else %}
+										<div class='kollab-product-card__price kollab-product-card__price--regular'>
+											<span class='kollab-product-card__regular'>{{ product.price | money }}</span>
+										</div>
+									{% endif %}
+									<p class='kollab-product-card__inventory'>
+										{% if product_inventory_tracked and product_inventory_quantity > 0 %}
+											Qty: {{ product_inventory_quantity }}
+										{% elsif add_to_cart_available %}
+											Qty: In stock
+										{% else %}
+											Qty: Sold out
+										{% endif %}
+									</p>
+									<form class='kollab-product-card__form' method='post' action='{{ routes.cart_add_url }}' data-kollab-ajax-cart-form>
+										<input type='hidden' name='id' value='{{ add_to_cart_variant.id }}'>
+										<input type='hidden' name='quantity' value='1'>
+										<button class='kollab-product-card__quick' type='submit' {% unless add_to_cart_available %}disabled{% endunless %}>
+											{% if add_to_cart_available %}Add to Cart{% else %}Unavailable{% endif %}
+										</button>
+									</form>
+								</div>
+							</article>
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+					<p class='kollab-product-empty' data-collection-empty hidden>No matching products.</p>
+
+					{%- if paginate.pages > 1 -%}
+						{% render 'pagination', paginate: paginate %}
+					{%- endif -%}
+				{%- endif -%}
+			{%- endpaginate -%}
+		</main>
+	</div>
+</div>
+
+<script>
+	(() => {
+		const initKollabCollection = () => {
+		document.querySelectorAll('[data-product-slider]').forEach(slider => {
+			if (slider.dataset.sliderInitialized === 'true') return;
+			slider.dataset.sliderInitialized = 'true';
+
+			const slides = slider.querySelectorAll('.kollab-product-card__slide');
+			const prev = slider.querySelector('[data-product-slider-prev]');
+			const next = slider.querySelector('[data-product-slider-next]');
+			let index = 0;
+
+			if (slides.length <= 1) {
+				if (prev) prev.hidden = true;
+				if (next) next.hidden = true;
+				return;
+			}
+
+			const update = () => {
+				slider.style.setProperty('--active-slide', index);
+			};
+
+			if (prev) {
+				prev.addEventListener('click', event => {
+					event.preventDefault();
+					index = index === 0 ? slides.length - 1 : index - 1;
+					update();
+				});
+			}
+
+			if (next) {
+				next.addEventListener('click', event => {
+					event.preventDefault();
+					index = index === slides.length - 1 ? 0 : index + 1;
+					update();
+				});
+			}
+
+			update();
+		});
+
+		document.querySelectorAll('[data-kollab-ajax-cart-form]').forEach(form => {
+			if (form.dataset.ajaxCartInitialized === 'true') return;
+			form.dataset.ajaxCartInitialized = 'true';
+
+			form.addEventListener('submit', event => {
+				event.preventDefault();
+
+				const button = form.querySelector('button[type="submit"]');
+				const defaultText = button ? button.textContent : '';
+
+				if (button) {
+					button.disabled = true;
+					button.textContent = 'Adding...';
+				}
+
+				fetch('{{ routes.cart_add_url }}.js', {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json'
+					},
+					body: new FormData(form)
+				})
+					.then(response => {
+						if (!response.ok) {
+							return response.json().then(error => {
+								throw new Error(error.description || 'Could not add item to cart.');
+							});
+						}
+
+						return response.json();
+					})
+					.then(() => {
+						const cartButton = document.querySelector('[data-kollab-cart-open]');
+
+						if (button) button.textContent = 'Added';
+						if (cartButton) cartButton.click();
+
+						window.setTimeout(() => {
+							if (button) {
+								button.disabled = false;
+								button.textContent = defaultText;
+							}
+						}, 900);
+					})
+					.catch(error => {
+						if (button) {
+							button.disabled = false;
+							button.textContent = error.message || defaultText;
+
+							window.setTimeout(() => {
+								button.textContent = defaultText;
+							}, 1800);
+						}
+					});
+			});
+		});
+
+		document.querySelectorAll('.kollab-collection-shell').forEach(shell => {
+			if (shell.dataset.filterInitialized === 'true') return;
+			shell.dataset.filterInitialized = 'true';
+
+			const searchInput = shell.querySelector('[data-collection-search]');
+			const empty = shell.querySelector('[data-collection-empty]');
+			const minInput = shell.querySelector('[data-price-min]');
+			const maxInput = shell.querySelector('[data-price-max]');
+			const filterToggle = shell.querySelector('[data-filter-toggle]');
+			const filterClose = shell.querySelector('[data-filter-close]');
+			const filterOverlay = shell.querySelector('[data-filter-overlay]');
+			let activeTag = '';
+			let activeTagTerms = [];
+			let activeVendor = '';
+			const normalize = value => String(value || '').trim().toLowerCase();
+			const normalizeTerms = value => normalize(value).split('||').filter(Boolean);
+			const parsePrice = input => {
+				if (!input || input.value === '') return null;
+
+				const price = Number(input.value);
+				return Number.isFinite(price) ? price * 100 : null;
+			};
+			const getTagButtons = () => shell.querySelectorAll('[data-filter-tag]');
+			const getVendorButtons = () => shell.querySelectorAll('[data-filter-vendor]');
+			const isMobileFilter = () => window.matchMedia('(max-width: 900px)').matches;
+			const openFilter = () => {
+				shell.classList.add('is-filter-open');
+				document.documentElement.classList.add('kollab-filter-lock');
+				if (filterToggle) filterToggle.setAttribute('aria-expanded', 'true');
+			};
+			const closeFilter = () => {
+				shell.classList.remove('is-filter-open');
+				document.documentElement.classList.remove('kollab-filter-lock');
+				if (filterToggle) filterToggle.setAttribute('aria-expanded', 'false');
+			};
+			const closeMobileFilter = () => {
+				if (isMobileFilter()) closeFilter();
+			};
+
+			const syncButtonState = () => {
+				getTagButtons().forEach(button => {
+					const isActive = normalize(button.dataset.filterTag) === activeTag;
+					button.classList.toggle('is-active', isActive);
+					button.setAttribute('aria-pressed', String(isActive));
+				});
+
+				getVendorButtons().forEach(button => {
+					const isActive = normalize(button.dataset.filterVendor) === activeVendor;
+					button.classList.toggle('is-active', isActive);
+					button.setAttribute('aria-pressed', String(isActive));
+				});
+			};
+
+			const filterCards = () => {
+				const cards = shell.querySelectorAll('[data-collection-product-card]');
+				const query = searchInput ? normalize(searchInput.value) : '';
+				const minPrice = parsePrice(minInput);
+				const maxPrice = parsePrice(maxInput);
+				let visibleCount = 0;
+
+				cards.forEach(card => {
+					const searchText = normalize(card.getAttribute('data-search') || card.textContent);
+					const searchWords = searchText.replace(/-/g, ' ');
+					const tags = normalize(card.getAttribute('data-tags')).split('||').filter(Boolean);
+					const vendor = normalize(card.getAttribute('data-vendor'));
+					const price = Number(card.getAttribute('data-price') || 0);
+
+					const matchesSearch = !query || searchText.includes(query);
+					const matchesTag = activeTagTerms.length === 0 || activeTagTerms.some(term => tags.includes(term) || searchText.includes(term) || searchWords.includes(term.replace(/-/g, ' ')));
+					const vendorWords = activeVendor.replace(/-/g, ' ');
+					const matchesVendor = !activeVendor || vendor === activeVendor || searchText.includes(activeVendor) || searchWords.includes(vendorWords);
+					const matchesMin = minPrice === null || price >= minPrice;
+					const matchesMax = maxPrice === null || price <= maxPrice;
+					const matches = matchesSearch && matchesTag && matchesVendor && matchesMin && matchesMax;
+
+					card.hidden = !matches;
+					if (matches) visibleCount += 1;
+				});
+
+				if (empty) empty.hidden = visibleCount !== 0;
+			};
+
+			shell.addEventListener('click', event => {
+				const tagButton = event.target.closest('[data-filter-tag]');
+				const vendorButton = event.target.closest('[data-filter-vendor]');
+
+				if (tagButton && shell.contains(tagButton)) {
+					const tag = normalize(tagButton.dataset.filterTag);
+					const isCurrentTag = activeTag === tag;
+					activeTag = isCurrentTag ? '' : tag;
+					activeTagTerms = isCurrentTag ? [] : normalizeTerms(tagButton.dataset.filterTerms || tag);
+					syncButtonState();
+					filterCards();
+					closeMobileFilter();
+					return;
+				}
+
+				if (vendorButton && shell.contains(vendorButton)) {
+					const vendor = normalize(vendorButton.dataset.filterVendor);
+					activeVendor = activeVendor === vendor ? '' : vendor;
+					syncButtonState();
+					filterCards();
+					closeMobileFilter();
+				}
+			});
+
+			if (filterToggle) filterToggle.addEventListener('click', openFilter);
+			if (filterClose) filterClose.addEventListener('click', closeFilter);
+			if (filterOverlay) filterOverlay.addEventListener('click', closeFilter);
+			document.addEventListener('keydown', event => {
+				if (event.key === 'Escape') closeFilter();
+			});
+			window.addEventListener('resize', () => {
+				if (!isMobileFilter()) closeFilter();
+			});
+
+			if (searchInput) {
+				searchInput.addEventListener('input', filterCards);
+				searchInput.addEventListener('search', filterCards);
+			}
+
+			if (minInput) minInput.addEventListener('input', filterCards);
+			if (maxInput) maxInput.addEventListener('input', filterCards);
+
+			syncButtonState();
+			filterCards();
+		});
+
+		};
+
+		window.initKollabCollection = initKollabCollection;
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initKollabCollection);
+		} else {
+			initKollabCollection();
+		}
+	})();
+</script>
+
+<script>
+	(() => {
+		const initKollabGridFilters = () => {
+			document.querySelectorAll('.kollab-collection-shell').forEach(shell => {
+				if (shell.dataset.kollabGridFiltersReady === 'true') return;
+				shell.dataset.kollabGridFiltersReady = 'true';
+
+				let activeTag = '';
+				let activeTagTerms = [];
+				let activeVendor = '';
+
+				const clean = value => String(value || '').trim().toLowerCase();
+				const cleanTerms = value => clean(value).split('||').filter(Boolean);
+				const words = value => clean(value).replace(/-/g, ' ');
+				const searchInput = shell.querySelector('[data-collection-search]');
+				const minInput = shell.querySelector('[data-price-min]');
+				const maxInput = shell.querySelector('[data-price-max]');
+				const empty = shell.querySelector('[data-collection-empty]');
+				const grid = shell.querySelector('[data-collection-product-grid]');
+				const paginationWrapper = shell.querySelector('.pagination-wrapper');
+				const currentPage = grid ? Number(grid.dataset.currentPage || 1) : 1;
+				const totalPages = grid ? Number(grid.dataset.totalPages || 1) : 1;
+				let allPagesLoaded = totalPages <= 1;
+				let loadingPagesPromise = null;
+
+				const priceValue = input => {
+					if (!input || input.value === '') return null;
+
+					const value = Number(input.value);
+					return Number.isFinite(value) ? value * 100 : null;
+				};
+
+				const setButtonState = () => {
+					shell.querySelectorAll('[data-filter-tag]').forEach(button => {
+						const isActive = clean(button.dataset.filterTag) === activeTag;
+						button.classList.toggle('is-active', isActive);
+						button.setAttribute('aria-pressed', String(isActive));
+					});
+
+					shell.querySelectorAll('[data-filter-vendor]').forEach(button => {
+						const isActive = clean(button.dataset.filterVendor) === activeVendor;
+						button.classList.toggle('is-active', isActive);
+						button.setAttribute('aria-pressed', String(isActive));
+					});
+				};
+
+				const hasActiveFilters = () => {
+					const query = clean(searchInput ? searchInput.value : '');
+					const minPrice = priceValue(minInput);
+					const maxPrice = priceValue(maxInput);
+
+					return Boolean(query || activeTagTerms.length > 0 || activeVendor || minPrice !== null || maxPrice !== null);
+				};
+
+				const getPageUrl = page => {
+					const url = new URL(window.location.href);
+					url.searchParams.set('page', String(page));
+
+					return url.toString();
+				};
+
+				const initNewCards = cards => {
+					cards.forEach(card => {
+						card.dataset.kollabFetchedPage = 'true';
+						card.hidden = true;
+						card.style.display = 'none';
+					});
+				};
+
+				const loadAllPages = () => {
+					if (!grid || allPagesLoaded) return Promise.resolve();
+					if (loadingPagesPromise) return loadingPagesPromise;
+
+					const existingProductIds = new Set(
+						Array.from(grid.querySelectorAll('[data-collection-product-card]')).map(card => card.dataset.productId).filter(Boolean)
+					);
+					const pageRequests = [];
+
+					for (let page = 1; page <= totalPages; page += 1) {
+						if (page === currentPage) continue;
+
+						pageRequests.push(
+							fetch(getPageUrl(page), { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+								.then(response => response.ok ? response.text() : '')
+								.then(html => {
+									if (!html) return;
+
+									const documentFragment = new DOMParser().parseFromString(html, 'text/html');
+									const nextGrid = documentFragment.querySelector('[data-collection-product-grid]');
+									if (!nextGrid) return;
+
+									const cards = Array.from(nextGrid.querySelectorAll('[data-collection-product-card]')).filter(card => {
+										const productId = card.dataset.productId;
+										if (productId && existingProductIds.has(productId)) return false;
+										if (productId) existingProductIds.add(productId);
+
+										return true;
+									});
+
+									initNewCards(cards);
+									cards.forEach(card => grid.appendChild(card));
+								})
+								.catch(() => {})
+						);
+					}
+
+					loadingPagesPromise = Promise.all(pageRequests).then(() => {
+						allPagesLoaded = true;
+						if (typeof window.initKollabCollection === 'function') window.initKollabCollection();
+					});
+
+					return loadingPagesPromise;
+				};
+
+				const applyFilters = () => {
+					const query = clean(searchInput ? searchInput.value : '');
+					const minPrice = priceValue(minInput);
+					const maxPrice = priceValue(maxInput);
+					const filtersActive = hasActiveFilters();
+					let visibleCount = 0;
+
+					shell.querySelectorAll('[data-collection-product-card]').forEach(card => {
+						const searchText = clean(`${card.dataset.search || ''} ${card.textContent || ''}`);
+						const searchableWords = words(`${card.dataset.search || ''} ${card.textContent || ''}`);
+						const cardTags = clean(card.dataset.tags).split('||').filter(Boolean);
+						const cardVendor = clean(card.dataset.vendor);
+						const cardPrice = Number(card.dataset.price || 0);
+						const tagWords = words(activeTag);
+						const vendorWords = words(activeVendor);
+
+						const matchesSearch = !query || searchText.includes(query);
+						const matchesTag = activeTagTerms.length === 0 || activeTagTerms.some(term => cardTags.includes(term) || searchText.includes(term) || searchableWords.includes(words(term)));
+						const matchesVendor = !activeVendor || cardVendor === activeVendor || searchText.includes(activeVendor) || searchableWords.includes(vendorWords);
+						const matchesMin = minPrice === null || cardPrice >= minPrice;
+						const matchesMax = maxPrice === null || cardPrice <= maxPrice;
+						const isFetchedPageCard = card.dataset.kollabFetchedPage === 'true';
+						const isVisible = filtersActive
+							? matchesSearch && matchesTag && matchesVendor && matchesMin && matchesMax
+							: !isFetchedPageCard;
+
+						card.hidden = !isVisible;
+						card.style.display = isVisible ? '' : 'none';
+						if (isVisible) visibleCount += 1;
+					});
+
+					if (empty) {
+						empty.hidden = visibleCount > 0;
+						empty.style.display = visibleCount > 0 ? 'none' : '';
+					}
+
+					if (paginationWrapper) {
+						paginationWrapper.hidden = filtersActive;
+						paginationWrapper.style.display = filtersActive ? 'none' : '';
+					}
+				};
+
+				const applyFiltersWithAllPages = () => {
+					if (!hasActiveFilters()) {
+						applyFilters();
+						return;
+					}
+
+					loadAllPages().then(applyFilters);
+				};
+
+				shell.addEventListener('click', event => {
+					const tagButton = event.target.closest('[data-filter-tag]');
+					const vendorButton = event.target.closest('[data-filter-vendor]');
+
+					if (tagButton && shell.contains(tagButton)) {
+						const nextTag = clean(tagButton.dataset.filterTag);
+						const isCurrentTag = activeTag === nextTag;
+						activeTag = isCurrentTag ? '' : nextTag;
+						activeTagTerms = isCurrentTag ? [] : cleanTerms(tagButton.dataset.filterTerms || nextTag);
+						setButtonState();
+						applyFiltersWithAllPages();
+						return;
+					}
+
+					if (vendorButton && shell.contains(vendorButton)) {
+						const nextVendor = clean(vendorButton.dataset.filterVendor);
+						activeVendor = activeVendor === nextVendor ? '' : nextVendor;
+						setButtonState();
+						applyFiltersWithAllPages();
+					}
+				});
+
+				[searchInput, minInput, maxInput].forEach(input => {
+					if (!input) return;
+					input.addEventListener('input', applyFiltersWithAllPages);
+					input.addEventListener('change', applyFiltersWithAllPages);
+					input.addEventListener('search', applyFiltersWithAllPages);
+				});
+
+				setButtonState();
+				applyFilters();
+			});
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initKollabGridFilters);
+		} else {
+			initKollabGridFilters();
+		}
+
+		document.addEventListener('shopify:section:load', initKollabGridFilters);
+	})();
+</script>
+
+{% schema %}
+{
+	"name": "t:sections.main-collection-product-grid.name",
+	"tag": "section",
+	"class": "collection-grid-section",
+	"settings": [
+		{
+			"type": "range",
+			"id": "products_per_page",
+			"min": 10,
+			"max": 50,
+			"step": 1,
+			"default": 50,
+			"label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.all.product_card.header.content"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_two_cards",
+			"default": false,
+			"label": "t:sections.all.product_card.mobile_card_count.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_secondary_image",
+			"default": true,
+			"label": "t:sections.all.product_card.show_secondary_image.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_sku",
+			"default": false,
+			"label": "t:sections.all.sku.show_sku"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_vendor",
+			"default": true,
+			"label": "t:sections.all.product_card.show_vendor.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_tags",
+			"default": false,
+			"label": "t:sections.all.product_card.show_tags.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_desc",
+			"default": false,
+			"label": "t:sections.all.product_card.show_description.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_color_swatch",
+			"default": false,
+			"label": "t:sections.all.product_card.show_type.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "show_variants",
+			"label": "t:sections.all.product_card.show_variants.label",
+			"default": false
+		},
+		{
+			"type": "select",
+			"id": "product_variant_type",
+			"label": "t:settings_schema.product_type.label",
+			"default": "color",
+			"options": [
+				{
+					"value": "color",
+					"label": "t:settings_schema.product_type.options__1.label"
+				},
+				{
+					"value": "image",
+					"label": "t:settings_schema.product_type.options__2.label"
+				}
+			]
+		},
+		{
+			"type": "header",
+			"content": "t:sections.all.image.header.content"
+		},
+		{
+			"type": "select",
+			"id": "image_ratio",
+			"options": [
+				{
+					"value": "landscape",
+					"label": "t:sections.all.image.ratio.options__1.label"
+				},
+				{
+					"value": "portrait",
+					"label": "t:sections.all.image.ratio.options__2.label"
+				},
+				{
+					"value": "square",
+					"label": "t:sections.all.image.ratio.options__3.label"
+				}
+			],
+			"default": "portrait",
+			"label": "t:sections.all.image.ratio.label"
+		},
+		{
+			"type": "select",
+			"id": "image_fit",
+			"label": "t:sections.all.image.fit.label",
+			"options": [
+				{
+					"value": "contain",
+					"label": "t:sections.all.image.fit.options__1.label"
+				},
+				{
+					"value": "cover",
+					"label": "t:sections.all.image.fit.options__2.label"
+				}
+			],
+			"default": "cover"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.main-collection-product-grid.settings.header__1.content"
+		},
+		{
+			"type": "color_scheme",
+			"id": "color_scheme",
+			"default": "background-1",
+			"label": "t:sections.all.color_scheme.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_filtering",
+			"default": true,
+			"label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+			"info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+		},
+		{
+			"type": "select",
+			"id": "filter_type",
+			"options": [
+				{
+					"value": "vertical",
+					"label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
+				},
+				{
+					"value": "horizontal",
+					"label": "t:sections.main-collection-product-grid.settings.filter_type.options__2.label"
+				},
+				{
+					"value": "horizontal_united",
+					"label": "t:sections.main-collection-product-grid.settings.filter_type.options__3.label"
+				}
+			],
+			"default": "vertical",
+			"label": "t:sections.main-collection-product-grid.settings.filter_type.label"
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_per_row_button",
+			"default": true,
+			"label": "t:sections.main-collection-product-grid.settings.per_row.enable_per_row_button.label"
+		},
+		{
+			"type": "select",
+			"id": "default_per_row",
+			"label": "t:sections.main-collection-product-grid.settings.per_row.default_per_row.label",
+			"default": "small",
+			"options": [
+				{
+					"value": "small",
+					"label": "t:sections.main-collection-product-grid.settings.per_row.default_per_row.options__1.label"
+				},
+				{
+					"value": "large",
+					"label": "t:sections.main-collection-product-grid.settings.per_row.default_per_row.options__2.label"
+				}
+			]
+		},
+		{
+			"type": "checkbox",
+			"id": "enable_sorting",
+			"default": true,
+			"label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.main-collection-product-grid.settings.image_filter.content"
+		},
+		{
+			"type": "select",
+			"id": "image_filter_ratio",
+			"options": [
+				{
+					"value": "3/2",
+					"label": "t:sections.all.image.ratio.options__1.label"
+				},
+				{
+					"value": "4/5",
+					"label": "t:sections.all.image.ratio.options__2.label"
+				},
+				{
+					"value": "1/1",
+					"label": "t:sections.all.image.ratio.options__3.label"
+				}
+			],
+			"default": "4/5",
+			"label": "t:sections.all.image.ratio.label"
+		},
+		{
+			"type": "select",
+			"id": "image_filter_fit",
+			"options": [
+				{
+					"value": "contain",
+					"label": "t:sections.all.image.fit.options__1.label"
+				},
+				{
+					"value": "cover",
+					"label": "t:sections.all.image.fit.options__2.label"
+				}
+			],
+			"default": "cover",
+			"label": "t:sections.all.image.fit.label"
+		},
+		{
+			"type": "range",
+			"id": "image_filter_columns",
+			"min": 1,
+			"max": 5,
+			"step": 1,
+			"default": 3,
+			"label": "t:sections.main-collection-product-grid.settings.image_filter_columns.label"
+		},
+		{
+			"type": "header",
+			"content": "t:sections.all.section-padding.header.content"
+		},
+		{
+			"type": "select",
+			"id": "padding_top",
+			"options": [
+				{
+					"value": "no-indent",
+					"label": "t:sections.all.section-padding.options__1.label"
+				},
+				{
+					"value": "xs",
+					"label": "t:sections.all.section-padding.options__2.label"
+				},
+				{
+					"value": "s",
+					"label": "t:sections.all.section-padding.options__3.label"
+				},
+				{
+					"value": "m",
+					"label": "t:sections.all.section-padding.options__4.label"
+				},
+				{
+					"value": "l",
+					"label": "t:sections.all.section-padding.options__5.label"
+				}
+			],
+			"default": "no-indent",
+			"label": "t:sections.all.section-padding.padding_top.label"
+		},
+		{
+			"type": "select",
+			"id": "padding_bottom",
+			"options": [
+				{
+					"value": "no-indent",
+					"label": "t:sections.all.section-padding.options__1.label"
+				},
+				{
+					"value": "xs",
+					"label": "t:sections.all.section-padding.options__2.label"
+				},
+				{
+					"value": "s",
+					"label": "t:sections.all.section-padding.options__3.label"
+				},
+				{
+					"value": "m",
+					"label": "t:sections.all.section-padding.options__4.label"
+				},
+				{
+					"value": "l",
+					"label": "t:sections.all.section-padding.options__5.label"
+				}
+			],
+			"default": "l",
+			"label": "t:sections.all.section-padding.padding_bottom.label"
+		}
+	]
+}
+{% endschema %}
