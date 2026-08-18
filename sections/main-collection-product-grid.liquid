@@ -1241,12 +1241,10 @@
 										</div>
 									{% endif %}
 									<p class='kollab-product-card__inventory'>
-										{% if product_inventory_tracked and product_inventory_quantity > 0 %}
-											Qty: {{ product_inventory_quantity }}
-										{% elsif add_to_cart_available %}
-											Qty: In stock
+										{% if add_to_cart_available %}
+											In Stock
 										{% else %}
-											Qty: Sold out
+											Sold Out
 										{% endif %}
 									</p>
 									<form class='kollab-product-card__form' method='post' action='{{ routes.cart_add_url }}' data-kollab-ajax-cart-form>
