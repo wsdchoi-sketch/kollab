@@ -1352,7 +1352,7 @@
 			if (!window.location.search.includes('sort_by=')) {
 				const url = new URL(window.location.href);
 				url.searchParams.set('sort_by', 'created-descending');
-				window.history.replaceState({}, '', url.toString());
+				window.location.replace(url.toString());
 			}
 		};
 
