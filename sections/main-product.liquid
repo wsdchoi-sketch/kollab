@@ -57,6 +57,39 @@
 		margin-bottom: 0;
 	}
 
+	#MainProduct-{{ section.id }} .kollab-product-details--full {
+		margin: 56px auto 0;
+		max-width: 800px;
+		padding-top: 40px;
+		border-top: 1px solid rgba(var(--color-foreground), 0.08);
+	}
+
+	#MainProduct-{{ section.id }} .kollab-product-details--full .kollab-product-details__heading {
+		font-size: 26px;
+		font-weight: 800;
+		margin-bottom: 16px;
+	}
+
+	#MainProduct-{{ section.id }} .kollab-product-details--full .kollab-product-details__content {
+		font-size: 16px;
+		line-height: 1.7;
+	}
+
+	@media screen and (max-width: 749px) {
+		#MainProduct-{{ section.id }} .kollab-product-details--full {
+			margin-top: 40px;
+			padding-top: 28px;
+		}
+
+		#MainProduct-{{ section.id }} .kollab-product-details--full .kollab-product-details__heading {
+			font-size: 22px;
+		}
+
+		#MainProduct-{{ section.id }} .kollab-product-details--full .kollab-product-details__content {
+			font-size: 15px;
+		}
+	}
+
 	#MainProduct-{{ section.id }} .product-form__buttons-row {
 		display: flex;
 		align-items: stretch;
@@ -392,7 +425,7 @@
 								
 
 							{%- when 'description' -%}
-								{% comment %}Description is rendered once after the price in .kollab-product-details.{% endcomment %}
+								{% comment %}Description is rendered once after the product row in .kollab-product-details--full.{% endcomment %}
 							
 							{%- when 'price' -%}
 								<div class="no-js-hidden price-wrapper" id="price-{{ section.id }}" {{ block.shopify_attributes }}>
@@ -611,24 +644,6 @@
 											</div>
 										{%- endform -%}
 									</product-form>
-									{% if product.description != blank or product_description_heading != blank %}
-										<div class="kollab-product-details">
-											<div class="kollab-product-details__section">
-												<h3 class="kollab-product-details__heading">
-													{% if product_description_heading != blank %}
-														{{ product_description_heading }}
-													{% else %}
-														Details
-													{% endif %}
-												</h3>
-												{% if product.description != blank %}
-													<div class="kollab-product-details__content rte small-font product__description {% if settings.rte_type == 'custom' %} rte__container{% endif %}">
-														{{ product.description }}
-													</div>
-												{% endif %}
-											</div>
-										</div>
-									{% endif %}
 								</div>
 							{% when 'short_description' %}
 								{% if product.metafields.custom.short_description != blank %}	
@@ -1261,6 +1276,25 @@
 			
 		</div>
 	</div>
+
+	{% if product.description != blank or product_description_heading != blank %}
+		<div class="kollab-product-details kollab-product-details--full">
+			<div class="kollab-product-details__section">
+				<h3 class="kollab-product-details__heading">
+					{% if product_description_heading != blank %}
+						{{ product_description_heading }}
+					{% else %}
+						Details
+					{% endif %}
+				</h3>
+				{% if product.description != blank %}
+					<div class="kollab-product-details__content rte product__description {% if settings.rte_type == 'custom' %} rte__container{% endif %}">
+						{{ product.description }}
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
 
 	{%- for block in section.blocks -%}
 		{%- case block.type -%}
