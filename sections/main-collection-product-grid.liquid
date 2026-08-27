@@ -267,14 +267,6 @@
 		transition: color 0.18s ease, transform 0.18s ease;
 	}
 
-	.collection-grid-section .kollab-collection-tag:hover,
-	.collection-grid-section .kollab-collection-tag.is-active,
-	.collection-grid-section .kollab-collection-tag[aria-pressed='true'] {
-		color: #ffffff;
-		background: #F12C18;
-		border-color: #F12C18;
-	}
-
 	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag:hover,
 	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag.is-active,
 	.collection-grid-section .kollab-filter-group--plain .kollab-collection-tag[aria-pressed='true'] {
@@ -282,6 +274,14 @@
 		background: transparent;
 		border-color: transparent;
 		transform: translateX(4px);
+	}
+
+	.collection-grid-section .kollab-collection-tag:hover,
+	.collection-grid-section .kollab-collection-tag.is-active,
+	.collection-grid-section .kollab-collection-tag[aria-pressed='true'] {
+		color: #ffffff;
+		background: #F12C18;
+		border-color: #F12C18;
 	}
 
 	.collection-grid-section .kollab-collection-tag:focus-visible {
@@ -336,9 +336,47 @@
 		overflow: hidden;
 	}
 
+	.collection-grid-section .kollab-collection-toolbar {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 10px;
+		margin-bottom: 18px;
+	}
+
+	.collection-grid-section .kollab-collection-toolbar label {
+		color: #000000;
+		font-size: 11px;
+		font-weight: 800;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+	}
+
+	.collection-grid-section .kollab-collection-sort {
+		min-height: 40px;
+		padding: 8px 34px 8px 14px;
+		color: #000000;
+		background: #ffffff;
+		border: 1px solid #787878;
+		border-radius: 999px;
+		font-size: 13px;
+		outline: 0;
+		cursor: pointer;
+		appearance: none;
+		-webkit-appearance: none;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23000' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 14px center;
+	}
+
+	.collection-grid-section .kollab-collection-sort:focus {
+		border-color: #000000;
+		box-shadow: 0 0 0 3px rgba(241, 44, 24, 0.14);
+	}
+
 	.collection-grid-section .kollab-product-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+		grid-template-columns: repeat(auto-fill, minmax(245px, 300px));
 		gap: 0;
 		width: 100%;
 		max-width: 100%;
@@ -886,6 +924,10 @@
 	}
 
 	@media screen and (max-width: 768px) {
+		.collection-grid-section .kollab-collection-toolbar {
+			justify-content: flex-start;
+		}
+
 		.collection-grid-section .kollab-product-grid {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 0;
@@ -1027,7 +1069,7 @@
 {% if kollab_products_per_page > 50 %}
 	{% assign kollab_products_per_page = 50 %}
 {% endif %}
-{% assign kollab_filter_categories = 'Moisturizers|Cleansers & Exfoliators|Serums & Essence|Masks & Treatments|Eye Care|Primer & Makeup|Lip Care|SPF|Body Care|Blotting Papers & Tools' | split: '|' %}
+{% assign kollab_filter_categories = 'Cleansers & Exfoliators|Serums & Essence|Eye Care|Moisturizers|Masks & Treatments|SPF|Lip Care|Primer & Makeup|Body Care|Blotting Papers & Tools' | split: '|' %}
 
 <div class='container section-{{ section.id }}-padding'>
 	<div class='kollab-collection-shell'>
@@ -1083,7 +1125,7 @@
 			{% if collection.all_vendors.size > 0 %}
 				{% assign sorted_collection_vendors = collection.all_vendors | sort_natural %}
 				<details class='kollab-filter-group kollab-filter-group--plain' open>
-					<summary class='kollab-filter-group__summary'>Vendor</summary>
+					<summary class='kollab-filter-group__summary'>Brand</summary>
 					<div class='kollab-filter-group__list'>
 						{% for vendor in sorted_collection_vendors limit: 18 %}
 							<button class='kollab-collection-tag' type='button' data-filter-vendor='{{ vendor | downcase | escape }}' aria-pressed='false'>{{ vendor }}</button>
@@ -1107,6 +1149,17 @@
 		</aside>
 
 		<main class='kollab-collection-main' id='ProductGridContainer'>
+			<div class='kollab-collection-toolbar'>
+				<label for='KollabCollectionSort-{{ section.id }}'>Sort by</label>
+				<select id='KollabCollectionSort-{{ section.id }}' class='kollab-collection-sort' data-collection-sort>
+					<option value='created-descending'>Newest</option>
+					<option value='best-selling'>Best Selling</option>
+					<option value='price-ascending'>Price: Low to High</option>
+					<option value='price-descending'>Price: High to Low</option>
+					<option value='title-ascending'>Alphabetically: A-Z</option>
+					<option value='title-descending'>Alphabetically: Z-A</option>
+				</select>
+			</div>
 			{%- paginate collection.products by kollab_products_per_page -%}
 				{%- if collection.products.size == 0 -%}
 					<div class='title-wrapper center title-wrapper-empty'>
@@ -1269,6 +1322,45 @@
 		</main>
 	</div>
 </div>
+
+<script>
+	(() => {
+		const initKollabCollectionSort = () => {
+			document.querySelectorAll('[data-collection-sort]').forEach(select => {
+				if (select.dataset.sortInitialized === 'true') return;
+				select.dataset.sortInitialized = 'true';
+
+				const params = new URLSearchParams(window.location.search);
+				const currentSort = params.get('sort_by');
+
+				if (currentSort) {
+					select.value = currentSort;
+				} else {
+					select.value = 'created-descending';
+				}
+
+				select.addEventListener('change', () => {
+					const url = new URL(window.location.href);
+					url.searchParams.set('sort_by', select.value);
+					url.searchParams.delete('page');
+					window.location.href = url.toString();
+				});
+			});
+
+			if (!window.location.search.includes('sort_by=')) {
+				const url = new URL(window.location.href);
+				url.searchParams.set('sort_by', 'created-descending');
+				window.history.replaceState({}, '', url.toString());
+			}
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', initKollabCollectionSort);
+		} else {
+			initKollabCollectionSort();
+		}
+	})();
+</script>
 
 <script>
 	(() => {
