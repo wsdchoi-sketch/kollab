@@ -285,7 +285,8 @@
       ],
       "name": "t:sections.rich-text.presets.name",
       "custom_css": [
-        ".title--section, .title--section * {font-family: Arial, Helvetica, sans-serif !important; font-style: normal !important; font-weight: 900 !important; text-transform: uppercase; letter-spacing: 0;}"
+        ".title--section, .title--section * {font-family: Arial, Helvetica, sans-serif !important; font-style: normal !important; font-weight: 900 !important; text-transform: uppercase; letter-spacing: 0;}",
+        ".subtitle {color: #F12C18 !important;}"
       ],
       "settings": {
         "color_scheme": "background-1",
