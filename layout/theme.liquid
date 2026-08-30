@@ -36,6 +36,25 @@
 		  #MainContent > .shopify-section.kollab-last-main-section [class*="section-"][class*="-padding"] {
 			padding-bottom: 1.2rem !important;
 		  }
+
+		  #MainContent > .shopify-section:last-child .contact-section,
+		  #MainContent > .shopify-section.kollab-last-main-section .contact-section {
+			padding-bottom: 4rem !important;
+		  }
+
+		  @media screen and (min-width: 990px) {
+			#MainContent > .shopify-section:last-child .contact-section,
+			#MainContent > .shopify-section.kollab-last-main-section .contact-section {
+			  padding-bottom: 5.2rem !important;
+			}
+		  }
+
+		  @media screen and (min-width: 1150px) {
+			#MainContent > .shopify-section:last-child .contact-section,
+			#MainContent > .shopify-section.kollab-last-main-section .contact-section {
+			  padding-bottom: 6.4rem !important;
+			}
+		  }
 		{% endstyle %}
 
 		{%- if settings.favicon != blank -%}
