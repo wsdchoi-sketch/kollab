@@ -1053,6 +1053,7 @@
 												{% assign image_height = featured_media.preview_image.width
 													| divided_by: featured_media.preview_image.aspect_ratio
 												%}
+												{% assign featured_media_alt = featured_media.alt | default: product.title | escape %}
 												{{
 													featured_media.preview_image
 													| image_url: width: 3840
@@ -1061,7 +1062,8 @@
 														width: featured_media.preview_image.width,
 														height: image_height,
 														sizes: '100vw',
-														widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+														widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+														alt: featured_media_alt
 												}}
 											</div>
 										</div>
@@ -1076,6 +1078,7 @@
 													{% assign image_height = media.preview_image.width
 														| divided_by: media.preview_image.aspect_ratio
 													%}
+													{% assign loop_media_alt = media.alt | default: product.title | escape %}
 
 													{{
 														media.preview_image
@@ -1085,7 +1088,8 @@
 															width: media.preview_image.width,
 															height: image_height,
 															sizes: '100vw',
-															widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+															widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+															alt: loop_media_alt
 													}}
 												</div>
 											</div>
@@ -1327,6 +1331,7 @@
 											object-fit: cover;
 										{%- endif -%}
 									{% endcapture %}
+									{% assign floated_media_alt = product.featured_media.alt | default: product.title | escape %}
 									{{
 										product.featured_media
 										| image_url: width: product.featured_media.width
@@ -1334,7 +1339,8 @@
 											loading: 'lazy',
 											class: 'motion-reduce media--first',
 											widths: '360, 533, 720, 940',
-											style: style
+											style: style,
+											alt: floated_media_alt
 									}}
 								{%- endif -%}
 							</div>
@@ -1369,6 +1375,7 @@
 							{% capture sizes %}
 								(min-width: 1100px) 535px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)
 							{% endcapture %}
+									{% assign modal_media_alt = media.alt | default: product.title | escape %}
 									{{
 										media.preview_image
 										| image_url: width: 720
@@ -1379,7 +1386,8 @@
 											class: 'motion-reduce',
 											width: media.preview_image.width,
 											height: media.preview_image.height,
-											data-media-id: media.id
+											data-media-id: media.id,
+											alt: modal_media_alt
 									}}
 						{% else %}
 								{% if media.media_type == 'model' %}
@@ -1401,6 +1409,7 @@
 										| divided_by: media.preview_image.aspect_ratio
 									%}
 		
+									{% assign deferred_media_alt = media.alt | default: product.title | escape %}
 									{{
 										media.preview_image
 										| image_url: width: 3840
@@ -1409,7 +1418,8 @@
 											width: media.preview_image.width,
 											height: image_height,
 											sizes: '100vw',
-											widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+											widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+											alt: deferred_media_alt
 									}}
 								</button>
 								<template>
