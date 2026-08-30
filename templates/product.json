@@ -264,18 +264,29 @@
     "rich_text_4V9bma": {
       "type": "rich-text",
       "blocks": {
+        "subheading_RvwEyeb": {
+          "type": "subheading",
+          "settings": {
+            "subheading": "Reviews",
+            "animation": false
+          }
+        },
         "heading_DNf8hQ": {
           "type": "heading",
           "settings": {
-            "heading": "ReVIEW",
+            "heading": "What Our Customers Say",
             "heading_size": "h2"
           }
         }
       },
       "block_order": [
+        "subheading_RvwEyeb",
         "heading_DNf8hQ"
       ],
       "name": "t:sections.rich-text.presets.name",
+      "custom_css": [
+        ".title--section, .title--section * {font-family: Arial, Helvetica, sans-serif !important; font-style: normal !important; font-weight: 900 !important; text-transform: uppercase; letter-spacing: 0;}"
+      ],
       "settings": {
         "color_scheme": "background-1",
         "full_width": false,
@@ -351,12 +362,12 @@
   "order": [
     "main",
     "single_review_jf3DAY",
+    "rich_text_4V9bma",
+    "1786212025af4b9207",
     "product-recommendations",
     "trivia_dtncV8",
     "icon_with_title_eGDMaV",
-    "rich_text_4V9bma",
     "176850605505f7c0d0",
-    "popular_products_YNhnAE",
-    "1786212025af4b9207"
+    "popular_products_YNhnAE"
   ]
 }
