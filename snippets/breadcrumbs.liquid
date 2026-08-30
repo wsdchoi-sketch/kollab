@@ -93,7 +93,7 @@
 	or template_base == 'customers/login'
 	or template_base == 'customers/register'
 	or template_base == 'product'
-	or template_base != 'page.contact'
+	or template_base == 'page.contact'
 %}
 	{% assign curent_url = request.path | lstrip | truncate: 12 %}
 	{% if curent_url == '/policies...' %}
@@ -103,6 +103,71 @@
 	{% else %}
 		{% assign container = 'container' %}
 	{% endif %}
+
+	{%- comment -%} Build BreadcrumbList structured data alongside the visual nav {%- endcomment -%}
+	{%- liquid
+		assign crumb_names = ''
+		assign crumb_urls = ''
+		assign crumb_names = crumb_names | append: 'Home' | append: '||'
+		assign crumb_urls = crumb_urls | append: shop.url | append: routes.root_url | append: '||'
+
+		if template contains 'page'
+			assign crumb_names = crumb_names | append: page.title | append: '||'
+			assign crumb_urls = crumb_urls | append: shop.url | append: page.url | append: '||'
+		elsif template contains 'collection' and collection.handle
+			if current_tags
+				assign crumb_names = crumb_names | append: collection.title | append: '||'
+				assign crumb_urls = crumb_urls | append: shop.url | append: collection.url | append: '||'
+				assign crumb_names = crumb_names | append: current_tags | join: ' + ' | append: '||'
+				assign crumb_urls = crumb_urls | append: shop.url | append: request.path | append: '||'
+			else
+				assign crumb_names = crumb_names | append: collection.title | append: '||'
+				assign crumb_urls = crumb_urls | append: shop.url | append: collection.url | append: '||'
+			endif
+		elsif template == 'blog'
+			if current_tags
+				assign crumb_names = crumb_names | append: blog.title | append: '||'
+				assign crumb_urls = crumb_urls | append: shop.url | append: blog.url | append: '||'
+				assign crumb_names = crumb_names | append: current_tags | join: ' + ' | append: '||'
+				assign crumb_urls = crumb_urls | append: shop.url | append: request.path | append: '||'
+			else
+				assign crumb_names = crumb_names | append: blog.title | append: '||'
+				assign crumb_urls = crumb_urls | append: shop.url | append: blog.url | append: '||'
+			endif
+		elsif template == 'customers/order'
+			assign crumb_names = crumb_names | append: 'Account' | append: '||'
+			assign crumb_urls = crumb_urls | append: shop.url | append: routes.account_url | append: '||'
+			assign crumb_names = crumb_names | append: order.name | append: '||'
+			assign crumb_urls = crumb_urls | append: shop.url | append: request.path | append: '||'
+		elsif template == 'customers/addresses'
+			assign crumb_names = crumb_names | append: 'Account' | append: '||'
+			assign crumb_urls = crumb_urls | append: shop.url | append: routes.account_url | append: '||'
+		else
+			assign crumb_names = crumb_names | append: page_title | append: '||'
+			assign crumb_urls = crumb_urls | append: shop.url | append: request.path | append: '||'
+		endif
+
+		assign crumb_name_list = crumb_names | split: '||'
+		assign crumb_url_list = crumb_urls | split: '||'
+	-%}
+
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		"itemListElement": [
+			{%- for crumb_name in crumb_name_list -%}
+				{
+					"@type": "ListItem",
+					"position": {{ forloop.index }},
+					"name": {{ crumb_name | strip | json }},
+					"item": {{ crumb_url_list[forloop.index0] | strip | json }}
+				}{%- unless forloop.last -%},{%- endunless -%}
+			{%- endfor -%}
+		]
+	}
+	</script>
+
 	<div class="breadcrumb_margin">
 		<div class="{{ container }}">
 			<nav
