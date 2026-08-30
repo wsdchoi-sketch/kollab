@@ -176,6 +176,65 @@
 			padding: 12px 16px;
 		}
 	}
+
+	#MainProduct-{{ section.id }} .kollab-details-collapse {
+		position: relative;
+		overflow: hidden;
+		max-height: 520px;
+		transition: max-height 0.4s ease;
+	}
+
+	#MainProduct-{{ section.id }} .kollab-details-collapse.is-expanded {
+		max-height: none;
+	}
+
+	#MainProduct-{{ section.id }} .kollab-details-collapse__fade {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		height: 100px;
+		background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 75%);
+		pointer-events: none;
+		opacity: 1;
+		transition: opacity 0.2s ease;
+	}
+
+	#MainProduct-{{ section.id }} .kollab-details-collapse.is-expanded .kollab-details-collapse__fade {
+		opacity: 0;
+	}
+
+	#MainProduct-{{ section.id }} .kollab-details-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 7px;
+		width: max-content;
+		margin: 18px auto 0;
+		padding: 10px 26px;
+		background: transparent;
+		border: 1px solid rgba(var(--color-foreground), 0.22);
+		border-radius: 999px;
+		color: rgb(var(--color-foreground));
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: border-color 0.2s ease;
+	}
+
+	#MainProduct-{{ section.id }} .kollab-details-toggle:hover {
+		border-color: rgba(var(--color-foreground), 0.5);
+	}
+
+	#MainProduct-{{ section.id }} .kollab-details-toggle svg {
+		width: 10px;
+		height: 6px;
+		flex-shrink: 0;
+		transition: transform 0.2s ease;
+	}
 {%- endstyle -%}
 
 {%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
@@ -1292,9 +1351,83 @@
 					{% endif %}
 				</h3>
 				{% if product.description != blank %}
-					<div class="kollab-product-details__content rte product__description {% if settings.rte_type == 'custom' %} rte__container{% endif %}">
-						{{ product.description }}
+					<div class="kollab-details-collapse" data-kollab-details-collapse>
+						<div class="kollab-product-details__content rte product__description {% if settings.rte_type == 'custom' %} rte__container{% endif %}" data-kollab-details-content>
+							{{ product.description }}
+						</div>
+						<div class="kollab-details-collapse__fade" data-kollab-details-fade></div>
 					</div>
+					<button type="button" class="kollab-details-toggle" data-kollab-details-toggle hidden>
+						<span data-kollab-details-toggle-text>Show more</span>
+						<svg data-kollab-details-toggle-icon width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+						</svg>
+					</button>
+					<script>
+						(() => {
+							const initKollabDetailsCollapse = () => {
+								document.querySelectorAll('[data-kollab-details-collapse]').forEach(wrapper => {
+									if (wrapper.dataset.kollabCollapseInit === 'true') return;
+									wrapper.dataset.kollabCollapseInit = 'true';
+
+									const content = wrapper.querySelector('[data-kollab-details-content]');
+									const toggle = wrapper.nextElementSibling;
+									if (!content || !toggle || !toggle.hasAttribute('data-kollab-details-toggle')) return;
+
+									const collapsedHeight = 520;
+									const toggleText = toggle.querySelector('[data-kollab-details-toggle-text]');
+									const toggleIcon = toggle.querySelector('[data-kollab-details-toggle-icon]');
+
+									const checkOverflow = () => {
+										if (content.scrollHeight > collapsedHeight + 40) {
+											toggle.hidden = false;
+										} else {
+											toggle.hidden = true;
+											wrapper.classList.add('is-expanded');
+										}
+									};
+
+									toggle.addEventListener('click', () => {
+										const isExpanded = wrapper.classList.toggle('is-expanded');
+										if (toggleText) toggleText.textContent = isExpanded ? 'Show less' : 'Show more';
+										if (toggleIcon) toggleIcon.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+										if (!isExpanded) {
+											wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+										}
+									});
+
+									const images = content.querySelectorAll('img');
+									let pending = images.length;
+
+									if (pending === 0) {
+										checkOverflow();
+									} else {
+										images.forEach(img => {
+											if (img.complete) {
+												pending -= 1;
+												if (pending === 0) checkOverflow();
+											} else {
+												img.addEventListener('load', () => {
+													pending -= 1;
+													if (pending === 0) checkOverflow();
+												});
+												img.addEventListener('error', () => {
+													pending -= 1;
+													if (pending === 0) checkOverflow();
+												});
+											}
+										});
+									}
+								});
+							};
+
+							if (document.readyState === 'loading') {
+								document.addEventListener('DOMContentLoaded', initKollabDetailsCollapse);
+							} else {
+								initKollabDetailsCollapse();
+							}
+						})();
+					</script>
 				{% endif %}
 			</div>
 		</div>
