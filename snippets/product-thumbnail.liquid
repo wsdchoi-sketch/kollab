@@ -14,6 +14,7 @@
     %}
 {% endcomment %}
 
+{%- assign thumb_alt = media.alt | default: product.title | escape -%}
 <noscript>
   {%- if media.media_type == 'video' or media.media_type == 'external_video' -%}
     <a href="{% if media.media_type == 'video' %}{{ media.sources[1].url }}{% else %}{{ media | external_video_url }}{% endif %}" aria-label="{{ 'products.product.video_exit_message' | t: title: product.title | escape }}">
@@ -30,7 +31,8 @@
 						width: media.preview_image.width,
 						height: image_height,
 						sizes: '100vw, (min-width: 1023px) 50vw',
-						widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+						widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+						alt: thumb_alt
 				}}
       </div>
     </a>
@@ -45,7 +47,8 @@
 					width: media.preview_image.width,
 					height: image_height,
 					sizes: '100vw, (min-width: 1023px) 50vw',
-					widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+					widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+					alt: thumb_alt
 			}}
     </div>
   {%- endif -%}
@@ -77,7 +80,8 @@
 		width: media.preview_image.width,
 		height: image_height,
 		sizes: '100vw, (min-width: 1023px) 50vw',
-		widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+		widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+		alt: thumb_alt
 		}}
   </div>
   <button class="product__media-toggle" type="button" aria-haspopup="dialog" data-media-id="{{ media.id }}">
@@ -119,7 +123,8 @@
 				width: media.preview_image.width,
 				height: image_height,
 				sizes: '100vw, (min-width: 1023px) 50vw',
-				widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+				widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+				alt: thumb_alt
 		}}
   </button>
   <template>
