@@ -58,6 +58,34 @@
 
 		{% render 'meta-tags' %}
 
+		{%- if request.page_type == 'index' -%}
+			<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Organization",
+				"name": {{ shop.name | json }},
+				"url": {{ shop.url | json }},
+				{%- if settings.logo != blank -%}
+					"logo": {{ settings.logo | image_url: width: 600 | prepend: "https:" | json }},
+				{%- endif -%}
+				{%- if settings.social_instagram_link != blank or settings.social_facebook_link != blank or settings.social_tiktok_link != blank or settings.social_twitter_link != blank -%}
+					"sameAs": [
+						{%- assign social_links = '' -%}
+						{%- if settings.social_instagram_link != blank -%}{%- assign social_links = social_links | append: settings.social_instagram_link | append: '||' -%}{%- endif -%}
+						{%- if settings.social_facebook_link != blank -%}{%- assign social_links = social_links | append: settings.social_facebook_link | append: '||' -%}{%- endif -%}
+						{%- if settings.social_tiktok_link != blank -%}{%- assign social_links = social_links | append: settings.social_tiktok_link | append: '||' -%}{%- endif -%}
+						{%- if settings.social_twitter_link != blank -%}{%- assign social_links = social_links | append: settings.social_twitter_link | append: '||' -%}{%- endif -%}
+						{%- assign social_link_list = social_links | split: '||' -%}
+						{%- for social_link in social_link_list -%}
+							{{ social_link | strip | json }}{%- unless forloop.last -%},{%- endunless -%}
+						{%- endfor -%}
+					],
+				{%- endif -%}
+				"description": {{ shop.description | default: shop.name | json }}
+			}
+			</script>
+		{%- endif -%}
+
 		<script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
 		<script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
 		<script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
