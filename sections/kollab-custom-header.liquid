@@ -5,7 +5,6 @@
 	assign kollab_cat_blocks = section.blocks | where: 'type', 'category'
 	assign kollab_brand_blocks = section.blocks | where: 'type', 'brand'
 %}
-
 {%- capture kollab_media_flags -%}
 	{%- for kollab_block in section.blocks -%}
 		{%- assign kollab_probe = kollab_block.settings.image -%}
@@ -303,6 +302,11 @@
 		color: #f12c18;
 		transform: translateX(4px);
 		outline: 0;
+	}
+
+	.kollab-header__submenu-toggle,
+	.kollab-header__mega-tabs {
+		display: none;
 	}
 
 	.kollab-header__mega.has-media {
@@ -682,16 +686,100 @@
 			border-top: 0;
 		}
 
-		.kollab-header__mega.has-media,
+		.kollab-header__mega,
+		.kollab-header__mega.has-media {
+			width: 100%;
+			display: none;
+		}
+
+		.kollab-header__item.is-expanded > .kollab-header__mega {
+			display: block;
+		}
+
 		.kollab-header__mega-inner,
 		.kollab-header__mega.has-media .kollab-header__mega-inner {
 			width: 100%;
-			grid-template-columns: 1fr;
-			gap: 34px;
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+		}
+
+		.kollab-header__submenu-toggle {
+			position: absolute;
+			top: 0;
+			right: 0;
+			z-index: 2;
+			width: 44px;
+			height: 44px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0;
+			background: transparent;
+			border: 0;
+			color: #f12c18;
+			cursor: pointer;
+		}
+
+		.kollab-header__submenu-toggle::after {
+			content: "";
+			width: 9px;
+			height: 9px;
+			border-right: 2px solid currentColor;
+			border-bottom: 2px solid currentColor;
+			transform: translateY(-3px) rotate(45deg);
+			transition: transform 180ms ease;
+		}
+
+		.kollab-header__item.is-expanded .kollab-header__submenu-toggle::after {
+			transform: translateY(2px) rotate(-135deg);
+		}
+
+		.kollab-header__mega-tabs {
+			order: 1;
+			display: flex;
+			margin: 0 0 14px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+		}
+
+		.kollab-header__mega-tab {
+			flex: 1 1 0;
+			padding: 11px 0;
+			background: none;
+			border: 0;
+			border-bottom: 2px solid transparent;
+			color: rgba(0, 0, 0, 0.48);
+			font-family: inherit;
+			font-size: 12px;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			cursor: pointer;
+		}
+
+		.kollab-header__mega-tab.is-active {
+			color: #111111;
+			font-weight: 700;
+			border-bottom-color: #f12c18;
+		}
+
+		.kollab-header__mega-title {
+			display: none;
+		}
+
+		.kollab-header__mega-col {
+			order: 2;
+			display: none;
+		}
+
+		.kollab-header__mega-col.is-active {
+			display: block;
 		}
 
 		.kollab-header__mega-media {
-			display: none;
+			order: 0;
+			display: block;
+			aspect-ratio: 16 / 9;
+			margin: 0 0 14px;
 		}
 
 		.kollab-header__dropdown-list {
@@ -727,9 +815,15 @@
 			<ul class="kollab-header__nav">
 				<li class="kollab-header__item">
 					<a class="kollab-header__link" href="{{ routes.all_products_collection_url }}" aria-haspopup="true">Shop</a>
+					<button class="kollab-header__submenu-toggle" type="button" aria-label="Show Shop menu" aria-expanded="false" data-kollab-submenu-toggle></button>
 					<div class="kollab-header__mega{% if kollab_mega_media > 0 %} has-media{% endif %}" aria-label="Shop submenu" data-kollab-mega>
 						<div class="kollab-header__mega-inner">
-							<div>
+							<div class="kollab-header__mega-tabs" role="tablist">
+								<button class="kollab-header__mega-tab is-active" type="button" role="tab" aria-selected="true" data-mega-tab="category">{{ section.settings.category_heading | default: 'Category' }}</button>
+								<button class="kollab-header__mega-tab" type="button" role="tab" aria-selected="false" data-mega-tab="brand">{{ section.settings.brand_heading | default: 'Brands' }}</button>
+							</div>
+
+							<div class="kollab-header__mega-col is-active" data-mega-col="category">
 								<h2 class="kollab-header__mega-title">{{ section.settings.category_heading | default: 'Category' }}</h2>
 								<ul class="kollab-header__mega-list">
 									{%- if kollab_cat_blocks.size > 0 -%}
@@ -748,7 +842,7 @@
 								</ul>
 							</div>
 
-							<div>
+							<div class="kollab-header__mega-col" data-mega-col="brand">
 								<h2 class="kollab-header__mega-title">{{ section.settings.brand_heading | default: 'Brands' }}</h2>
 								<ul class="kollab-header__mega-list">
 									{%- if kollab_brand_blocks.size > 0 -%}
@@ -785,7 +879,7 @@
 											assign media_alt = media_alt | escape
 										-%}
 										{%- if media_src != blank -%}
-											<div class="kollab-header__mega-media-item" data-media-key="{{ block.id }}" data-media-label="{{ block.settings.label | escape }}">
+											<div class="kollab-header__mega-media-item" data-media-key="{{ block.id }}" data-media-group="{{ block.type }}" data-media-label="{{ block.settings.label | escape }}">
 												{{ media_src | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400,700,900', sizes: '320px', alt: media_alt }}
 											</div>
 										{%- endif -%}
@@ -1204,6 +1298,67 @@
 
 			link.addEventListener("mouseenter", show);
 			link.addEventListener("focus", show);
+		});
+
+		window.kollabMegaShowGroup = function (group) {
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].getAttribute("data-media-group") === group) {
+					stopIntro();
+					activate(i, true);
+					return;
+				}
+			}
+		};
+	}());
+
+	(function () {
+		var item = document.querySelector("[data-kollab-submenu-toggle]");
+
+		if (!item) {
+			return;
+		}
+
+		var parent = item.closest(".kollab-header__item");
+		var mega = parent ? parent.querySelector(".kollab-header__mega") : null;
+
+		if (!parent || !mega) {
+			return;
+		}
+
+		item.addEventListener("click", function (event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			var open = !parent.classList.contains("is-expanded");
+			parent.classList.toggle("is-expanded", open);
+			item.setAttribute("aria-expanded", open ? "true" : "false");
+			item.setAttribute("aria-label", open ? "Hide Shop menu" : "Show Shop menu");
+		});
+
+		var tabs = Array.prototype.slice.call(mega.querySelectorAll("[data-mega-tab]"));
+		var cols = Array.prototype.slice.call(mega.querySelectorAll("[data-mega-col]"));
+
+		tabs.forEach(function (tab) {
+			tab.addEventListener("click", function (event) {
+				event.preventDefault();
+				event.stopPropagation();
+
+				var group = tab.getAttribute("data-mega-tab");
+
+				tabs.forEach(function (other) {
+					var on = other === tab;
+					other.classList.toggle("is-active", on);
+					other.setAttribute("aria-selected", on ? "true" : "false");
+				});
+
+				cols.forEach(function (col) {
+					col.classList.toggle("is-active", col.getAttribute("data-mega-col") === group);
+				});
+
+				if (typeof window.kollabMegaShowGroup === "function") {
+					window.kollabMegaShowGroup(group);
+				}
+			});
 		});
 	}());
 </script>
