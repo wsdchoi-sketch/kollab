@@ -1,6 +1,16 @@
 {% liquid
 	assign kollab_categories = 'Moisturizers|Cleansers & Exfoliators|Serums & Essence|Masks & Treatments|Eye Care|Primer & Makeup|Lip Care|SPF|Body Care|Blotting Papers & Tools' | split: '|'
 	assign kollab_shop_collection = collections.all
+
+	assign kollab_cat_blocks = section.blocks | where: 'type', 'category'
+	assign kollab_brand_blocks = section.blocks | where: 'type', 'brand'
+
+	assign kollab_mega_media = 0
+	for kollab_block in section.blocks
+		if kollab_block.settings.image != blank
+			assign kollab_mega_media = kollab_mega_media | plus: 1
+		endif
+	endfor
 %}
 
 <style>
@@ -288,6 +298,79 @@
 		color: #f12c18;
 		transform: translateX(4px);
 		outline: 0;
+	}
+
+	.kollab-header__mega.has-media {
+		width: min(1120px, calc(100vw - 48px));
+	}
+
+	.kollab-header__mega.has-media .kollab-header__mega-inner {
+		grid-template-columns: minmax(210px, 1fr) minmax(180px, 0.82fr) minmax(250px, 1.05fr);
+		gap: 48px;
+	}
+
+	.kollab-header__mega-media {
+		position: relative;
+		display: block;
+		width: 100%;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background: #111111;
+	}
+
+	.kollab-header__mega-media-item {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		transform: scale(1.045);
+		transition: opacity 400ms ease, transform 620ms ease;
+		pointer-events: none;
+	}
+
+	.kollab-header__mega-media-item.is-active {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	.kollab-header__mega-media-item img {
+		width: 100%;
+		height: 100%;
+		display: block;
+		object-fit: cover;
+	}
+
+	.kollab-header__mega-media::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(180deg, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.42) 100%);
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.kollab-header__mega-media-caption {
+		position: absolute;
+		left: 16px;
+		bottom: 14px;
+		z-index: 3;
+		color: #ffffff;
+		font-family: "ENKEL", "Enkel", Georgia, serif;
+		font-size: 15px;
+		line-height: 1.2;
+		text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+		opacity: 0;
+		transition: opacity 260ms ease;
+	}
+
+	.kollab-header__mega-media-caption.is-visible {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.kollab-header__mega-media-item {
+			transition: opacity 120ms ease;
+			transform: none;
+		}
 	}
 
 	.kollab-cart-drawer {
@@ -590,9 +673,16 @@
 			border-top: 0;
 		}
 
-		.kollab-header__mega-inner {
+		.kollab-header__mega.has-media,
+		.kollab-header__mega-inner,
+		.kollab-header__mega.has-media .kollab-header__mega-inner {
+			width: 100%;
 			grid-template-columns: 1fr;
 			gap: 34px;
+		}
+
+		.kollab-header__mega-media {
+			display: none;
 		}
 
 		.kollab-header__dropdown-list {
@@ -628,23 +718,37 @@
 			<ul class="kollab-header__nav">
 				<li class="kollab-header__item">
 					<a class="kollab-header__link" href="{{ routes.all_products_collection_url }}" aria-haspopup="true">Shop</a>
-					<div class="kollab-header__mega" aria-label="Shop submenu">
+					<div class="kollab-header__mega{% if kollab_mega_media > 0 %} has-media{% endif %}" aria-label="Shop submenu" data-kollab-mega>
 						<div class="kollab-header__mega-inner">
 							<div>
-								<h2 class="kollab-header__mega-title">Category</h2>
+								<h2 class="kollab-header__mega-title">{{ section.settings.category_heading | default: 'Category' }}</h2>
 								<ul class="kollab-header__mega-list">
-									{%- for category in kollab_categories -%}
-										<li>
-											<a class="kollab-header__mega-link" href="{{ routes.all_products_collection_url }}/{{ category | handleize }}">{{ category }}</a>
-										</li>
-									{%- endfor -%}
+									{%- if kollab_cat_blocks.size > 0 -%}
+										{%- for block in kollab_cat_blocks -%}
+											<li {{ block.shopify_attributes }}>
+												<a class="kollab-header__mega-link" href="{{ block.settings.link | default: routes.all_products_collection_url }}" data-mega-key="{{ block.id }}">{{ block.settings.label }}</a>
+											</li>
+										{%- endfor -%}
+									{%- else -%}
+										{%- for category in kollab_categories -%}
+											<li>
+												<a class="kollab-header__mega-link" href="{{ routes.all_products_collection_url }}/{{ category | handleize }}">{{ category }}</a>
+											</li>
+										{%- endfor -%}
+									{%- endif -%}
 								</ul>
 							</div>
 
 							<div>
-								<h2 class="kollab-header__mega-title">Brands</h2>
+								<h2 class="kollab-header__mega-title">{{ section.settings.brand_heading | default: 'Brands' }}</h2>
 								<ul class="kollab-header__mega-list">
-									{%- if kollab_shop_collection.all_vendors.size > 0 -%}
+									{%- if kollab_brand_blocks.size > 0 -%}
+										{%- for block in kollab_brand_blocks -%}
+											<li {{ block.shopify_attributes }}>
+												<a class="kollab-header__mega-link" href="{{ block.settings.link | default: routes.all_products_collection_url }}" data-mega-key="{{ block.id }}">{{ block.settings.label }}</a>
+											</li>
+										{%- endfor -%}
+									{%- elsif kollab_shop_collection.all_vendors.size > 0 -%}
 										{%- for vendor in kollab_shop_collection.all_vendors limit: 8 -%}
 											<li>
 												<a class="kollab-header__mega-link" href="/collections/vendors?q={{ vendor | url_encode }}">{{ vendor }}</a>
@@ -655,6 +759,26 @@
 									{%- endif -%}
 								</ul>
 							</div>
+
+							{%- if kollab_mega_media > 0 -%}
+								<div class="kollab-header__mega-media" data-kollab-mega-media>
+									{%- for block in section.blocks -%}
+										{%- if block.settings.image != blank -%}
+											{%- liquid
+												assign media_alt = block.settings.label
+												if media_alt == blank
+													assign media_alt = block.settings.image.alt
+												endif
+												assign media_alt = media_alt | escape
+											-%}
+											<div class="kollab-header__mega-media-item" data-media-key="{{ block.id }}" data-media-label="{{ block.settings.label | escape }}">
+												{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400,700,900', sizes: '320px', alt: media_alt }}
+											</div>
+										{%- endif -%}
+									{%- endfor -%}
+									<span class="kollab-header__mega-media-caption" data-kollab-mega-caption></span>
+								</div>
+							{%- endif -%}
 						</div>
 					</div>
 				</li>
@@ -953,12 +1077,128 @@
 			}
 		});
 	}());
+
+	(function () {
+		var mega = document.querySelector("[data-kollab-mega]");
+
+		if (!mega) {
+			return;
+		}
+
+		var media = mega.querySelector("[data-kollab-mega-media]");
+
+		if (!media) {
+			return;
+		}
+
+		var items = Array.prototype.slice.call(media.querySelectorAll("[data-media-key]"));
+		var caption = media.querySelector("[data-kollab-mega-caption]");
+		var links = Array.prototype.slice.call(mega.querySelectorAll("[data-mega-key]"));
+
+		if (items.length === 0) {
+			return;
+		}
+
+		var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		var introTimer = null;
+		var introDone = false;
+
+		function activate(index, withCaption) {
+			items.forEach(function (item, i) {
+				item.classList.toggle("is-active", i === index);
+			});
+
+			if (!caption) {
+				return;
+			}
+
+			if (withCaption) {
+				caption.textContent = items[index].getAttribute("data-media-label") || "";
+				caption.classList.add("is-visible");
+			} else {
+				caption.classList.remove("is-visible");
+			}
+		}
+
+		function indexForKey(key) {
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].getAttribute("data-media-key") === key) {
+					return i;
+				}
+			}
+			return -1;
+		}
+
+		function stopIntro() {
+			if (introTimer) {
+				window.clearTimeout(introTimer);
+				introTimer = null;
+			}
+			introDone = true;
+		}
+
+		function runIntro() {
+			if (introDone || reduceMotion || items.length < 2) {
+				activate(0, true);
+				introDone = true;
+				return;
+			}
+
+			var step = 0;
+			var total = Math.min(items.length, 5);
+
+			function tick() {
+				activate(step % items.length, false);
+				step++;
+
+				if (step <= total) {
+					introTimer = window.setTimeout(tick, 95 + step * 22);
+				} else {
+					introTimer = null;
+					introDone = true;
+					activate(0, true);
+				}
+			}
+
+			tick();
+		}
+
+		activate(0, false);
+
+		var shopItem = mega.closest(".kollab-header__item");
+
+		if (shopItem) {
+			shopItem.addEventListener("mouseenter", runIntro);
+			shopItem.addEventListener("mouseleave", function () {
+				stopIntro();
+				introDone = false;
+				activate(0, false);
+			});
+		}
+
+		links.forEach(function (link) {
+			function show() {
+				var index = indexForKey(link.getAttribute("data-mega-key"));
+
+				if (index === -1) {
+					return;
+				}
+
+				stopIntro();
+				activate(index, true);
+			}
+
+			link.addEventListener("mouseenter", show);
+			link.addEventListener("focus", show);
+		});
+	}());
 </script>
 
 {% schema %}
 {
 	"name": "Kollab custom header",
 	"class": "shopify-section-header",
+	"max_blocks": 30,
 	"settings": [
 		{
 			"type": "image_picker",
@@ -974,6 +1214,74 @@
 			"default": 110,
 			"unit": "px",
 			"label": "Logo width"
+		},
+		{
+			"type": "header",
+			"content": "Shop menu"
+		},
+		{
+			"type": "paragraph",
+			"content": "Add Category and Brand blocks below to control the Shop menu. With no blocks the menu keeps using the automatic category and vendor lists. Add an image to any block to turn on the preview panel."
+		},
+		{
+			"type": "text",
+			"id": "category_heading",
+			"label": "Category column heading",
+			"default": "Category"
+		},
+		{
+			"type": "text",
+			"id": "brand_heading",
+			"label": "Brand column heading",
+			"default": "Brands"
+		}
+	],
+	"blocks": [
+		{
+			"type": "category",
+			"name": "Category link",
+			"settings": [
+				{
+					"type": "text",
+					"id": "label",
+					"label": "Label",
+					"default": "Category"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Preview image",
+					"info": "Optional. Shown in the menu preview panel on hover."
+				}
+			]
+		},
+		{
+			"type": "brand",
+			"name": "Brand link",
+			"settings": [
+				{
+					"type": "text",
+					"id": "label",
+					"label": "Label",
+					"default": "Brand"
+				},
+				{
+					"type": "url",
+					"id": "link",
+					"label": "Link"
+				},
+				{
+					"type": "image_picker",
+					"id": "image",
+					"label": "Preview image",
+					"info": "Optional. Shown in the menu preview panel on hover."
+				}
+			]
 		}
 	]
 }
