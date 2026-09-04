@@ -304,6 +304,10 @@
 		outline: 0;
 	}
 
+	.kollab-header__mega-link.is-cycling {
+		color: #f12c18;
+	}
+
 	.kollab-header__submenu-toggle,
 	.kollab-header__mega-tabs {
 		display: none;
@@ -737,29 +741,33 @@
 
 		.kollab-header__mega-tabs {
 			order: 1;
-			display: flex;
-			margin: 0 0 14px;
-			border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 10px;
+			margin: 0 0 18px;
 		}
 
 		.kollab-header__mega-tab {
-			flex: 1 1 0;
-			padding: 11px 0;
-			background: none;
-			border: 0;
-			border-bottom: 2px solid transparent;
-			color: rgba(0, 0, 0, 0.48);
+			min-height: 52px;
+			padding: 14px 8px;
+			background: #ffffff;
+			border: 1px solid rgba(0, 0, 0, 0.2);
+			color: #111111;
 			font-family: inherit;
-			font-size: 12px;
-			letter-spacing: 0.12em;
+			font-size: 13px;
+			font-weight: 600;
+			letter-spacing: 0.1em;
+			line-height: 1.2;
 			text-transform: uppercase;
 			cursor: pointer;
+			transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 		}
 
 		.kollab-header__mega-tab.is-active {
-			color: #111111;
+			background: #f12c18;
+			border-color: #f12c18;
+			color: #ffffff;
 			font-weight: 700;
-			border-bottom-color: #f12c18;
 		}
 
 		.kollab-header__mega-title {
@@ -1208,23 +1216,50 @@
 		}
 
 		var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		var introTimer = null;
-		var introDone = false;
+		var loopTimer = null;
+		var loopStart = 0;
+		var loopIndex = 0;
 
-		function activate(index, withCaption) {
-			items.forEach(function (item, i) {
-				item.classList.toggle("is-active", i === index);
-			});
+		var FAST_MS = 110;
+		var SLOW_MS = 1150;
+		var RAMP_FROM = 2000;
+		var RAMP_TO = 3400;
 
-			if (!caption) {
+		function intervalAt(elapsed) {
+			if (elapsed <= RAMP_FROM) {
+				return FAST_MS;
+			}
+
+			if (elapsed >= RAMP_TO) {
+				return SLOW_MS;
+			}
+
+			var t = (elapsed - RAMP_FROM) / (RAMP_TO - RAMP_FROM);
+			var eased = 1 - Math.pow(1 - t, 2);
+
+			return FAST_MS + (SLOW_MS - FAST_MS) * eased;
+		}
+
+		function activate(index) {
+			var current = items[index];
+
+			if (!current) {
 				return;
 			}
 
-			if (withCaption) {
-				caption.textContent = items[index].getAttribute("data-media-label") || "";
+			items.forEach(function (entry, i) {
+				entry.classList.toggle("is-active", i === index);
+			});
+
+			var key = current.getAttribute("data-media-key");
+
+			links.forEach(function (link) {
+				link.classList.toggle("is-cycling", link.getAttribute("data-mega-key") === key);
+			});
+
+			if (caption) {
+				caption.textContent = current.getAttribute("data-media-label") || "";
 				caption.classList.add("is-visible");
-			} else {
-				caption.classList.remove("is-visible");
 			}
 		}
 
@@ -1234,78 +1269,76 @@
 					return i;
 				}
 			}
+
 			return -1;
 		}
 
-		function stopIntro() {
-			if (introTimer) {
-				window.clearTimeout(introTimer);
-				introTimer = null;
+		function stopLoop() {
+			if (loopTimer) {
+				window.clearTimeout(loopTimer);
+				loopTimer = null;
 			}
-			introDone = true;
 		}
 
-		function runIntro() {
-			if (introDone || reduceMotion || items.length < 2) {
-				activate(0, true);
-				introDone = true;
+		function tick() {
+			activate(loopIndex % items.length);
+			loopIndex++;
+			loopTimer = window.setTimeout(tick, intervalAt(Date.now() - loopStart));
+		}
+
+		function startLoop() {
+			stopLoop();
+
+			if (reduceMotion || items.length < 2) {
+				activate(0);
 				return;
 			}
 
-			var step = 0;
-			var total = Math.min(items.length, 5);
-
-			function tick() {
-				activate(step % items.length, false);
-				step++;
-
-				if (step <= total) {
-					introTimer = window.setTimeout(tick, 95 + step * 22);
-				} else {
-					introTimer = null;
-					introDone = true;
-					activate(0, true);
-				}
-			}
-
+			loopStart = Date.now();
+			loopIndex = 0;
 			tick();
 		}
 
-		activate(0, false);
+		activate(0);
 
 		var shopItem = mega.closest(".kollab-header__item");
+		var inner = mega.querySelector(".kollab-header__mega-inner");
 
 		if (shopItem) {
-			shopItem.addEventListener("mouseenter", runIntro);
-			shopItem.addEventListener("mouseleave", function () {
-				stopIntro();
-				introDone = false;
-				activate(0, false);
-			});
+			shopItem.addEventListener("mouseenter", startLoop);
+			shopItem.addEventListener("mouseleave", stopLoop);
+		}
+
+		if (inner) {
+			inner.addEventListener("mouseleave", startLoop);
 		}
 
 		links.forEach(function (link) {
-			function show() {
+			function pin() {
 				var index = indexForKey(link.getAttribute("data-mega-key"));
 
 				if (index === -1) {
 					return;
 				}
 
-				stopIntro();
-				activate(index, true);
+				stopLoop();
+				activate(index);
 			}
 
-			link.addEventListener("mouseenter", show);
-			link.addEventListener("focus", show);
+			link.addEventListener("mouseenter", pin);
+			link.addEventListener("focus", pin);
 		});
 
-		window.kollabMegaShowGroup = function (group) {
-			for (var i = 0; i < items.length; i++) {
-				if (items[i].getAttribute("data-media-group") === group) {
-					stopIntro();
-					activate(i, true);
-					return;
+		window.kollabMega = {
+			start: startLoop,
+			stop: stopLoop,
+			showGroup: function (group) {
+				for (var i = 0; i < items.length; i++) {
+					if (items[i].getAttribute("data-media-group") === group) {
+						stopLoop();
+						activate(i);
+						return;
+					}
 				}
 			}
 		};
@@ -1333,6 +1366,14 @@
 			parent.classList.toggle("is-expanded", open);
 			item.setAttribute("aria-expanded", open ? "true" : "false");
 			item.setAttribute("aria-label", open ? "Hide Shop menu" : "Show Shop menu");
+
+			if (window.kollabMega) {
+				if (open) {
+					window.kollabMega.start();
+				} else {
+					window.kollabMega.stop();
+				}
+			}
 		});
 
 		var tabs = Array.prototype.slice.call(mega.querySelectorAll("[data-mega-tab]"));
@@ -1355,8 +1396,8 @@
 					col.classList.toggle("is-active", col.getAttribute("data-mega-col") === group);
 				});
 
-				if (typeof window.kollabMegaShowGroup === "function") {
-					window.kollabMegaShowGroup(group);
+				if (window.kollabMega) {
+					window.kollabMega.showGroup(group);
 				}
 			});
 		});
