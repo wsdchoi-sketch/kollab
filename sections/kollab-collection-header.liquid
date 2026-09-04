@@ -1,0 +1,482 @@
+{%- liquid
+  assign kicker_text = section.settings.kicker
+
+  assign title_text = section.settings.heading
+  if title_text == blank
+    assign title_text = collection.title
+  endif
+
+  assign body_text = section.settings.description
+  if body_text == blank
+    assign body_text = collection.description
+  endif
+
+  assign media_count = 0
+  for block in section.blocks
+    if block.settings.image != blank
+      assign media_count = media_count | plus: 1
+    endif
+  endfor
+-%}
+
+<style>
+  .kollab-ch-{{ section.id }} {
+    --kollab-ch-panel: {{ section.settings.panel_color }};
+    --kollab-ch-accent: {{ section.settings.accent_color }};
+    --kollab-ch-border: rgba(0, 0, 0, 0.14);
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__wrap {
+    margin: 0 auto;
+    padding: {{ section.settings.padding_top }}px {{ section.settings.horizontal_padding }}px {{ section.settings.padding_bottom }}px;
+    max-width: {{ section.settings.max_width }}px;
+    box-sizing: border-box;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__wrap * {
+    box-sizing: border-box;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    border: 1px solid var(--kollab-ch-border);
+  }
+
+  .kollab-ch-{{ section.id }}.has-media .kollab-ch__grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px 38px;
+    background: var(--kollab-ch-panel);
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__kicker {
+    margin: 0 0 14px;
+    color: var(--kollab-ch-accent);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__title {
+    margin: 0 0 14px;
+    color: #111111;
+    font-family: "ENKEL", "Enkel", Georgia, serif;
+    font-size: {{ section.settings.title_size }}px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: 0;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__desc {
+    margin: 0 0 20px;
+    color: #4a473e;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__desc > *:first-child {
+    margin-top: 0;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__desc > *:last-child {
+    margin-bottom: 0;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border: 1px solid #111111;
+    border-radius: 999px;
+    color: #111111;
+    font-size: 12px;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__media {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    min-height: 260px;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__cell {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    background: #efece4;
+    text-decoration: none;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__cell:first-child {
+    grid-row: span 2;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__cell img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 420ms ease;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__cell:hover img,
+  .kollab-ch-{{ section.id }} .kollab-ch__cell:focus-visible img {
+    transform: scale(1.04);
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__cell::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, 0.42) 100%);
+    pointer-events: none;
+  }
+
+  .kollab-ch-{{ section.id }} .kollab-ch__cell-label {
+    position: absolute;
+    left: 12px;
+    bottom: 10px;
+    z-index: 2;
+    color: #ffffff;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55);
+  }
+
+  @media screen and (max-width: 900px) {
+    .kollab-ch-{{ section.id }} .kollab-ch__wrap {
+      padding-left: {{ section.settings.horizontal_padding_mobile }}px;
+      padding-right: {{ section.settings.horizontal_padding_mobile }}px;
+    }
+
+    .kollab-ch-{{ section.id }}.has-media .kollab-ch__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__grid {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__media {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: auto;
+      min-height: 0;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__cell {
+      aspect-ratio: 1 / 1;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__cell:first-child {
+      grid-row: auto;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__cell:nth-child(n + 4) {
+      display: none;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__text {
+      padding: 24px 20px 26px;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__title {
+      font-size: {{ section.settings.title_size_mobile }}px;
+    }
+
+    .kollab-ch-{{ section.id }} .kollab-ch__desc {
+      font-size: 13px;
+    }
+  }
+</style>
+
+<div class="kollab-ch-{{ section.id }}{% if media_count > 0 %} has-media{% endif %}">
+  <div class="kollab-ch__wrap">
+    <div class="kollab-ch__grid">
+      <div class="kollab-ch__text">
+        {%- if kicker_text != blank -%}
+          <p class="kollab-ch__kicker">{{ kicker_text }}</p>
+        {%- endif -%}
+
+        {%- if title_text != blank -%}
+          <h1 class="kollab-ch__title">{{ title_text }}</h1>
+        {%- endif -%}
+
+        {%- if body_text != blank -%}
+          <div class="kollab-ch__desc">{{ body_text }}</div>
+        {%- endif -%}
+
+        {%- liquid
+          assign has_tags = false
+          if section.settings.show_product_count
+            assign has_tags = true
+          endif
+          if section.settings.tag_one != blank or section.settings.tag_two != blank or section.settings.tag_three != blank
+            assign has_tags = true
+          endif
+        -%}
+
+        {%- if has_tags -%}
+          <ul class="kollab-ch__tags">
+            {%- if section.settings.show_product_count and collection != blank -%}
+              <li class="kollab-ch__tag">{{ collection.products_count }} {{ section.settings.product_count_label }}</li>
+            {%- endif -%}
+            {%- if section.settings.tag_one != blank -%}
+              <li class="kollab-ch__tag">{{ section.settings.tag_one }}</li>
+            {%- endif -%}
+            {%- if section.settings.tag_two != blank -%}
+              <li class="kollab-ch__tag">{{ section.settings.tag_two }}</li>
+            {%- endif -%}
+            {%- if section.settings.tag_three != blank -%}
+              <li class="kollab-ch__tag">{{ section.settings.tag_three }}</li>
+            {%- endif -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- if media_count > 0 -%}
+        <div class="kollab-ch__media">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.image != blank -%}
+              {%- liquid
+                assign cell_label = block.settings.label
+                assign cell_alt = cell_label
+                if cell_alt == blank
+                  assign cell_alt = block.settings.image.alt
+                endif
+                assign cell_alt = cell_alt | escape
+                assign cell_link = block.settings.link
+              -%}
+              {%- if cell_link != blank -%}
+                <a class="kollab-ch__cell" href="{{ cell_link }}" {{ block.shopify_attributes }}>
+              {%- else -%}
+                <div class="kollab-ch__cell" {{ block.shopify_attributes }}>
+              {%- endif -%}
+                {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', widths: '300,500,800', sizes: '(max-width: 900px) 33vw, 20vw', alt: cell_alt }}
+                {%- if cell_label != blank -%}
+                  <span class="kollab-ch__cell-label">{{ cell_label }}</span>
+                {%- endif -%}
+              {%- if cell_link != blank -%}
+                </a>
+              {%- else -%}
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Kollab collection header",
+  "tag": "section",
+  "class": "kollab-collection-header",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Eyebrow label",
+      "info": "Small uppercase line above the title. Example: CURATED EDIT",
+      "default": "CURATED EDIT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Title",
+      "info": "Leave empty to use the collection name automatically."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Curation note",
+      "info": "Leave empty to use the collection description automatically."
+    },
+    {
+      "type": "header",
+      "content": "Tags"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_count",
+      "label": "Show product count tag",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "product_count_label",
+      "label": "Product count wording",
+      "default": "items"
+    },
+    {
+      "type": "text",
+      "id": "tag_one",
+      "label": "Tag 1",
+      "info": "Example: 9 brands"
+    },
+    {
+      "type": "text",
+      "id": "tag_two",
+      "label": "Tag 2"
+    },
+    {
+      "type": "text",
+      "id": "tag_three",
+      "label": "Tag 3"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "panel_color",
+      "label": "Text panel background",
+      "default": "#F1EEE4"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Eyebrow colour",
+      "default": "#F12C18"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size (desktop)",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "title_size_mobile",
+      "min": 18,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "label": "Title size (mobile)",
+      "default": 22
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1800,
+      "step": 20,
+      "unit": "px",
+      "label": "Max width",
+      "default": 1400
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Side padding (desktop)",
+      "default": 44
+    },
+    {
+      "type": "range",
+      "id": "horizontal_padding_mobile",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Side padding (mobile)",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 8
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Caption",
+          "info": "Shown over the image. Usually the brand name."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Kollab collection header",
+      "blocks": [
+        { "type": "media" },
+        { "type": "media" },
+        { "type": "media" },
+        { "type": "media" },
+        { "type": "media" }
+      ]
+    }
+  ]
+}
+{% endschema %}
