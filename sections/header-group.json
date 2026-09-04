@@ -14,65 +14,159 @@
     "header": {
       "type": "kollab-custom-header",
       "blocks": {
-        "category_byLpAV": {
+        "category_moisturizers": {
           "type": "category",
           "settings": {
-            "label": "Category 3",
-            "link": "",
-            "image": "shopify://shop_images/Treats_for_Treatments_png.webp"
+            "label": "Moisturizers",
+            "link": "/collections/all/moisturizers"
           }
         },
-        "category_YGzwrU": {
+        "category_cleansers": {
           "type": "category",
           "settings": {
-            "label": "Category",
-            "link": ""
+            "label": "Cleansers & Exfoliators",
+            "link": "/collections/all/cleansers-exfoliators"
           }
         },
-        "brand_eEEzed": {
-          "type": "brand",
-          "settings": {
-            "label": "Brand",
-            "link": ""
-          }
-        },
-        "brand_L9i3d9": {
-          "type": "brand",
-          "settings": {
-            "label": "Brand",
-            "link": ""
-          }
-        },
-        "brand_QiaBXN": {
-          "type": "brand",
-          "settings": {
-            "label": "TEST BRAND 1",
-            "link": "",
-            "image": "shopify://shop_images/Untitled-1_35af6529-a019-49fc-a8ad-335d7eaea6ba_png.webp"
-          }
-        },
-        "category_MkixU9": {
+        "category_serums": {
           "type": "category",
           "settings": {
-            "label": "TEST CATEGORY 1",
-            "link": "",
-            "image": "shopify://shop_images/ChatGPTImageAug22_2026at02_29_41PM.png"
+            "label": "Serums & Essence",
+            "link": "/collections/all/serums-essence"
+          }
+        },
+        "category_masks": {
+          "type": "category",
+          "settings": {
+            "label": "Masks & Treatments",
+            "link": "/collections/all/masks-treatments"
+          }
+        },
+        "category_eyecare": {
+          "type": "category",
+          "settings": {
+            "label": "Eye Care",
+            "link": "/collections/all/eye-care"
+          }
+        },
+        "category_makeup": {
+          "type": "category",
+          "settings": {
+            "label": "Primer & Makeup",
+            "link": "/collections/all/primer-makeup"
+          }
+        },
+        "category_lipcare": {
+          "type": "category",
+          "settings": {
+            "label": "Lip Care",
+            "link": "/collections/all/lip-care"
+          }
+        },
+        "category_spf": {
+          "type": "category",
+          "settings": {
+            "label": "SPF",
+            "link": "/collections/all/spf"
+          }
+        },
+        "category_bodycare": {
+          "type": "category",
+          "settings": {
+            "label": "Body Care",
+            "link": "/collections/all/body-care"
+          }
+        },
+        "category_tools": {
+          "type": "category",
+          "settings": {
+            "label": "Blotting Papers & Tools",
+            "link": "/collections/all/blotting-papers-tools"
+          }
+        },
+        "brand_cosrx": {
+          "type": "brand",
+          "settings": {
+            "label": "COSRX",
+            "link": "/collections/cosrx"
+          }
+        },
+        "brand_mediheal": {
+          "type": "brand",
+          "settings": {
+            "label": "MEDIHEAL",
+            "link": "/collections/mediheal"
+          }
+        },
+        "brand_clio": {
+          "type": "brand",
+          "settings": {
+            "label": "CLIO",
+            "link": "/collections/clio"
+          }
+        },
+        "brand_drg": {
+          "type": "brand",
+          "settings": {
+            "label": "Dr.G",
+            "link": "/collections/dr-g"
+          }
+        },
+        "brand_hince": {
+          "type": "brand",
+          "settings": {
+            "label": "hince",
+            "link": "/collections/hince"
+          }
+        },
+        "brand_centellian": {
+          "type": "brand",
+          "settings": {
+            "label": "Centellian 24+",
+            "link": "/collections/centellian-24"
+          }
+        },
+        "brand_muzigae": {
+          "type": "brand",
+          "settings": {
+            "label": "Muzigae Mansion",
+            "link": "/collections/muzigae-mansion"
+          }
+        },
+        "brand_demaf": {
+          "type": "brand",
+          "settings": {
+            "label": "DE:MAF",
+            "link": "/collections/de-maf"
           }
         }
       },
       "block_order": [
-        "category_byLpAV",
-        "category_YGzwrU",
-        "brand_eEEzed",
-        "brand_L9i3d9",
-        "brand_QiaBXN",
-        "category_MkixU9"
+        "category_moisturizers",
+        "category_cleansers",
+        "category_serums",
+        "category_masks",
+        "category_eyecare",
+        "category_makeup",
+        "category_lipcare",
+        "category_spf",
+        "category_bodycare",
+        "category_tools",
+        "brand_cosrx",
+        "brand_mediheal",
+        "brand_clio",
+        "brand_drg",
+        "brand_hince",
+        "brand_centellian",
+        "brand_muzigae",
+        "brand_demaf"
       ],
       "settings": {
         "logo": "shopify://shop_images/Kollab_LOGO-01_551f6dc3-b25b-4223-9c11-6c3d3a3fc4a9.png",
         "logo_width": 110,
         "category_heading": "Category",
-        "brand_heading": "Brands"
+        "brand_heading": "Brands",
+        "preview_fit": "contain"
       }
     }
   },
