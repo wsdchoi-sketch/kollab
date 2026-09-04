@@ -4,14 +4,19 @@
 
 	assign kollab_cat_blocks = section.blocks | where: 'type', 'category'
 	assign kollab_brand_blocks = section.blocks | where: 'type', 'brand'
-
-	assign kollab_mega_media = 0
-	for kollab_block in section.blocks
-		if kollab_block.settings.image != blank
-			assign kollab_mega_media = kollab_mega_media | plus: 1
-		endif
-	endfor
 %}
+
+{%- capture kollab_media_flags -%}
+	{%- for kollab_block in section.blocks -%}
+		{%- assign kollab_probe = kollab_block.settings.image -%}
+		{%- if kollab_probe == blank and kollab_block.settings.link contains '/collections/' -%}
+			{%- assign kollab_handle = kollab_block.settings.link | split: '/collections/' | last | split: '?' | first | split: '/' | first -%}
+			{%- assign kollab_probe = collections[kollab_handle].image -%}
+		{%- endif -%}
+		{%- if kollab_probe != blank -%}1{%- endif -%}
+	{%- endfor -%}
+{%- endcapture -%}
+{%- assign kollab_mega_media = kollab_media_flags | strip | size -%}
 
 <style>
 	.kollab-header {
@@ -336,7 +341,11 @@
 		width: 100%;
 		height: 100%;
 		display: block;
-		object-fit: cover;
+		object-fit: {{ section.settings.preview_fit }};
+	}
+
+	.kollab-header__mega-media[data-fit="contain"] {
+		background: #f7f6f2;
 	}
 
 	.kollab-header__mega-media::after {
@@ -761,18 +770,23 @@
 							</div>
 
 							{%- if kollab_mega_media > 0 -%}
-								<div class="kollab-header__mega-media" data-kollab-mega-media>
+								<div class="kollab-header__mega-media" data-kollab-mega-media data-fit="{{ section.settings.preview_fit }}">
 									{%- for block in section.blocks -%}
-										{%- if block.settings.image != blank -%}
-											{%- liquid
-												assign media_alt = block.settings.label
-												if media_alt == blank
-													assign media_alt = block.settings.image.alt
-												endif
-												assign media_alt = media_alt | escape
-											-%}
+										{%- liquid
+											assign media_src = block.settings.image
+											if media_src == blank and block.settings.link contains '/collections/'
+												assign media_handle = block.settings.link | split: '/collections/' | last | split: '?' | first | split: '/' | first
+												assign media_src = collections[media_handle].image
+											endif
+											assign media_alt = block.settings.label
+											if media_alt == blank
+												assign media_alt = media_src.alt
+											endif
+											assign media_alt = media_alt | escape
+										-%}
+										{%- if media_src != blank -%}
 											<div class="kollab-header__mega-media-item" data-media-key="{{ block.id }}" data-media-label="{{ block.settings.label | escape }}">
-												{{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400,700,900', sizes: '320px', alt: media_alt }}
+												{{ media_src | image_url: width: 900 | image_tag: loading: 'lazy', widths: '400,700,900', sizes: '320px', alt: media_alt }}
 											</div>
 										{%- endif -%}
 									{%- endfor -%}
@@ -1221,7 +1235,18 @@
 		},
 		{
 			"type": "paragraph",
-			"content": "Add Category and Brand blocks below to control the Shop menu. With no blocks the menu keeps using the automatic category and vendor lists. Add an image to any block to turn on the preview panel."
+			"content": "Add Category and Brand blocks below to control the Shop menu. With no blocks the menu keeps using the automatic category and vendor lists. A block shows a preview image when you pick one, or automatically when its link points at a collection that has a collection image."
+		},
+		{
+			"type": "select",
+			"id": "preview_fit",
+			"label": "Preview image fit",
+			"options": [
+				{ "value": "cover", "label": "Fill (crop to frame)" },
+				{ "value": "contain", "label": "Fit (show whole image)" }
+			],
+			"default": "cover",
+			"info": "Use Fit when the preview images are brand logos rather than photos."
 		},
 		{
 			"type": "text",
@@ -1256,7 +1281,7 @@
 					"type": "image_picker",
 					"id": "image",
 					"label": "Preview image",
-					"info": "Optional. Shown in the menu preview panel on hover."
+					"info": "Optional. Falls back to the linked collection's image."
 				}
 			]
 		},
@@ -1279,7 +1304,7 @@
 					"type": "image_picker",
 					"id": "image",
 					"label": "Preview image",
-					"info": "Optional. Shown in the menu preview panel on hover."
+					"info": "Optional. Falls back to the linked collection's image."
 				}
 			]
 		}
