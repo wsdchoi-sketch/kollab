@@ -1,1 +1,131 @@
-{"sections":{"banner":{"type":"main-collection-banner","settings":{"collection_list":[],"add_word":"Collection","show_word":false,"show_collection_description":true,"description_products":"","image_size":"landscape","show_collection_image":false}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":10,"show_two_cards":false,"show_secondary_image":true,"show_sku":false,"show_vendor":false,"show_tags":false,"show_desc":false,"show_color_swatch":false,"show_variants":false,"product_variant_type":"color","image_ratio":"portrait","image_fit":"cover","color_scheme":"","enable_filtering":false,"filter_type":"horizontal_united","enable_per_row_button":false,"default_per_row":"large","enable_sorting":true,"image_filter_ratio":"4/5","image_filter_fit":"cover","image_filter_columns":4,"padding_top":"s","padding_bottom":"m"}}},"order":["banner","product-grid"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "kollab_collection_header_xiwmiH": {
+      "type": "kollab-collection-header",
+      "blocks": {
+        "media_VQfF3K": {
+          "type": "media",
+          "settings": {
+            "image": "shopify://shop_images/ChatGPTImageAug22_2026at02_29_41PM.png",
+            "label": "",
+            "link": ""
+          }
+        },
+        "media_YC9V3M": {
+          "type": "media",
+          "settings": {
+            "image": "shopify://shop_images/d79bd5dc4e28851e4a279af950b8d577_bb295edc-ddbc-49e1-ae05-ce53278d47dc_jpg.webp",
+            "label": "",
+            "link": ""
+          }
+        },
+        "media_NxXcTB": {
+          "type": "media",
+          "settings": {
+            "image": "shopify://shop_images/9e1baa90080f55d658e6677683c1aab9_e28a0b39-121d-43d4-939e-b0f7e166a951_jpg.webp",
+            "label": "",
+            "link": ""
+          }
+        },
+        "media_UKbJkV": {
+          "type": "media",
+          "settings": {
+            "image": "shopify://shop_images/A00000017142683ko_jpg.webp",
+            "label": "",
+            "link": ""
+          }
+        },
+        "media_rKRA4f": {
+          "type": "media",
+          "settings": {
+            "image": "shopify://shop_images/thumb_ac93ec8b-7ed5-4060-ace6-78fdd4125bf7_400x400_crop_center_jpg.webp",
+            "label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "media_VQfF3K",
+        "media_YC9V3M",
+        "media_NxXcTB",
+        "media_UKbJkV",
+        "media_rKRA4f"
+      ],
+      "name": "Kollab collection header",
+      "settings": {
+        "kicker": "Curated Edit",
+        "heading": "Serums & Essence",
+        "description": "<p>lorem ipsum dolor sit amet consectetur adipiscing elit eum veniam veniam et aliqua deleniti voluptatum cillum aliqua cupidatat eos ut adipiscing nobis aute sit optio magna cupiditate commodo odio aut quidem aliqua iusto nostrud excepteur consectetur labore qui irure atque ullamco est fuga atque ipsum eiusmod non iusto aliquip eum</p>",
+        "show_product_count": true,
+        "product_count_label": "items",
+        "tag_one": "Madecasso",
+        "tag_two": "B",
+        "tag_three": "C",
+        "panel_color": "#FBFBFB",
+        "accent_color": "#F12C18",
+        "title_size": 33,
+        "title_size_mobile": 22,
+        "max_width": 1400,
+        "horizontal_padding": 44,
+        "horizontal_padding_mobile": 18,
+        "padding_top": 24,
+        "padding_bottom": 8
+      }
+    },
+    "banner": {
+      "type": "main-collection-banner",
+      "disabled": true,
+      "settings": {
+        "collection_list": [],
+        "add_word": "Collection",
+        "show_word": false,
+        "show_collection_description": true,
+        "description_products": "",
+        "image_size": "landscape",
+        "show_collection_image": false
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 10,
+        "show_two_cards": false,
+        "show_secondary_image": true,
+        "show_sku": false,
+        "show_vendor": false,
+        "show_tags": false,
+        "show_desc": false,
+        "show_color_swatch": false,
+        "show_variants": false,
+        "product_variant_type": "color",
+        "image_ratio": "portrait",
+        "image_fit": "cover",
+        "color_scheme": "",
+        "enable_filtering": false,
+        "filter_type": "horizontal_united",
+        "enable_per_row_button": false,
+        "default_per_row": "large",
+        "enable_sorting": true,
+        "image_filter_ratio": "4/5",
+        "image_filter_fit": "cover",
+        "image_filter_columns": 4,
+        "padding_top": "s",
+        "padding_bottom": "m"
+      }
+    }
+  },
+  "order": [
+    "kollab_collection_header_xiwmiH",
+    "banner",
+    "product-grid"
+  ]
+}

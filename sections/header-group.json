@@ -1,12 +1,78 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "t:sections.header.settings.header-group.label",
   "sections": {
     "header": {
       "type": "kollab-custom-header",
+      "blocks": {
+        "category_byLpAV": {
+          "type": "category",
+          "settings": {
+            "label": "Category 3",
+            "link": "",
+            "image": "shopify://shop_images/Treats_for_Treatments_png.webp"
+          }
+        },
+        "category_YGzwrU": {
+          "type": "category",
+          "settings": {
+            "label": "Category",
+            "link": ""
+          }
+        },
+        "brand_eEEzed": {
+          "type": "brand",
+          "settings": {
+            "label": "Brand",
+            "link": ""
+          }
+        },
+        "brand_L9i3d9": {
+          "type": "brand",
+          "settings": {
+            "label": "Brand",
+            "link": ""
+          }
+        },
+        "brand_QiaBXN": {
+          "type": "brand",
+          "settings": {
+            "label": "TEST BRAND 1",
+            "link": "",
+            "image": "shopify://shop_images/Untitled-1_35af6529-a019-49fc-a8ad-335d7eaea6ba_png.webp"
+          }
+        },
+        "category_MkixU9": {
+          "type": "category",
+          "settings": {
+            "label": "TEST CATEGORY 1",
+            "link": "",
+            "image": "shopify://shop_images/ChatGPTImageAug22_2026at02_29_41PM.png"
+          }
+        }
+      },
+      "block_order": [
+        "category_byLpAV",
+        "category_YGzwrU",
+        "brand_eEEzed",
+        "brand_L9i3d9",
+        "brand_QiaBXN",
+        "category_MkixU9"
+      ],
       "settings": {
         "logo": "shopify://shop_images/Kollab_LOGO-01_551f6dc3-b25b-4223-9c11-6c3d3a3fc4a9.png",
-        "logo_width": 110
+        "logo_width": 110,
+        "category_heading": "Category",
+        "brand_heading": "Brands"
       }
     }
   },
