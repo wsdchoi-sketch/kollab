@@ -38,15 +38,52 @@
         "margin_bottom": "no-indent"
       }
     },
-    "highlight_features_zyHrL8": {
-      "type": "highlight-features",
-      "custom_css": [],
-      "name": "Highlight Features",
+    "custom_liquid_4nG6gC": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
       "settings": {
-        "heading": "This Month's Highlight",
-        "blog": "event",
-        "highlight_tag": "",
-        "margin_top": "s",
+        "custom_liquid": "<section class=\"kollab-calendar-section\">\n\n    <div class=\"calendar-header\">\n        <p class=\"calendar-subtitle\">WHAT'S HAPPENING</p>\n        <h2>Upcoming <span>Events</span></h2>\n    </div>\n\n    <div class=\"calendar-embed-wrap\">\n        <iframe\n            src=\"https://luma.com/embed/calendar/cal-xVZvsoSO9NSiT44/events?lt=light\"\n            width=\"100%\"\n            height=\"300\"\n            frameborder=\"0\"\n            style=\"border: none; border-radius: 18px;\"\n            allowfullscreen=\"\"\n            aria-hidden=\"false\"\n            tabindex=\"0\"\n        ></iframe>\n    </div>\n\n</section>\n\n<style>\n\n.kollab-calendar-section{\n    padding:70px 6% 80px;\n    background:#fff;\n    font-family:Arial, sans-serif;\n}\n\n.calendar-header{\n    text-align:center;\n    margin-bottom:36px;\n}\n\n.calendar-subtitle{\n    color:#F12C18;\n    font-size:13px;\n    font-weight:700;\n    letter-spacing:0;\n    margin-bottom:10px;\n}\n\n.calendar-header h2{\n    font-size:clamp(38px,5vw,68px);\n    margin:0;\n    font-weight:900;\n    color:#000;\n    line-height:1;\n}\n\n.calendar-header h2 span{\n    color:#F12C18;\n    font-style:italic;\n}\n\n.calendar-embed-wrap{\n    max-width:880px;\n    margin:0 auto;\n    border:1px solid #d8d8d8;\n    border-radius:18px;\n    overflow:hidden;\n    background:#fff;\n}\n\n.calendar-embed-wrap iframe{\n    display:block;\n    width:100%;\n}\n\n@media(max-width:768px){\n\n    .kollab-calendar-section{\n        padding:56px 5% 60px;\n    }\n\n    .calendar-header{\n        margin-bottom:24px;\n    }\n\n    .calendar-embed-wrap iframe{\n        height:340px;\n    }\n\n}\n\n</style>"
+      }
+    },
+    "popular_products_EpxFXV": {
+      "type": "popular-products",
+      "custom_css": [
+        "h2.section-header__title em {color: #dc0100;}"
+      ],
+      "settings": {
+        "product_list": [
+          "raume-cerafit-time-essential-serum-50ml",
+          "cosrx-one-step-original-blemish-pore-clear-pad-300ml-100-pads",
+          "de-maf-my-glow-oil-20ml",
+          "sumsae-isoflavone-hydrating-essence",
+          "de-maf-i-glow-jojoba-oil-multi-balm-1"
+        ],
+        "per_row": 4,
+        "section_header_type": "type2",
+        "mobile_slider_grid_layout": "slider",
+        "heading": "SHOP <em>NOW</em>",
+        "subheading": "",
+        "description": "",
+        "enable_border_top": true,
+        "button_label": "View More",
+        "button_link": "shopify://collections/all",
+        "button_style": "primary",
+        "button_arrow": false,
+        "autoplay": false,
+        "stop_autoplay": false,
+        "show_arrows": false,
+        "slideshow_speed": 1.1,
+        "slideshow_delay": 3,
+        "image_ratio": "square",
+        "image_fit": "cover",
+        "show_two_cards": true,
+        "show_sku": false,
+        "show_vendor": false,
+        "show_collection_name": false,
+        "show_color_swatch": true,
+        "product_variant_type": "color",
+        "show_desc": false,
+        "margin_top": "no-indent",
         "margin_bottom": "s"
       }
     },
@@ -164,46 +201,36 @@
         "margin_bottom": "l"
       }
     },
-    "popular_products_EpxFXV": {
-      "type": "popular-products",
+    "highlight_features_zyHrL8": {
+      "type": "highlight-features",
+      "custom_css": [],
+      "name": "Highlight Features",
+      "settings": {
+        "heading": "This Month's Highlight",
+        "blog": "event",
+        "highlight_tag": "",
+        "margin_top": "no-indent",
+        "margin_bottom": "no-indent"
+      }
+    },
+    "1761729198bbbe3cd6": {
+      "type": "apps",
+      "blocks": {
+        "reelup_shoppable_videos_reels_reelup_playlist_DbBMDD": {
+          "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup_playlist/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
+          "settings": {
+            "playlist_id": ""
+          }
+        }
+      },
+      "block_order": [
+        "reelup_shoppable_videos_reels_reelup_playlist_DbBMDD"
+      ],
       "custom_css": [
-        "h2.section-header__title em {color: #dc0100;}"
+        ".reelUp_cards_carousel .reelUp_slider_heading {display: none;}"
       ],
       "settings": {
-        "product_list": [
-          "minicell-bubble-lip-gommage-scrub-15ml",
-          "de-maf-i-glow-jojoba-oil-multi-balm-1",
-          "de-maf-forest-for-rest-melting-body-cream-280ml",
-          "de-maf-all-day-glow-im-so-jelly-olive-oil-cleanser-100ml",
-          "de-maf-creams-come-true-squalane-barrier-repair-50ml"
-        ],
-        "per_row": 4,
-        "section_header_type": "type2",
-        "mobile_slider_grid_layout": "slider",
-        "heading": "SHOP <em>NOW</em>",
-        "subheading": "",
-        "description": "",
-        "enable_border_top": true,
-        "button_label": "View More",
-        "button_link": "shopify://collections/all",
-        "button_style": "primary",
-        "button_arrow": false,
-        "autoplay": false,
-        "stop_autoplay": false,
-        "show_arrows": false,
-        "slideshow_speed": 1.1,
-        "slideshow_delay": 3,
-        "image_ratio": "square",
-        "image_fit": "cover",
-        "show_two_cards": true,
-        "show_sku": false,
-        "show_vendor": false,
-        "show_collection_name": false,
-        "show_color_swatch": true,
-        "product_variant_type": "color",
-        "show_desc": false,
-        "margin_top": "no-indent",
-        "margin_bottom": "s"
+        "include_margins": false
       }
     },
     "ticker_n4Hqni": {
@@ -293,26 +320,6 @@
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
         "custom_liquid": "<style>\n  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');\n\n  .kollab-title {\n\n    font-family: \"Instrument Serif\", serif !important;\n    font-size: 48px;\n    font-weight: 400;\n    line-height: 1.2;\n    margin: 0;\n    color: #1f1f1f;\n    text-align: center;\npadding-top:20px;\n  }\n\n  .kollab-title i {\n    font-family: \"Instrument Serif\", serif !important;\n    font-style: italic;\n    font-weight: 400;\n  }\n</style>\n\n<h1 class=\"kollab-title\"><i>#letskollab</i></h1>"
-      }
-    },
-    "1761729198bbbe3cd6": {
-      "type": "apps",
-      "blocks": {
-        "reelup_shoppable_videos_reels_reelup_playlist_DbBMDD": {
-          "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup_playlist/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
-          "settings": {
-            "playlist_id": ""
-          }
-        }
-      },
-      "block_order": [
-        "reelup_shoppable_videos_reels_reelup_playlist_DbBMDD"
-      ],
-      "custom_css": [
-        ".reelUp_cards_carousel .reelUp_slider_heading {display: none;}"
-      ],
-      "settings": {
-        "include_margins": false
       }
     },
     "rich_text_zLNpXX": {
@@ -723,13 +730,6 @@
         "margin_top": "m",
         "margin_bottom": "m"
       }
-    },
-    "custom_liquid_4nG6gC": {
-      "type": "custom-liquid",
-      "name": "t:sections.custom-liquid.presets.name",
-      "settings": {
-        "custom_liquid": "<section class=\"kollab-calendar-section\">\n\n    <div class=\"calendar-header\">\n        <p class=\"calendar-subtitle\">WHAT'S HAPPENING</p>\n        <h2>Upcoming <span>Events</span></h2>\n    </div>\n\n    <div class=\"calendar-embed-wrap\">\n        <iframe\n            src=\"https://luma.com/embed/calendar/cal-xVZvsoSO9NSiT44/events?lt=light\"\n            width=\"100%\"\n            height=\"300\"\n            frameborder=\"0\"\n            style=\"border: none; border-radius: 18px;\"\n            allowfullscreen=\"\"\n            aria-hidden=\"false\"\n            tabindex=\"0\"\n        ></iframe>\n    </div>\n\n</section>\n\n<style>\n\n.kollab-calendar-section{\n    padding:70px 6% 80px;\n    background:#fff;\n    font-family:Arial, sans-serif;\n}\n\n.calendar-header{\n    text-align:center;\n    margin-bottom:36px;\n}\n\n.calendar-subtitle{\n    color:#F12C18;\n    font-size:13px;\n    font-weight:700;\n    letter-spacing:0;\n    margin-bottom:10px;\n}\n\n.calendar-header h2{\n    font-size:clamp(38px,5vw,68px);\n    margin:0;\n    font-weight:900;\n    color:#000;\n    line-height:1;\n}\n\n.calendar-header h2 span{\n    color:#F12C18;\n    font-style:italic;\n}\n\n.calendar-embed-wrap{\n    max-width:880px;\n    margin:0 auto;\n    border:1px solid #d8d8d8;\n    border-radius:18px;\n    overflow:hidden;\n    background:#fff;\n}\n\n.calendar-embed-wrap iframe{\n    display:block;\n    width:100%;\n}\n\n@media(max-width:768px){\n\n    .kollab-calendar-section{\n        padding:56px 5% 60px;\n    }\n\n    .calendar-header{\n        margin-bottom:24px;\n    }\n\n    .calendar-embed-wrap iframe{\n        height:340px;\n    }\n\n}\n\n</style>"
-      }
     }
   },
   "order": [
@@ -737,12 +737,12 @@
     "custom_liquid_eWHRwW",
     "image_banner_qbAKAq",
     "custom_liquid_4nG6gC",
-    "highlight_features_zyHrL8",
-    "collection-grid",
     "popular_products_EpxFXV",
+    "collection-grid",
+    "highlight_features_zyHrL8",
+    "1761729198bbbe3cd6",
     "ticker_n4Hqni",
     "custom_liquid_Jt6zy7",
-    "1761729198bbbe3cd6",
     "rich_text_zLNpXX",
     "custom_liquid_8P3kkx",
     "newsletter_EDWgym",
