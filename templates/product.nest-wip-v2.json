@@ -34,16 +34,18 @@
     "apps": {
       "type": "apps",
       "blocks": {
-        "okendo_reviews_widget_qhiNFX": {
-          "type": "shopify://apps/okendo/blocks/reviews-widget/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
+        "judge_me_reviews_review_widget_tNBa4T": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
           "settings": {
-            "product": "{{product}}",
-            "widget_type": "reviews_widget"
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
           }
         }
       },
       "block_order": [
-        "okendo_reviews_widget_qhiNFX"
+        "judge_me_reviews_review_widget_tNBa4T"
       ],
       "settings": {
         "include_margins": true
