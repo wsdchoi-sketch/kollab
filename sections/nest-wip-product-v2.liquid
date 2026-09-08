@@ -14,6 +14,7 @@
   - Mobile (<=900px): swipeable scroll-snap gallery replaces the
     click-to-swap thumbnail grid
   - Top banner switched from WIP warning to a Free Shipping announcement
+  - Key ingredients moved from "What it does" tab to "Ingredients" tab
 {%- endcomment -%}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
@@ -328,10 +329,6 @@
             {%- else -%}
               <div class="nwip-pending">Please see product images for detail.</div>
             {%- endif -%}
-            {%- if mf.hero_ingredients != blank -%}
-              <h4>Key ingredients</h4>
-              <div>{{ mf.hero_ingredients | newline_to_br }}</div>
-            {%- endif -%}
           </div>
         </details>
 
@@ -350,9 +347,14 @@
         <details>
           <summary><span class="t">Ingredients</span><span class="ic"></span></summary>
           <div class="bd">
+            {%- if mf.hero_ingredients != blank -%}
+              <h4>Key ingredients</h4>
+              <div>{{ mf.hero_ingredients | newline_to_br }}</div>
+            {%- endif -%}
             {%- if mf.inci_list != blank -%}
+              {%- if mf.hero_ingredients != blank -%}<h4>Full ingredient list</h4>{%- endif -%}
               <p class="nwip-inci">{{ mf.inci_list | newline_to_br }}</p>
-            {%- else -%}
+            {%- elsif mf.hero_ingredients == blank -%}
               <div class="nwip-pending">Please see product images for detail.</div>
             {%- endif -%}
           </div>
