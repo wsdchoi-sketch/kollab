@@ -11,10 +11,39 @@
   "sections": {
     "main": {
       "type": "nest-wip-product-v2",
+      "blocks": {
+        "reelup_shoppable_videos_reels_reelup_product_slider_LwaWM7": {
+          "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup_product_slider/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "reelup_shoppable_videos_reels_reelup_product_slider_LwaWM7"
+      ],
       "settings": {
         "show_wip_banner": true,
         "detail_start_position": 2,
         "detail_heading": "The story behind the product"
+      }
+    },
+    "apps": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_YBfYXy": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_YBfYXy"
+      ],
+      "settings": {
+        "include_margins": true
       }
     },
     "you-may-also-like": {
@@ -47,26 +76,6 @@
         "show_desc": false,
         "margin_top": "m",
         "margin_bottom": "no-indent"
-      }
-    },
-    "apps": {
-      "type": "apps",
-      "blocks": {
-        "judge_me_reviews_review_widget_YBfYXy": {
-          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
-          "settings": {
-            "review_data": "sample_data",
-            "max_width": 1200,
-            "show_shop_reviews": false,
-            "empty_state": "empty_widget"
-          }
-        }
-      },
-      "block_order": [
-        "judge_me_reviews_review_widget_YBfYXy"
-      ],
-      "settings": {
-        "include_margins": true
       }
     }
   },
