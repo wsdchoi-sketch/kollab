@@ -1,0 +1,62 @@
+{%- comment -%}
+  NEST WIP — From the Brand
+  Lightweight brand block for the PDP. Pulls from custom.brand_story metafield
+  if present (set at the product or, ideally, a brand-level source later),
+  falls back to vendor name only. Never fabricates brand copy.
+{%- endcomment -%}
+
+{%- assign story = product.metafields.custom.brand_story -%}
+{%- assign brand_logo = product.metafields.custom.brand_logo -%}
+
+<style>
+  .nwip-brand{ font-family:var(--font-body-family, 'Inter', sans-serif); color:#16181A;
+    border-top:1px solid #E3E5E1; background:#F4F5F3; padding:64px 22px; }
+  .nwip-brand-wrap{ max-width:680px; margin:0 auto; text-align:center; }
+  .nwip-brand-logo{ max-height:36px; width:auto; margin:0 auto 20px; }
+  .nwip-brand-kick{ font-family:ui-monospace,monospace; font-size:10.5px;
+    letter-spacing:.14em; text-transform:uppercase; color:#A8AEB1; margin-bottom:10px; }
+  .nwip-brand-name{ font-family:var(--font-heading-family, Georgia, serif);
+    font-size:26px; font-weight:400; margin:0 0 14px; }
+  .nwip-brand-copy{ font-size:14.5px; line-height:1.75; color:#5C6266; }
+  .nwip-brand-link{ display:inline-block; margin-top:22px; font-size:12.5px;
+    letter-spacing:.08em; text-transform:uppercase; color:#16181A; text-decoration:underline;
+    text-underline-offset:3px; }
+  .nwip-brand-pending{ font-size:12.5px; color:#A8AEB1; font-style:italic; margin-top:10px; }
+</style>
+
+<div class="nwip-brand">
+  <div class="nwip-brand-wrap">
+    {%- if brand_logo != blank -%}
+      {{ brand_logo | image_url: width: 300 | image_tag: class: 'nwip-brand-logo', alt: product.vendor }}
+    {%- endif -%}
+    <div class="nwip-brand-kick">From the brand</div>
+    <h3 class="nwip-brand-name">{{ product.vendor }}</h3>
+
+    {%- if story != blank -%}
+      <p class="nwip-brand-copy">{{ story }}</p>
+    {%- else -%}
+      <p class="nwip-brand-pending">Brand story pending intake &mdash; add custom.brand_story to replace this.</p>
+    {%- endif -%}
+
+    {%- if section.settings.show_shop_all_link -%}
+      <a class="nwip-brand-link" href="{{ routes.all_products_collection_url }}?q=vendor:{{ product.vendor | url_param_escape }}">
+        Shop all {{ product.vendor }}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "NEST WIP From Brand",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_shop_all_link",
+      "label": "Show \"Shop all [vendor]\" link",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
