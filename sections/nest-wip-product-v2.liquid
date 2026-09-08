@@ -72,10 +72,10 @@
   .nwip-qty input::-webkit-outer-spin-button,
   .nwip-qty input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
 
-  .nwip-atc{ flex:1; background:var(--ink); color:#fff; border:none; padding:0 16px;
+  .nwip-atc{ flex:1; background:#DC0100; color:#fff; border:none; padding:0 16px;
     font-size:14px; font-weight:500; letter-spacing:.02em;
     border-radius:999px; cursor:pointer; transition:.15s; }
-  .nwip-atc:hover{ background:#000; }
+  .nwip-atc:hover{ background:#B80100; }
   .nwip-atc[disabled]{ background:var(--surface); color:var(--ink60);
     border:1px solid var(--line); cursor:not-allowed; }
 
@@ -83,10 +83,10 @@
   .nwip-dynamic-checkout > div{ flex:1; min-width:0; }
   .nwip-dynamic-checkout .shopify-payment-button{ height:100%; }
   .nwip-dynamic-checkout .shopify-payment-button__button{ border-radius:999px !important; height:44px !important; }
-  .nwip-more-payment{ flex:1; height:44px; border-radius:999px; border:1px solid var(--line);
-    background:#fff; color:var(--ink); font-size:13px; font-weight:500; cursor:pointer;
+  .nwip-more-payment{ flex:1; height:44px; border-radius:999px; border:none;
+    background:var(--ink); color:#fff; font-size:13px; font-weight:500; cursor:pointer;
     white-space:nowrap; }
-  .nwip-more-payment:hover{ background:var(--surface); }
+  .nwip-more-payment:hover{ background:#000; }
 
   .nwip-policies{ margin-top:22px; display:flex; flex-direction:column; gap:11px; }
   .nwip-policy-row{ display:flex; align-items:flex-start; gap:9px; font-size:15px;
@@ -118,9 +118,7 @@
     width:5px; height:1px; background:var(--ink); }
   .nwip-inci{ font-family:ui-monospace,monospace; font-size:11px; line-height:1.85;
     color:var(--ink60); word-break:break-word; }
-  .nwip-pending{ border:1px dashed var(--ink30); border-radius:4px; padding:18px;
-    background:repeating-linear-gradient(-45deg,#FAFBF9,#FAFBF9 9px,#F2F4F0 9px,#F2F4F0 18px);
-    font-size:12.5px; color:var(--ink60); }
+  .nwip-pending{ font-size:13px; color:var(--ink60); font-style:italic; }
 
   .nwip-faq{ margin-top:30px; }
   .nwip-faq details{ border-bottom:1px solid var(--line); }
