@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "nest-wip-product",
+      "settings": {
+        "show_wip_banner": true,
+        "detail_start_position": 2,
+        "detail_heading": "The story behind the product",
+        "show_ugc_placeholder": true,
+        "show_routine_placeholder": true
+      }
+    }
+  },
+  "order": ["main"]
+}
