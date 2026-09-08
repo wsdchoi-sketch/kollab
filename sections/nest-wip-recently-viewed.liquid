@@ -1,34 +1,47 @@
 {%- comment -%}
   NEST WIP — Recently Viewed
-  No app, no server calls. Records each visited product to localStorage
-  (title, url, image, price, handle) client-side, then renders everyone
-  else's cards here, excluding the product currently being viewed.
+  Styled to match the native "You may also like" (product-recommendations)
+  section: centered display-font heading, horizontal rule, vendor/title/price
+  card pattern. No app, no server calls — localStorage only.
   Hides itself automatically if there's nothing else to show yet.
 {%- endcomment -%}
 
 <div class="nwip-rv" id="nwipRecentlyViewed" hidden
   data-current-handle="{{ product.handle }}"
+  data-current-vendor="{{ product.vendor | escape }}"
   data-current-title="{{ product.title | escape }}"
   data-current-url="{{ product.url }}"
-  data-current-image="{{ product.featured_image | image_url: width: 400 }}"
-  data-current-price="{{ product.selected_or_first_available_variant.price | money }}">
-  <div class="nwip-rv-head">{{ section.settings.heading | default: 'Recently viewed' }}</div>
+  data-current-image="{{ product.featured_image | image_url: width: 600 }}"
+  data-current-price="{{ product.selected_or_first_available_variant.price | money }}"
+  data-current-compare="{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}{{ product.selected_or_first_available_variant.compare_at_price | money }}{% endif %}">
+  <div class="nwip-rv-head-wrap">
+    <h2 class="nwip-rv-head">{{ section.settings.heading | default: 'Recently viewed' }}</h2>
+  </div>
+  <div class="nwip-rv-rule"></div>
   <div class="nwip-rv-grid" id="nwipRecentlyViewedGrid"></div>
 </div>
 
 <style>
   .nwip-rv{ font-family:var(--font-body-family, 'Inter', sans-serif); color:#16181A;
-    padding:48px 22px; border-top:1px solid #E3E5E1; }
-  .nwip-rv-head{ font-family:ui-monospace,monospace; font-size:11px; letter-spacing:.14em;
-    text-transform:uppercase; color:#A8AEB1; text-align:center; margin-bottom:24px; }
+    padding:64px 22px; }
+  .nwip-rv-head-wrap{ text-align:center; }
+  .nwip-rv-head{ font-family:var(--font-heading-family, Georgia, serif);
+    font-size:32px; font-weight:400; text-transform:uppercase; letter-spacing:.01em;
+    margin:0; }
+  .nwip-rv-rule{ max-width:1100px; margin:22px auto 34px; border-bottom:1px solid #E3E5E1; }
   .nwip-rv-grid{ max-width:1100px; margin:0 auto; display:grid;
-    grid-template-columns:repeat(4,1fr); gap:18px; }
+    grid-template-columns:repeat(4,1fr); gap:24px; }
   .nwip-rv-card{ text-decoration:none; color:inherit; display:block; }
   .nwip-rv-card img{ width:100%; aspect-ratio:1/1; object-fit:cover; background:#F4F5F3; }
-  .nwip-rv-card .nm{ font-size:12.5px; margin-top:8px; line-height:1.4; }
-  .nwip-rv-card .pr{ font-size:12px; color:#5C6266; margin-top:2px; }
+  .nwip-rv-card .vd{ font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    color:#5C6266; margin-top:14px; }
+  .nwip-rv-card .nm{ font-size:14px; margin-top:4px; line-height:1.4; color:#16181A; }
+  .nwip-rv-card .pr-row{ display:flex; gap:8px; align-items:baseline; margin-top:4px; }
+  .nwip-rv-card .pr{ font-size:13px; color:#16181A; }
+  .nwip-rv-card .was{ font-size:12px; color:#A8AEB1; text-decoration:line-through; }
   @media (max-width:700px){
-    .nwip-rv-grid{ grid-template-columns:repeat(2,1fr); }
+    .nwip-rv-grid{ grid-template-columns:repeat(2,1fr); gap:16px; }
+    .nwip-rv-head{ font-size:26px; }
   }
 </style>
 
@@ -41,22 +54,22 @@
 
     var current = {
       handle: root.dataset.currentHandle,
+      vendor: root.dataset.currentVendor,
       title: root.dataset.currentTitle,
       url: root.dataset.currentUrl,
       image: root.dataset.currentImage,
-      price: root.dataset.currentPrice
+      price: root.dataset.currentPrice,
+      compare: root.dataset.currentCompare
     };
 
     var list = [];
     try { list = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { list = []; }
 
-    // De-dupe and push current product to front
     list = list.filter(function(p){ return p.handle !== current.handle; });
     if (current.handle) list.unshift(current);
     list = list.slice(0, MAX);
     try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
 
-    // Render everything except the product being viewed right now
     var others = list.filter(function(p){ return p.handle !== current.handle; });
     if (others.length === 0) return;
 
@@ -65,10 +78,15 @@
       var a = document.createElement('a');
       a.className = 'nwip-rv-card';
       a.href = p.url;
+      var priceHtml = '<span class="pr">' + p.price + '</span>';
+      if (p.compare) {
+        priceHtml += '<span class="was">' + p.compare + '</span>';
+      }
       a.innerHTML =
-        '<img src="' + p.image + '" alt="' + p.title.replace(/"/g, '&quot;') + '" loading="lazy">' +
+        '<img src="' + p.image + '" alt="' + (p.title || '').replace(/"/g, '&quot;') + '" loading="lazy">' +
+        '<div class="vd">' + (p.vendor || '') + '</div>' +
         '<div class="nm">' + p.title + '</div>' +
-        '<div class="pr">' + p.price + '</div>';
+        '<div class="pr-row">' + priceHtml + '</div>';
       grid.appendChild(a);
     });
 

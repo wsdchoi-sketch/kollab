@@ -117,13 +117,12 @@
   .nwip-faq .a{ padding:0 0 18px; font-size:13.5px; color:var(--ink60);
     line-height:1.7; max-width:62ch; }
 
-  .nwip-detail{ border-top:1px solid var(--line); background:#fff; padding:64px 0 40px; }
-  .nwip-detail-head{ max-width:620px; margin:0 auto 34px; padding:0 22px; text-align:center; }
-  .nwip-detail-head .kick{ font-family:ui-monospace,monospace; font-size:10.5px;
-    letter-spacing:.14em; text-transform:uppercase; color:var(--ink30); margin-bottom:11px; }
+  .nwip-detail{ background:#fff; padding:64px 22px; }
+  .nwip-detail-head{ text-align:center; }
   .nwip-detail-head h3{ font-family:var(--font-heading-family, Georgia, serif);
-    font-size:28px; font-weight:400; margin:0; }
-  .nwip-detail-wrap{ max-width:860px; margin:0 auto; padding:0 22px; font-size:14px;
+    font-size:32px; font-weight:400; text-transform:uppercase; letter-spacing:.01em; margin:0; }
+  .nwip-detail-rule{ max-width:1100px; margin:22px auto 34px; border-bottom:1px solid var(--line); }
+  .nwip-detail-wrap{ max-width:860px; margin:0 auto; font-size:14px;
     line-height:1.75; color:var(--ink60); }
   .nwip-detail-wrap img{ margin:0 auto 20px; }
 
@@ -345,9 +344,9 @@
   {%- if product.description != blank -%}
     <div class="nwip-detail">
       <div class="nwip-detail-head">
-        <div class="kick">Product Detail</div>
-        <h3>{{ section.settings.detail_heading | default: 'The story behind the product' }}</h3>
+        <h3>{{ section.settings.detail_heading | default: 'Product Detail' }}</h3>
       </div>
+      <div class="nwip-detail-rule"></div>
       <div class="nwip-detail-wrap">
         {{ product.description }}
       </div>
@@ -411,7 +410,7 @@
       "type": "text",
       "id": "detail_heading",
       "label": "Product Detail heading",
-      "default": "The story behind the product"
+      "default": "Product Detail"
     },
     {
       "type": "header",
@@ -421,7 +420,8 @@
       "type": "text",
       "id": "shipping_note",
       "label": "Shipping note",
-      "info": "e.g. \"Free shipping over $175\". Leave blank to show only the policy link."
+      "default": "Free shipping on orders over $50",
+      "info": "Editable — leave blank to show only the policy link."
     },
     {
       "type": "text",
