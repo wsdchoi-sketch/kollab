@@ -140,7 +140,8 @@
     letter-spacing:.06em; text-align:center; padding:7px 12px; text-transform:uppercase; }
 
   {%- comment -%} ---- Sticky add-to-cart bar ---- {%- endcomment -%}
-  .nwip-sticky-atc{ position:fixed; left:50%; bottom:18px; transform:translate(-50%,140%);
+  .nwip-sticky-atc{ --ink:#16181A; --ink60:#5C6266; --ink30:#A8AEB1; --line:#E3E5E1; --surface:#F4F5F3;
+    position:fixed; left:50%; bottom:18px; transform:translate(-50%,140%);
     z-index:40; width:min(680px, calc(100% - 32px)); background:#fff; border-radius:16px;
     box-shadow:0 10px 40px rgba(0,0,0,.16); padding:14px 16px; transition:transform .28s ease; }
   .nwip-sticky-atc.show{ transform:translate(-50%,0); }
