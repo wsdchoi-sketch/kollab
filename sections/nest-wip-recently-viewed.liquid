@@ -1,0 +1,92 @@
+{%- comment -%}
+  NEST WIP — Recently Viewed
+  No app, no server calls. Records each visited product to localStorage
+  (title, url, image, price, handle) client-side, then renders everyone
+  else's cards here, excluding the product currently being viewed.
+  Hides itself automatically if there's nothing else to show yet.
+{%- endcomment -%}
+
+<div class="nwip-rv" id="nwipRecentlyViewed" hidden
+  data-current-handle="{{ product.handle }}"
+  data-current-title="{{ product.title | escape }}"
+  data-current-url="{{ product.url }}"
+  data-current-image="{{ product.featured_image | image_url: width: 400 }}"
+  data-current-price="{{ product.selected_or_first_available_variant.price | money }}">
+  <div class="nwip-rv-head">{{ section.settings.heading | default: 'Recently viewed' }}</div>
+  <div class="nwip-rv-grid" id="nwipRecentlyViewedGrid"></div>
+</div>
+
+<style>
+  .nwip-rv{ font-family:var(--font-body-family, 'Inter', sans-serif); color:#16181A;
+    padding:48px 22px; border-top:1px solid #E3E5E1; }
+  .nwip-rv-head{ font-family:ui-monospace,monospace; font-size:11px; letter-spacing:.14em;
+    text-transform:uppercase; color:#A8AEB1; text-align:center; margin-bottom:24px; }
+  .nwip-rv-grid{ max-width:1100px; margin:0 auto; display:grid;
+    grid-template-columns:repeat(4,1fr); gap:18px; }
+  .nwip-rv-card{ text-decoration:none; color:inherit; display:block; }
+  .nwip-rv-card img{ width:100%; aspect-ratio:1/1; object-fit:cover; background:#F4F5F3; }
+  .nwip-rv-card .nm{ font-size:12.5px; margin-top:8px; line-height:1.4; }
+  .nwip-rv-card .pr{ font-size:12px; color:#5C6266; margin-top:2px; }
+  @media (max-width:700px){
+    .nwip-rv-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+
+<script>
+  (function(){
+    var KEY = 'nwip_recently_viewed';
+    var MAX = 8;
+    var root = document.getElementById('nwipRecentlyViewed');
+    if (!root) return;
+
+    var current = {
+      handle: root.dataset.currentHandle,
+      title: root.dataset.currentTitle,
+      url: root.dataset.currentUrl,
+      image: root.dataset.currentImage,
+      price: root.dataset.currentPrice
+    };
+
+    var list = [];
+    try { list = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { list = []; }
+
+    // De-dupe and push current product to front
+    list = list.filter(function(p){ return p.handle !== current.handle; });
+    if (current.handle) list.unshift(current);
+    list = list.slice(0, MAX);
+    try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+
+    // Render everything except the product being viewed right now
+    var others = list.filter(function(p){ return p.handle !== current.handle; });
+    if (others.length === 0) return;
+
+    var grid = document.getElementById('nwipRecentlyViewedGrid');
+    others.forEach(function(p){
+      var a = document.createElement('a');
+      a.className = 'nwip-rv-card';
+      a.href = p.url;
+      a.innerHTML =
+        '<img src="' + p.image + '" alt="' + p.title.replace(/"/g, '&quot;') + '" loading="lazy">' +
+        '<div class="nm">' + p.title + '</div>' +
+        '<div class="pr">' + p.price + '</div>';
+      grid.appendChild(a);
+    });
+
+    root.hidden = false;
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "NEST WIP Recently Viewed",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently viewed"
+    }
+  ]
+}
+{% endschema %}

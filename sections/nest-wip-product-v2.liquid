@@ -1,0 +1,434 @@
+{%- comment -%}
+  RESYNC MARKER: forcing a fresh diff so GitHub->Shopify picks up this edit.
+  NEST WIP PDP v2.1 — draft template, not linked to live product.json
+  Changes from v2:
+  - Gallery shows all product.images (no more position-split reservation)
+  - "Brand Detail" renamed to "Product Detail", now renders product.description
+    (Shopify Product > Description) instead of image-position-split — per David,
+    detail images will live in Description going forward, not in Media.
+  - Buy box: quantity stepper, ATC price label, native dynamic checkout
+    (Shop Pay / more payment options via payment_button), shipping + returns rows
+    linking to the shop's actual policy pages. No fabricated thresholds —
+    the $ / day copy is editable in section settings and blank by default.
+{%- endcomment -%}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+
+{%- assign clean_title = product.title -%}
+{%- if clean_title contains ']' -%}
+  {%- assign clean_title = clean_title | split: ']' | last | strip -%}
+{%- endif -%}
+
+{%- assign mf = product.metafields.custom -%}
+
+<style>
+  .nwip{ --ink:#16181A; --ink60:#5C6266; --ink30:#A8AEB1; --line:#E3E5E1;
+    --surface:#F4F5F3;
+    font-family:var(--font-body-family, 'Inter', sans-serif); color:var(--ink); }
+  .nwip *{ box-sizing:border-box; }
+  .nwip img{ max-width:100%; display:block; }
+
+  .nwip-grid{ display:grid; grid-template-columns:1fr 1fr; }
+  .nwip-gallery{ background:var(--surface); padding:28px; }
+  .nwip-shot{ background:#fff; }
+  .nwip-thumbs{ display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-top:10px; }
+  .nwip-thumbs button{ background:#fff; border:1px solid transparent; padding:0; cursor:pointer; }
+  .nwip-thumbs button.on{ border-color:var(--ink); }
+  .nwip-buy{ padding:44px 40px; }
+
+  .nwip-eyebrow{ font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--ink60); margin-bottom:12px; }
+  .nwip-title{ font-family:var(--font-heading-family, Georgia, serif);
+    font-size:38px; line-height:1.12; font-weight:400; margin:0; }
+  .nwip-desc{ font-size:13px; color:var(--ink60); margin-top:7px; }
+  .nwip-hero{ font-size:17px; line-height:1.5; font-weight:300; margin:22px 0 0; }
+  .nwip-price-row{ display:flex; align-items:baseline; gap:11px; margin-top:24px; }
+  .nwip-price{ font-size:23px; font-weight:500; }
+  .nwip-was{ font-size:15px; color:var(--ink30); text-decoration:line-through; }
+
+  .nwip-sizes{ display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
+  .nwip-size{ border:1px solid var(--line); background:#fff; padding:11px 17px;
+    font-size:13px; border-radius:2px; cursor:pointer; transition:.15s; color:var(--ink); }
+  .nwip-size[aria-pressed="true"]{ border-color:var(--ink); background:var(--ink); color:#fff; }
+  .nwip-size .sub{ display:block; font-size:10.5px; opacity:.55; margin-top:2px; }
+  .nwip-size[disabled]{ opacity:.4; cursor:not-allowed; }
+
+  .nwip-qty-row{ display:flex; gap:12px; margin-top:22px; }
+  .nwip-qty{ display:flex; align-items:center; border:1px solid var(--line); border-radius:999px;
+    overflow:hidden; flex-shrink:0; }
+  .nwip-qty button{ width:38px; height:44px; border:none; background:#fff; cursor:pointer;
+    font-size:16px; color:var(--ink); }
+  .nwip-qty button:hover{ background:var(--surface); }
+  .nwip-qty input{ width:34px; text-align:center; border:none; font-size:14px;
+    -moz-appearance:textfield; }
+  .nwip-qty input::-webkit-outer-spin-button,
+  .nwip-qty input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+
+  .nwip-atc{ flex:1; background:var(--ink); color:#fff; border:none; padding:0 16px;
+    font-size:14px; font-weight:500; letter-spacing:.02em;
+    border-radius:999px; cursor:pointer; transition:.15s; }
+  .nwip-atc:hover{ background:#000; }
+  .nwip-atc[disabled]{ background:var(--surface); color:var(--ink60);
+    border:1px solid var(--line); cursor:not-allowed; }
+
+  .nwip-dynamic-checkout{ margin-top:12px; }
+  .nwip-dynamic-checkout .shopify-payment-button__button{ border-radius:999px !important; }
+
+  .nwip-policies{ margin-top:22px; display:flex; flex-direction:column; gap:9px; }
+  .nwip-policy-row{ display:flex; align-items:flex-start; gap:9px; font-size:12.5px;
+    color:var(--ink60); line-height:1.5; }
+  .nwip-policy-row svg{ width:18px; height:18px; flex-shrink:0; margin-top:1px; color:var(--ink60); }
+  .nwip-policy-row a{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+
+  .nwip-app-zone{ margin-top:28px; }
+
+  .nwip-acc{ border-top:1px solid var(--ink); margin-top:32px; }
+  .nwip-acc details{ border-bottom:1px solid var(--line); }
+  .nwip-acc summary{ padding:19px 0; cursor:pointer; list-style:none;
+    display:flex; justify-content:space-between; align-items:center; gap:14px; }
+  .nwip-acc summary::-webkit-details-marker{ display:none; }
+  .nwip-acc summary .t{ font-size:13px; letter-spacing:.12em; text-transform:uppercase; font-weight:500; }
+  .nwip-acc summary .ic{ width:11px; height:11px; position:relative; flex-shrink:0; }
+  .nwip-acc summary .ic:before,.nwip-acc summary .ic:after{ content:''; position:absolute;
+    background:var(--ink); transition:transform .22s; }
+  .nwip-acc summary .ic:before{ top:5px; left:0; width:11px; height:1px; }
+  .nwip-acc summary .ic:after{ left:5px; top:0; width:1px; height:11px; }
+  .nwip-acc details[open] summary .ic:after{ transform:scaleY(0); }
+  .nwip-acc .bd{ padding:0 0 24px; font-size:14px; line-height:1.75; }
+  .nwip-acc h4{ font-size:11.5px; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink60); margin:22px 0 9px; font-weight:500; }
+  .nwip-bullets{ list-style:none; padding:0; margin:0; }
+  .nwip-bullets li{ padding-left:17px; position:relative; margin-bottom:8px; }
+  .nwip-bullets li:before{ content:''; position:absolute; left:0; top:11px;
+    width:5px; height:1px; background:var(--ink); }
+  .nwip-inci{ font-family:ui-monospace,monospace; font-size:11px; line-height:1.85;
+    color:var(--ink60); word-break:break-word; }
+  .nwip-pending{ border:1px dashed var(--ink30); border-radius:4px; padding:18px;
+    background:repeating-linear-gradient(-45deg,#FAFBF9,#FAFBF9 9px,#F2F4F0 9px,#F2F4F0 18px);
+    font-size:12.5px; color:var(--ink60); }
+
+  .nwip-faq{ margin-top:30px; }
+  .nwip-faq details{ border-bottom:1px solid var(--line); }
+  .nwip-faq summary{ padding:16px 0; font-size:14px; cursor:pointer; list-style:none;
+    display:flex; justify-content:space-between; gap:14px; }
+  .nwip-faq summary::-webkit-details-marker{ display:none; }
+  .nwip-faq summary:after{ content:'+'; font-size:17px; color:var(--ink30); line-height:1; }
+  .nwip-faq details[open] summary:after{ content:'\2013'; }
+  .nwip-faq .a{ padding:0 0 18px; font-size:13.5px; color:var(--ink60);
+    line-height:1.7; max-width:62ch; }
+
+  .nwip-detail{ border-top:1px solid var(--line); background:#fff; padding:64px 0 40px; }
+  .nwip-detail-head{ max-width:620px; margin:0 auto 34px; padding:0 22px; text-align:center; }
+  .nwip-detail-head .kick{ font-family:ui-monospace,monospace; font-size:10.5px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--ink30); margin-bottom:11px; }
+  .nwip-detail-head h3{ font-family:var(--font-heading-family, Georgia, serif);
+    font-size:28px; font-weight:400; margin:0; }
+  .nwip-detail-wrap{ max-width:860px; margin:0 auto; padding:0 22px; font-size:14px;
+    line-height:1.75; color:var(--ink60); }
+  .nwip-detail-wrap img{ margin:0 auto 20px; }
+
+  .nwip-wipbar{ background:#FBD5C4; color:#8A2B12; font-size:11.5px; font-weight:600;
+    letter-spacing:.06em; text-align:center; padding:7px 12px; text-transform:uppercase; }
+
+  @media (max-width:900px){
+    .nwip-grid{ grid-template-columns:1fr; }
+    .nwip-buy{ padding:28px 22px; }
+    .nwip-title{ font-size:30px; }
+  }
+  @media (min-width:901px){
+    .nwip-gallery{ position:sticky; top:20px; align-self:start; }
+  }
+</style>
+
+<div class="nwip">
+  {%- if section.settings.show_wip_banner -%}
+    <div class="nwip-wipbar">WIP Template v2.1 &mdash; Nest draft, not the live PDP</div>
+  {%- endif -%}
+
+  <div class="nwip-grid">
+
+    {%- comment -%} ============ GALLERY: all product images ============ {%- endcomment -%}
+    <div class="nwip-gallery">
+      {%- if product.images.size > 0 -%}
+        {%- assign hero_img = product.images.first -%}
+        {%- assign hero_alt = hero_img.alt | default: clean_title | escape -%}
+        <div class="nwip-shot" id="nwipMain">
+          {{ hero_img | image_url: width: 1200 | image_tag: class: 'nwip-main-img', alt: hero_alt, loading: 'eager', width: 1200 }}
+        </div>
+        <div class="nwip-thumbs">
+          {%- for image in product.images limit: 5 -%}
+            {%- assign t_alt = image.alt | default: clean_title | escape -%}
+            {%- assign t_full = image | image_url: width: 1200 -%}
+            <button type="button"
+              class="{% if forloop.first %}on{% endif %}"
+              data-full="{{ t_full }}"
+              onclick="nwipSwap(this)">
+              {{ image | image_url: width: 200 | image_tag: alt: t_alt, loading: 'lazy', width: 200 }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="nwip-pending">No product images.</div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ============ BUY BOX ============ {%- endcomment -%}
+    <div class="nwip-buy">
+      <div class="nwip-eyebrow">{{ product.vendor }}</div>
+      <h1 class="nwip-title">{{ clean_title }}</h1>
+
+      {%- if mf.descriptor != blank -%}
+        <div class="nwip-desc">{{ mf.descriptor }}</div>
+      {%- endif -%}
+
+      {%- if mf.hero_line != blank -%}
+        <p class="nwip-hero">{{ mf.hero_line }}</p>
+      {%- endif -%}
+
+      <div class="nwip-price-row">
+        <span class="nwip-price" id="nwipPrice">{{ current_variant.price | money }}</span>
+        {%- if current_variant.compare_at_price > current_variant.price -%}
+          <span class="nwip-was">{{ current_variant.compare_at_price | money }}</span>
+        {%- endif -%}
+      </div>
+
+      {%- form 'product', product, id: 'nwip-form' -%}
+        <input type="hidden" name="id" id="nwipVariantId" value="{{ current_variant.id }}">
+
+        {%- if product.variants.size > 1 -%}
+          <div class="nwip-sizes">
+            {%- for variant in product.variants -%}
+              {%- assign v_price = variant.price | money -%}
+              <button type="button" class="nwip-size"
+                aria-pressed="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-price="{{ v_price }}"
+                data-available="{{ variant.available }}"
+                onclick="nwipSelect(this)"
+                {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+                {%- unless variant.available -%}<span class="sub">Sold out</span>{%- endunless -%}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="nwip-qty-row">
+          <div class="nwip-qty">
+            <button type="button" onclick="nwipQty(-1)" aria-label="Decrease quantity">&minus;</button>
+            <input type="number" name="quantity" id="nwipQtyInput" value="1" min="1" inputmode="numeric">
+            <button type="button" onclick="nwipQty(1)" aria-label="Increase quantity">+</button>
+          </div>
+
+          {%- if current_variant.available -%}
+            <button type="submit" name="add" class="nwip-atc" id="nwipAtc">
+              Add to cart &middot; <span id="nwipAtcPrice">{{ current_variant.price | money }}</span>
+            </button>
+          {%- else -%}
+            <button type="button" class="nwip-atc" id="nwipAtc" disabled>Sold out</button>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} ---- Native dynamic checkout: Shop Pay + more payment options ---- {%- endcomment -%}
+        <div class="nwip-dynamic-checkout">
+          {{ form | payment_button }}
+        </div>
+      {%- endform -%}
+
+      {%- comment -%} ---- Shipping / returns — no fabricated thresholds, editable in Customize ---- {%- endcomment -%}
+      <div class="nwip-policies">
+        <div class="nwip-policy-row">
+          {%- render 'icon-shipping' -%}
+          <span>
+            {%- if section.settings.shipping_note != blank -%}{{ section.settings.shipping_note }}. {%- endif -%}
+            {%- if shop.shipping_policy.url != blank -%}
+              <a href="{{ shop.shipping_policy.url }}">View shipping policy</a>
+            {%- endif -%}
+          </span>
+        </div>
+        <div class="nwip-policy-row">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.4">
+            <path d="M20 11a8 8 0 1 0-2.6 5.9M20 11V6m0 5h-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>
+            {%- if section.settings.returns_note != blank -%}{{ section.settings.returns_note }}. {%- endif -%}
+            {%- if shop.refund_policy.url != blank -%}
+              <a href="{{ shop.refund_policy.url }}">View return policy</a>
+            {%- endif -%}
+          </span>
+        </div>
+      </div>
+
+      {%- comment -%}
+        ---- Real app block zone (ReelUp etc.) ----
+        No placeholder. Renders only actual connected app blocks.
+      {%- endcomment -%}
+      {%- if section.blocks.size > 0 -%}
+        <div class="nwip-app-zone">
+          {%- for block in section.blocks -%}
+            <div {{ block.shopify_attributes }}>{% render block %}</div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ---- Accordion: What it does / How to use / Ingredients ---- {%- endcomment -%}
+      <div class="nwip-acc">
+        <details open>
+          <summary><span class="t">What it does</span><span class="ic"></span></summary>
+          <div class="bd">
+            {%- if mf.key_benefits != blank -%}
+              <ul class="nwip-bullets">
+                {%- for b in mf.key_benefits.value -%}<li>{{ b }}</li>{%- endfor -%}
+              </ul>
+            {%- elsif product.metafields.custom.benefits != blank -%}
+              <ul class="nwip-bullets">
+                {%- for b in product.metafields.custom.benefits.value -%}<li>{{ b }}</li>{%- endfor -%}
+              </ul>
+            {%- else -%}
+              <div class="nwip-pending">Key benefits pending intake.</div>
+            {%- endif -%}
+            {%- if mf.hero_ingredients != blank -%}
+              <h4>Key ingredients</h4>
+              <div>{{ mf.hero_ingredients | newline_to_br }}</div>
+            {%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="t">How to use</span><span class="ic"></span></summary>
+          <div class="bd">
+            {%- if mf.how_to_use != blank -%}
+              <div>{{ mf.how_to_use | newline_to_br }}</div>
+              {%- if mf.am_pm != blank -%}<h4>When</h4><div>{{ mf.am_pm }}</div>{%- endif -%}
+            {%- else -%}
+              <div class="nwip-pending">Usage directions pending intake.</div>
+            {%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary><span class="t">Ingredients</span><span class="ic"></span></summary>
+          <div class="bd">
+            {%- if mf.inci_list != blank -%}
+              <p class="nwip-inci">{{ mf.inci_list | newline_to_br }}</p>
+            {%- else -%}
+              <div class="nwip-pending">Full INCI list pending intake. Required for US listing.</div>
+            {%- endif -%}
+          </div>
+        </details>
+      </div>
+
+      {%- comment -%} ---- FAQ ---- {%- endcomment -%}
+      {%- if mf.faq != blank -%}
+        <div class="nwip-faq">
+          {%- assign faq_pairs = mf.faq | strip | split: ';;' -%}
+          {%- for pair in faq_pairs -%}
+            {%- assign qa = pair | split: '|' -%}
+            {%- if qa.size >= 2 -%}
+              <details {% if forloop.first %}open{% endif %}>
+                <summary>{{ qa[0] | strip }}</summary>
+                <div class="a">{{ qa[1] | strip }}</div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%}
+    ============ PRODUCT DETAIL ============
+    Renders Shopify Product > Description directly. Detail images now live
+    in the Description (Body HTML), not in Media — keeps them out of the
+    GMC/Meta image feed, which pulls from product.images.
+  {%- endcomment -%}
+  {%- if product.description != blank -%}
+    <div class="nwip-detail">
+      <div class="nwip-detail-head">
+        <div class="kick">Product Detail</div>
+        <h3>{{ section.settings.detail_heading | default: 'The story behind the product' }}</h3>
+      </div>
+      <div class="nwip-detail-wrap">
+        {{ product.description }}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+<script>
+  function nwipSwap(btn){
+    var main = document.querySelector('#nwipMain img');
+    if (main && btn.dataset.full) { main.src = btn.dataset.full; }
+    document.querySelectorAll('.nwip-thumbs button').forEach(function(b){ b.classList.remove('on'); });
+    btn.classList.add('on');
+  }
+  function nwipSelect(btn){
+    if (btn.disabled) return;
+    document.querySelectorAll('.nwip-size').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
+    btn.setAttribute('aria-pressed','true');
+    document.getElementById('nwipVariantId').value = btn.dataset.variantId;
+    var priceEl = document.getElementById('nwipPrice');
+    var atcPriceEl = document.getElementById('nwipAtcPrice');
+    if (btn.dataset.price) {
+      if (priceEl) priceEl.textContent = btn.dataset.price;
+      if (atcPriceEl) atcPriceEl.textContent = btn.dataset.price;
+    }
+    var atc = document.getElementById('nwipAtc');
+    if (atc) {
+      if (btn.dataset.available === 'true') {
+        atc.disabled = false;
+      } else {
+        atc.disabled = true;
+      }
+    }
+  }
+  function nwipQty(delta){
+    var input = document.getElementById('nwipQtyInput');
+    if (!input) return;
+    var val = parseInt(input.value, 10) || 1;
+    val = Math.max(1, val + delta);
+    input.value = val;
+  }
+</script>
+
+{% schema %}
+{
+  "name": "NEST WIP Product v2.1",
+  "tag": "section",
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_wip_banner",
+      "label": "Show WIP banner",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "detail_heading",
+      "label": "Product Detail heading",
+      "default": "The story behind the product"
+    },
+    {
+      "type": "header",
+      "content": "Shipping & returns copy (leave blank if unsure — no numbers are assumed)"
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "label": "Shipping note",
+      "info": "e.g. \"Free shipping over $175\". Leave blank to show only the policy link."
+    },
+    {
+      "type": "text",
+      "id": "returns_note",
+      "label": "Returns note",
+      "info": "e.g. \"30 day returns\". Leave blank to show only the policy link."
+    }
+  ]
+}
+{% endschema %}
