@@ -11,6 +11,15 @@
   "sections": {
     "main": {
       "type": "nest-wip-product-v2",
+      "blocks": {
+        "reelup_shoppable_videos_reels_reelup_product_slider_9CMEqY": {
+          "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup_product_slider/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "reelup_shoppable_videos_reels_reelup_product_slider_9CMEqY"
+      ],
       "settings": {
         "show_top_banner": true,
         "top_banner_text": "Free Shipping on orders over $50",
