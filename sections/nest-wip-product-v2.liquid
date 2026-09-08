@@ -13,6 +13,7 @@
     the swapped src on some viewports. Now clears srcset/sizes on swap.
   - Mobile (<=900px): swipeable scroll-snap gallery replaces the
     click-to-swap thumbnail grid
+  - Top banner switched from WIP warning to a Free Shipping announcement
 {%- endcomment -%}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
@@ -136,8 +137,8 @@
     line-height:1.75; color:var(--ink60); }
   .nwip-detail-wrap img{ margin:0 auto 20px; }
 
-  .nwip-wipbar{ background:#FBD5C4; color:#8A2B12; font-size:11.5px; font-weight:600;
-    letter-spacing:.06em; text-align:center; padding:7px 12px; text-transform:uppercase; }
+  .nwip-announce{ background:var(--ink); color:#fff; font-size:12.5px; font-weight:500;
+    letter-spacing:.04em; text-align:center; padding:10px 12px; }
 
   {%- comment -%} ---- Sticky add-to-cart bar ---- {%- endcomment -%}
   .nwip-sticky-atc{ --ink:#16181A; --ink60:#5C6266; --ink30:#A8AEB1; --line:#E3E5E1; --surface:#F4F5F3;
@@ -175,8 +176,8 @@
 </style>
 
 <div class="nwip">
-  {%- if section.settings.show_wip_banner -%}
-    <div class="nwip-wipbar">WIP Template v2.2 &mdash; Nest draft, not the live PDP</div>
+  {%- if section.settings.show_top_banner -%}
+    <div class="nwip-announce">{{ section.settings.top_banner_text | default: 'Free Shipping on orders over $50' }}</div>
   {%- endif -%}
 
   <div class="nwip-grid">
@@ -581,9 +582,15 @@
   "settings": [
     {
       "type": "checkbox",
-      "id": "show_wip_banner",
-      "label": "Show WIP banner",
+      "id": "show_top_banner",
+      "label": "Show top banner",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "top_banner_text",
+      "label": "Top banner text",
+      "default": "Free Shipping on orders over $50"
     },
     {
       "type": "text",
