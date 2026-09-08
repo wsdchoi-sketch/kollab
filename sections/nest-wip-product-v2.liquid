@@ -327,7 +327,7 @@
                 {%- for b in product.metafields.custom.benefits.value -%}<li>{{ b }}</li>{%- endfor -%}
               </ul>
             {%- else -%}
-              <div class="nwip-pending">Key benefits pending intake.</div>
+              <div class="nwip-pending">Please see product images for detail.</div>
             {%- endif -%}
             {%- if mf.hero_ingredients != blank -%}
               <h4>Key ingredients</h4>
@@ -343,7 +343,7 @@
               <div>{{ mf.how_to_use | newline_to_br }}</div>
               {%- if mf.am_pm != blank -%}<h4>When</h4><div>{{ mf.am_pm }}</div>{%- endif -%}
             {%- else -%}
-              <div class="nwip-pending">Usage directions pending intake.</div>
+              <div class="nwip-pending">Please see product images for detail.</div>
             {%- endif -%}
           </div>
         </details>
@@ -354,7 +354,7 @@
             {%- if mf.inci_list != blank -%}
               <p class="nwip-inci">{{ mf.inci_list | newline_to_br }}</p>
             {%- else -%}
-              <div class="nwip-pending">Full INCI list pending intake. Required for US listing.</div>
+              <div class="nwip-pending">Please see product images for detail.</div>
             {%- endif -%}
           </div>
         </details>
