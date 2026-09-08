@@ -1,18 +1,22 @@
 {%- comment -%}
-  RESYNC MARKER: forcing a fresh diff so GitHub->Shopify picks up this edit.
-  NEST WIP PDP v2.1 — draft template, not linked to live product.json
-  Changes from v2:
-  - Gallery shows all product.images (no more position-split reservation)
-  - "Brand Detail" renamed to "Product Detail", now renders product.description
-    (Shopify Product > Description) instead of image-position-split — per David,
-    detail images will live in Description going forward, not in Media.
-  - Buy box: quantity stepper, ATC price label, native dynamic checkout
-    (Shop Pay / more payment options via payment_button), shipping + returns rows
-    linking to the shop's actual policy pages. No fabricated thresholds —
-    the $ / day copy is editable in section settings and blank by default.
+  NEST WIP PDP v2.2 — draft template, not linked to live product.json
+  Changes from v2.1:
+  - Uses theme's own 'price' snippet (exact sale-price styling, no more
+    hand-rolled gray strikethrough)
+  - Uses theme's own 'section-header' snippet for Product Detail heading,
+    for typographic parity with native sections
+  - Sticky bottom add-to-cart bar (thumb + title + price + qty + ATC),
+    appears once the main ATC scrolls out of view, with a simple free-
+    shipping progress gauge fed by /cart.js
+  - Bigger shipping-note text
+  - Fixed image swap bug: image_tag's auto-generated srcset was overriding
+    the swapped src on some viewports. Now clears srcset/sizes on swap.
+  - Mobile (<=900px): swipeable scroll-snap gallery replaces the
+    click-to-swap thumbnail grid
 {%- endcomment -%}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign ship_threshold = section.settings.free_shipping_threshold | default: 50 -%}
 
 {%- assign clean_title = product.title -%}
 {%- if clean_title contains ']' -%}
@@ -34,6 +38,7 @@
   .nwip-thumbs{ display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-top:10px; }
   .nwip-thumbs button{ background:#fff; border:1px solid transparent; padding:0; cursor:pointer; }
   .nwip-thumbs button.on{ border-color:var(--ink); }
+  .nwip-gallery-mobile{ display:none; }
   .nwip-buy{ padding:44px 40px; }
 
   .nwip-eyebrow{ font-size:11px; letter-spacing:.22em; text-transform:uppercase;
@@ -42,9 +47,7 @@
     font-size:38px; line-height:1.12; font-weight:400; margin:0; }
   .nwip-desc{ font-size:13px; color:var(--ink60); margin-top:7px; }
   .nwip-hero{ font-size:17px; line-height:1.5; font-weight:300; margin:22px 0 0; }
-  .nwip-price-row{ display:flex; align-items:baseline; gap:11px; margin-top:24px; }
-  .nwip-price{ font-size:23px; font-weight:500; }
-  .nwip-was{ font-size:15px; color:var(--ink30); text-decoration:line-through; }
+  .nwip-price-row{ margin-top:24px; font-size:20px; }
 
   .nwip-sizes{ display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
   .nwip-size{ border:1px solid var(--line); background:#fff; padding:11px 17px;
@@ -74,11 +77,12 @@
   .nwip-dynamic-checkout{ margin-top:12px; }
   .nwip-dynamic-checkout .shopify-payment-button__button{ border-radius:999px !important; }
 
-  .nwip-policies{ margin-top:22px; display:flex; flex-direction:column; gap:9px; }
-  .nwip-policy-row{ display:flex; align-items:flex-start; gap:9px; font-size:12.5px;
-    color:var(--ink60); line-height:1.5; }
-  .nwip-policy-row svg{ width:18px; height:18px; flex-shrink:0; margin-top:1px; color:var(--ink60); }
-  .nwip-policy-row a{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+  .nwip-policies{ margin-top:22px; display:flex; flex-direction:column; gap:11px; }
+  .nwip-policy-row{ display:flex; align-items:flex-start; gap:9px; font-size:15px;
+    color:var(--ink60); line-height:1.5; font-weight:500; }
+  .nwip-policy-row svg{ width:20px; height:20px; flex-shrink:0; margin-top:1px; color:var(--ink60); }
+  .nwip-policy-row a{ color:var(--ink); text-decoration:underline; text-underline-offset:2px;
+    font-weight:400; }
 
   .nwip-app-zone{ margin-top:28px; }
 
@@ -117,22 +121,42 @@
   .nwip-faq .a{ padding:0 0 18px; font-size:13.5px; color:var(--ink60);
     line-height:1.7; max-width:62ch; }
 
-  .nwip-detail{ background:#fff; padding:64px 22px; }
-  .nwip-detail-head{ text-align:center; }
-  .nwip-detail-head h3{ font-family:var(--font-heading-family, Georgia, serif);
-    font-size:32px; font-weight:400; text-transform:uppercase; letter-spacing:.01em; margin:0; }
-  .nwip-detail-rule{ max-width:1100px; margin:22px auto 34px; border-bottom:1px solid var(--line); }
-  .nwip-detail-wrap{ max-width:860px; margin:0 auto; font-size:14px;
+  .nwip-detail{ background:#fff; }
+  .nwip-detail-wrap{ max-width:860px; margin:0 auto; padding:0 22px 64px; font-size:14px;
     line-height:1.75; color:var(--ink60); }
   .nwip-detail-wrap img{ margin:0 auto 20px; }
 
   .nwip-wipbar{ background:#FBD5C4; color:#8A2B12; font-size:11.5px; font-weight:600;
     letter-spacing:.06em; text-align:center; padding:7px 12px; text-transform:uppercase; }
 
+  {%- comment -%} ---- Sticky add-to-cart bar ---- {%- endcomment -%}
+  .nwip-sticky-atc{ position:fixed; left:50%; bottom:18px; transform:translate(-50%,140%);
+    z-index:40; width:min(680px, calc(100% - 32px)); background:#fff; border-radius:16px;
+    box-shadow:0 10px 40px rgba(0,0,0,.16); padding:14px 16px; transition:transform .28s ease; }
+  .nwip-sticky-atc.show{ transform:translate(-50%,0); }
+  .nwip-sticky-inner{ display:flex; align-items:center; gap:12px; }
+  .nwip-sticky-thumb{ width:46px; height:46px; border-radius:8px; object-fit:cover;
+    background:var(--surface); flex-shrink:0; }
+  .nwip-sticky-info{ flex:1; min-width:0; }
+  .nwip-sticky-title{ font-size:13px; line-height:1.3;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .nwip-sticky-price{ font-size:13px; color:var(--ink60); margin-top:2px; }
+  .nwip-sticky-qty{ display:none; }
+  .nwip-sticky-btn{ height:44px; white-space:nowrap; padding:0 20px; flex-shrink:0; }
+  .nwip-ship-gauge{ margin-top:11px; }
+  .nwip-ship-gauge-track{ height:4px; background:var(--surface); border-radius:99px;
+    overflow:hidden; }
+  .nwip-ship-gauge-fill{ height:100%; width:0%; background:var(--ink);
+    transition:width .3s ease; }
+  .nwip-ship-gauge-label{ font-size:11px; color:var(--ink60); margin-top:6px; text-align:center; }
+
   @media (max-width:900px){
     .nwip-grid{ grid-template-columns:1fr; }
     .nwip-buy{ padding:28px 22px; }
     .nwip-title{ font-size:30px; }
+    .nwip-gallery-desktop{ display:none; }
+    .nwip-gallery-mobile{ display:block; }
+    .nwip-sticky-qty{ display:none; }
   }
   @media (min-width:901px){
     .nwip-gallery{ position:sticky; top:20px; align-self:start; }
@@ -141,29 +165,43 @@
 
 <div class="nwip">
   {%- if section.settings.show_wip_banner -%}
-    <div class="nwip-wipbar">WIP Template v2.1 &mdash; Nest draft, not the live PDP</div>
+    <div class="nwip-wipbar">WIP Template v2.2 &mdash; Nest draft, not the live PDP</div>
   {%- endif -%}
 
   <div class="nwip-grid">
 
-    {%- comment -%} ============ GALLERY: all product images ============ {%- endcomment -%}
+    {%- comment -%} ============ GALLERY ============ {%- endcomment -%}
     <div class="nwip-gallery">
       {%- if product.images.size > 0 -%}
         {%- assign hero_img = product.images.first -%}
         {%- assign hero_alt = hero_img.alt | default: clean_title | escape -%}
-        <div class="nwip-shot" id="nwipMain">
-          {{ hero_img | image_url: width: 1200 | image_tag: class: 'nwip-main-img', alt: hero_alt, loading: 'eager', width: 1200 }}
+
+        {%- comment -%} ---- Desktop: click-to-swap ---- {%- endcomment -%}
+        <div class="nwip-gallery-desktop">
+          <div class="nwip-shot" id="nwipMain">
+            {{ hero_img | image_url: width: 1200 | image_tag: id: 'nwipMainImg', class: 'nwip-main-img', alt: hero_alt, loading: 'eager', width: 1200 }}
+          </div>
+          <div class="nwip-thumbs">
+            {%- for image in product.images limit: 5 -%}
+              {%- assign t_alt = image.alt | default: clean_title | escape -%}
+              {%- assign t_full = image | image_url: width: 1200 -%}
+              <button type="button"
+                class="{% if forloop.first %}on{% endif %}"
+                data-full="{{ t_full }}"
+                onclick="nwipSwap(this)">
+                {{ image | image_url: width: 200 | image_tag: alt: t_alt, loading: 'lazy', width: 200 }}
+              </button>
+            {%- endfor -%}
+          </div>
         </div>
-        <div class="nwip-thumbs">
-          {%- for image in product.images limit: 5 -%}
-            {%- assign t_alt = image.alt | default: clean_title | escape -%}
-            {%- assign t_full = image | image_url: width: 1200 -%}
-            <button type="button"
-              class="{% if forloop.first %}on{% endif %}"
-              data-full="{{ t_full }}"
-              onclick="nwipSwap(this)">
-              {{ image | image_url: width: 200 | image_tag: alt: t_alt, loading: 'lazy', width: 200 }}
-            </button>
+
+        {%- comment -%} ---- Mobile: swipeable scroll-snap ---- {%- endcomment -%}
+        <div class="nwip-gallery-mobile" style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:8px;">
+          {%- for image in product.images -%}
+            {%- assign m_alt = image.alt | default: clean_title | escape -%}
+            <div style="flex:0 0 100%; scroll-snap-align:center;">
+              {{ image | image_url: width: 1200 | image_tag: alt: m_alt, loading: 'lazy', width: 1200 }}
+            </div>
           {%- endfor -%}
         </div>
       {%- else -%}
@@ -184,11 +222,8 @@
         <p class="nwip-hero">{{ mf.hero_line }}</p>
       {%- endif -%}
 
-      <div class="nwip-price-row">
-        <span class="nwip-price" id="nwipPrice">{{ current_variant.price | money }}</span>
-        {%- if current_variant.compare_at_price > current_variant.price -%}
-          <span class="nwip-was">{{ current_variant.compare_at_price | money }}</span>
-        {%- endif -%}
+      <div class="nwip-price-row" id="nwipPriceBox">
+        {%- render 'price', product: product, use_variant: true, show_badges: true -%}
       </div>
 
       {%- form 'product', product, id: 'nwip-form' -%}
@@ -198,10 +233,13 @@
           <div class="nwip-sizes">
             {%- for variant in product.variants -%}
               {%- assign v_price = variant.price | money -%}
+              {%- assign v_compare = '' -%}
+              {%- if variant.compare_at_price > variant.price -%}{%- assign v_compare = variant.compare_at_price | money -%}{%- endif -%}
               <button type="button" class="nwip-size"
                 aria-pressed="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
                 data-variant-id="{{ variant.id }}"
                 data-price="{{ v_price }}"
+                data-compare="{{ v_compare }}"
                 data-available="{{ variant.available }}"
                 onclick="nwipSelect(this)"
                 {% unless variant.available %}disabled{% endunless %}>
@@ -228,13 +266,11 @@
           {%- endif -%}
         </div>
 
-        {%- comment -%} ---- Native dynamic checkout: Shop Pay + more payment options ---- {%- endcomment -%}
         <div class="nwip-dynamic-checkout">
           {{ form | payment_button }}
         </div>
       {%- endform -%}
 
-      {%- comment -%} ---- Shipping / returns — no fabricated thresholds, editable in Customize ---- {%- endcomment -%}
       <div class="nwip-policies">
         <div class="nwip-policy-row">
           {%- render 'icon-shipping' -%}
@@ -258,10 +294,6 @@
         </div>
       </div>
 
-      {%- comment -%}
-        ---- Real app block zone (ReelUp etc.) ----
-        No placeholder. Renders only actual connected app blocks.
-      {%- endcomment -%}
       {%- if section.blocks.size > 0 -%}
         <div class="nwip-app-zone">
           {%- for block in section.blocks -%}
@@ -270,7 +302,6 @@
         </div>
       {%- endif -%}
 
-      {%- comment -%} ---- Accordion: What it does / How to use / Ingredients ---- {%- endcomment -%}
       <div class="nwip-acc">
         <details open>
           <summary><span class="t">What it does</span><span class="ic"></span></summary>
@@ -317,7 +348,6 @@
         </details>
       </div>
 
-      {%- comment -%} ---- FAQ ---- {%- endcomment -%}
       {%- if mf.faq != blank -%}
         <div class="nwip-faq">
           {%- assign faq_pairs = mf.faq | strip | split: ';;' -%}
@@ -335,18 +365,13 @@
     </div>
   </div>
 
-  {%- comment -%}
-    ============ PRODUCT DETAIL ============
-    Renders Shopify Product > Description directly. Detail images now live
-    in the Description (Body HTML), not in Media — keeps them out of the
-    GMC/Meta image feed, which pulls from product.images.
-  {%- endcomment -%}
+  {%- comment -%} ============ PRODUCT DETAIL — uses theme's own section-header for exact style match ============ {%- endcomment -%}
   {%- if product.description != blank -%}
     <div class="nwip-detail">
-      <div class="nwip-detail-head">
-        <h3>{{ section.settings.detail_heading | default: 'Product Detail' }}</h3>
-      </div>
-      <div class="nwip-detail-rule"></div>
+      {%- render 'section-header',
+        show_arrows: false,
+        section: section
+      -%}
       <div class="nwip-detail-wrap">
         {{ product.description }}
       </div>
@@ -354,33 +379,82 @@
   {%- endif -%}
 </div>
 
+{%- comment -%} ============ STICKY ADD TO CART ============ {%- endcomment -%}
+<div class="nwip-sticky-atc" id="nwipStickyAtc">
+  <div class="nwip-sticky-inner">
+    {%- if product.featured_image -%}
+      <img class="nwip-sticky-thumb" src="{{ product.featured_image | image_url: width: 100 }}" alt="">
+    {%- endif -%}
+    <div class="nwip-sticky-info">
+      <div class="nwip-sticky-title">{{ clean_title }}</div>
+      <div class="nwip-sticky-price" id="nwipStickyPrice">{{ current_variant.price | money }}</div>
+    </div>
+    {%- if current_variant.available -%}
+      <button type="button" class="nwip-atc nwip-sticky-btn" id="nwipStickyBtn" onclick="nwipStickyAdd()">
+        Add to Cart &middot; <span id="nwipStickyAtcPrice">{{ current_variant.price | money }}</span>
+      </button>
+    {%- else -%}
+      <button type="button" class="nwip-atc nwip-sticky-btn" disabled>Sold out</button>
+    {%- endif -%}
+  </div>
+  <div class="nwip-ship-gauge">
+    <div class="nwip-ship-gauge-track"><div class="nwip-ship-gauge-fill" id="nwipShipFill"></div></div>
+    <div class="nwip-ship-gauge-label" id="nwipShipLabel"></div>
+  </div>
+</div>
+
 <script>
+  window.nwipShipThreshold = {{ ship_threshold | times: 100 }};
+  window.nwipCurrentVariantId = {{ current_variant.id | json }};
+
   function nwipSwap(btn){
-    var main = document.querySelector('#nwipMain img');
-    if (main && btn.dataset.full) { main.src = btn.dataset.full; }
+    var main = document.getElementById('nwipMainImg');
+    if (main && btn.dataset.full) {
+      main.removeAttribute('srcset');
+      main.removeAttribute('sizes');
+      main.src = btn.dataset.full;
+    }
     document.querySelectorAll('.nwip-thumbs button').forEach(function(b){ b.classList.remove('on'); });
     btn.classList.add('on');
   }
+
+  function nwipRenderPrice(price, compare){
+    var box = document.getElementById('nwipPriceBox');
+    if (!box) return;
+    if (compare) {
+      box.innerHTML =
+        '<div class="price price--on-sale"><dl>' +
+        '<div class="price__sale"><dd><span class="price-item price-item--sale">' + price + '</span></dd>' +
+        '<dd class="price__compare"><span class="price-item price-item--regular">' + compare + '</span></dd></div>' +
+        '</dl></div>';
+    } else {
+      box.innerHTML =
+        '<div class="price"><dl><div class="price__regular"><dd><span class="price-item price-item--regular">' + price + '</span></dd></div></dl></div>';
+    }
+  }
+
   function nwipSelect(btn){
     if (btn.disabled) return;
     document.querySelectorAll('.nwip-size').forEach(function(b){ b.setAttribute('aria-pressed','false'); });
     btn.setAttribute('aria-pressed','true');
     document.getElementById('nwipVariantId').value = btn.dataset.variantId;
-    var priceEl = document.getElementById('nwipPrice');
-    var atcPriceEl = document.getElementById('nwipAtcPrice');
+    window.nwipCurrentVariantId = btn.dataset.variantId;
     if (btn.dataset.price) {
-      if (priceEl) priceEl.textContent = btn.dataset.price;
+      nwipRenderPrice(btn.dataset.price, btn.dataset.compare);
+      var atcPriceEl = document.getElementById('nwipAtcPrice');
+      var stickyPriceEl = document.getElementById('nwipStickyPrice');
+      var stickyAtcPriceEl = document.getElementById('nwipStickyAtcPrice');
       if (atcPriceEl) atcPriceEl.textContent = btn.dataset.price;
+      if (stickyPriceEl) stickyPriceEl.textContent = btn.dataset.price;
+      if (stickyAtcPriceEl) stickyAtcPriceEl.textContent = btn.dataset.price;
     }
     var atc = document.getElementById('nwipAtc');
-    if (atc) {
-      if (btn.dataset.available === 'true') {
-        atc.disabled = false;
-      } else {
-        atc.disabled = true;
-      }
-    }
+    var stickyBtn = document.getElementById('nwipStickyBtn');
+    var available = btn.dataset.available === 'true';
+    if (atc) atc.disabled = !available;
+    if (stickyBtn) stickyBtn.disabled = !available;
   }
+
   function nwipQty(delta){
     var input = document.getElementById('nwipQtyInput');
     if (!input) return;
@@ -388,11 +462,74 @@
     val = Math.max(1, val + delta);
     input.value = val;
   }
+
+  function nwipStickyAdd(){
+    var btn = document.getElementById('nwipStickyBtn');
+    var qtyInput = document.getElementById('nwipQtyInput');
+    var qty = qtyInput ? (parseInt(qtyInput.value, 10) || 1) : 1;
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    var originalText = btn.innerHTML;
+    fetch('/cart/add.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: window.nwipCurrentVariantId, quantity: qty })
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(){
+        btn.innerHTML = 'Added &#10003;';
+        nwipRefreshShipGauge();
+        setTimeout(function(){ btn.innerHTML = originalText; btn.disabled = false; }, 1600);
+      })
+      .catch(function(){
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      });
+  }
+
+  function nwipRefreshShipGauge(){
+    fetch('/cart.js')
+      .then(function(r){ return r.json(); })
+      .then(function(cart){
+        var fill = document.getElementById('nwipShipFill');
+        var label = document.getElementById('nwipShipLabel');
+        if (!fill || !label) return;
+        var threshold = window.nwipShipThreshold || 5000;
+        var pct = Math.min(100, (cart.total_price / threshold) * 100);
+        fill.style.width = pct + '%';
+        if (cart.total_price >= threshold) {
+          label.textContent = "You've unlocked free shipping!";
+        } else {
+          var remaining = ((threshold - cart.total_price) / 100).toFixed(2);
+          label.textContent = '$' + remaining + ' away from free shipping';
+        }
+      })
+      .catch(function(){});
+  }
+
+  (function(){
+    nwipRefreshShipGauge();
+
+    var stickyBar = document.getElementById('nwipStickyAtc');
+    var mainAtc = document.getElementById('nwipAtc');
+    if (stickyBar && mainAtc && 'IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            stickyBar.classList.remove('show');
+          } else {
+            stickyBar.classList.add('show');
+          }
+        });
+      }, { threshold: 0 });
+      obs.observe(mainAtc);
+    }
+  })();
 </script>
 
 {% schema %}
 {
-  "name": "NEST WIP Product v2.1",
+  "name": "NEST WIP Product v2.2",
   "tag": "section",
   "blocks": [
     {
@@ -408,9 +545,25 @@
     },
     {
       "type": "text",
-      "id": "detail_heading",
+      "id": "heading",
       "label": "Product Detail heading",
       "default": "Product Detail"
+    },
+    {
+      "type": "select",
+      "id": "section_header_type",
+      "label": "Header layout",
+      "default": "type1",
+      "options": [
+        { "value": "type1", "label": "Centered" },
+        { "value": "type2", "label": "Left aligned" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_border_top",
+      "label": "Show divider",
+      "default": true
     },
     {
       "type": "header",
@@ -421,7 +574,14 @@
       "id": "shipping_note",
       "label": "Shipping note",
       "default": "Free shipping on orders over $50",
-      "info": "Editable — leave blank to show only the policy link."
+      "info": "Display text only."
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Free shipping min ($)",
+      "default": 50,
+      "info": "Used for the sticky cart's shipping progress gauge."
     },
     {
       "type": "text",

@@ -4,7 +4,11 @@
       "type": "nest-wip-product-v2",
       "settings": {
         "show_wip_banner": true,
-        "detail_heading": "The story behind the product"
+        "heading": "Product Detail",
+        "section_header_type": "type1",
+        "enable_border_top": true,
+        "shipping_note": "Free shipping on orders over $50",
+        "free_shipping_threshold": 50
       }
     },
     "you-may-also-like": {
@@ -22,7 +26,9 @@
     "recently-viewed": {
       "type": "nest-wip-recently-viewed",
       "settings": {
-        "heading": "Recently viewed"
+        "heading": "Recently viewed",
+        "section_header_type": "type1",
+        "enable_border_top": true
       }
     },
     "apps": {
