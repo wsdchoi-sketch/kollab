@@ -38,7 +38,7 @@
   .nwip-thumbs{ display:grid; grid-template-columns:repeat(5,1fr); gap:7px; margin-top:10px; }
   .nwip-thumbs button{ background:#fff; border:1px solid transparent; padding:0; cursor:pointer; }
   .nwip-thumbs button.on{ border-color:var(--ink); }
-  .nwip-gallery-mobile{ display:none; }
+  .nwip-gallery-mobile{ display:none; overflow-x:auto; scroll-snap-type:x mandatory; gap:8px; }
   .nwip-buy{ padding:44px 40px; }
 
   .nwip-eyebrow{ font-size:11px; letter-spacing:.22em; text-transform:uppercase;
@@ -47,7 +47,11 @@
     font-size:38px; line-height:1.12; font-weight:400; margin:0; }
   .nwip-desc{ font-size:13px; color:var(--ink60); margin-top:7px; }
   .nwip-hero{ font-size:17px; line-height:1.5; font-weight:300; margin:22px 0 0; }
-  .nwip-price-row{ margin-top:24px; font-size:20px; }
+  .nwip-price-row{ margin-top:24px; }
+  .nwip-price-row .price-item--sale,
+  .nwip-price-row .price__regular .price-item--regular{ font-size:28px; font-weight:500; color:var(--ink); }
+  .nwip-price-row .price__compare .price-item--regular{ font-size:19px; font-weight:400;
+    color:#C0392B; text-decoration:line-through; margin-left:4px; }
 
   .nwip-sizes{ display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
   .nwip-size{ border:1px solid var(--line); background:#fff; padding:11px 17px;
@@ -74,8 +78,14 @@
   .nwip-atc[disabled]{ background:var(--surface); color:var(--ink60);
     border:1px solid var(--line); cursor:not-allowed; }
 
-  .nwip-dynamic-checkout{ margin-top:12px; }
-  .nwip-dynamic-checkout .shopify-payment-button__button{ border-radius:999px !important; }
+  .nwip-dynamic-checkout{ margin-top:12px; display:flex; gap:10px; align-items:stretch; }
+  .nwip-dynamic-checkout > div{ flex:1; min-width:0; }
+  .nwip-dynamic-checkout .shopify-payment-button{ height:100%; }
+  .nwip-dynamic-checkout .shopify-payment-button__button{ border-radius:999px !important; height:44px !important; }
+  .nwip-more-payment{ flex:1; height:44px; border-radius:999px; border:1px solid var(--line);
+    background:#fff; color:var(--ink); font-size:13px; font-weight:500; cursor:pointer;
+    white-space:nowrap; }
+  .nwip-more-payment:hover{ background:var(--surface); }
 
   .nwip-policies{ margin-top:22px; display:flex; flex-direction:column; gap:11px; }
   .nwip-policy-row{ display:flex; align-items:flex-start; gap:9px; font-size:15px;
@@ -155,7 +165,7 @@
     .nwip-buy{ padding:28px 22px; }
     .nwip-title{ font-size:30px; }
     .nwip-gallery-desktop{ display:none; }
-    .nwip-gallery-mobile{ display:block; }
+    .nwip-gallery-mobile{ display:flex; }
     .nwip-sticky-qty{ display:none; }
   }
   @media (min-width:901px){
@@ -196,7 +206,7 @@
         </div>
 
         {%- comment -%} ---- Mobile: swipeable scroll-snap ---- {%- endcomment -%}
-        <div class="nwip-gallery-mobile" style="display:flex; overflow-x:auto; scroll-snap-type:x mandatory; gap:8px;">
+        <div class="nwip-gallery-mobile">
           {%- for image in product.images -%}
             {%- assign m_alt = image.alt | default: clean_title | escape -%}
             <div style="flex:0 0 100%; scroll-snap-align:center;">
@@ -267,7 +277,8 @@
         </div>
 
         <div class="nwip-dynamic-checkout">
-          {{ form | payment_button }}
+          <div>{{ form | payment_button }}</div>
+          <button type="submit" name="checkout" class="nwip-more-payment">More Payment Options</button>
         </div>
       {%- endform -%}
 
@@ -275,7 +286,7 @@
         <div class="nwip-policy-row">
           {%- render 'icon-shipping' -%}
           <span>
-            {%- if section.settings.shipping_note != blank -%}{{ section.settings.shipping_note }}. {%- endif -%}
+            {%- if section.settings.shipping_note != blank -%}{{ section.settings.shipping_note }}. {% endif -%}
             {%- if shop.shipping_policy.url != blank -%}
               <a href="{{ shop.shipping_policy.url }}">View shipping policy</a>
             {%- endif -%}
@@ -507,12 +518,29 @@
       .catch(function(){});
   }
 
-  (function(){
-    nwipRefreshShipGauge();
-
+  function nwipInitStickyBar(){
     var stickyBar = document.getElementById('nwipStickyAtc');
     var mainAtc = document.getElementById('nwipAtc');
-    if (stickyBar && mainAtc && 'IntersectionObserver' in window) {
+    if (!stickyBar || !mainAtc) return;
+
+    // Reparent to <body> so position:fixed is always relative to the
+    // viewport, not a transformed ancestor (a common cause of "fixed"
+    // elements getting trapped inside a section wrapper).
+    if (stickyBar.parentElement !== document.body) {
+      document.body.appendChild(stickyBar);
+    }
+
+    function checkVisibility(){
+      var rect = mainAtc.getBoundingClientRect();
+      var isVisible = rect.bottom > 0 && rect.top < (window.innerHeight || document.documentElement.clientHeight);
+      if (isVisible) {
+        stickyBar.classList.remove('show');
+      } else {
+        stickyBar.classList.add('show');
+      }
+    }
+
+    if ('IntersectionObserver' in window) {
       var obs = new IntersectionObserver(function(entries){
         entries.forEach(function(entry){
           if (entry.isIntersecting) {
@@ -523,6 +551,19 @@
         });
       }, { threshold: 0 });
       obs.observe(mainAtc);
+    } else {
+      window.addEventListener('scroll', checkVisibility, { passive: true });
+      window.addEventListener('resize', checkVisibility);
+    }
+    checkVisibility();
+  }
+
+  (function(){
+    nwipRefreshShipGauge();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', nwipInitStickyBar);
+    } else {
+      nwipInitStickyBar();
     }
   })();
 </script>
