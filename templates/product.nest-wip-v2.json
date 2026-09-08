@@ -20,12 +20,6 @@
         "margin_bottom": "no-indent"
       }
     },
-    "from-brand": {
-      "type": "nest-wip-from-brand",
-      "settings": {
-        "show_shop_all_link": true
-      }
-    },
     "apps": {
       "type": "apps",
       "settings": {
@@ -34,5 +28,5 @@
       "blocks": {}
     }
   },
-  "order": ["main", "you-may-also-like", "from-brand", "apps"]
+  "order": ["main", "you-may-also-like", "apps"]
 }
