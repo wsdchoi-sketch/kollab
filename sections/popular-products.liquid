@@ -1656,46 +1656,66 @@
 		}
 	}
 
-	/* Redesign the "View More" button on mobile: the shared section-header
-	   snippet switches .section-header__title__block to a column layout
-	   under 990px, and the button box (.section-header__button) stretches
-	   full-width but keeps its inner justify-content:flex-start, which
-	   sticks the pill button to the left edge. Center it as a proper
-	   full-width-ish pill below the heading instead, scoped to this
-	   section only. */
+	/* The "View More" button now lives below the product grid as its own
+	   block (.kollab-view-more) instead of inside the shared section-header
+	   snippet — hide the snippet's built-in button so it doesn't duplicate. */
+	.popular-products .section-header__button {
+		display: none !important;
+	}
+
+	.popular-products .kollab-view-more {
+		display: flex;
+		justify-content: center;
+		margin-top: 24px;
+	}
+
+	.popular-products .kollab-view-more .button {
+		min-width: 220px;
+		background: #F12C18 !important;
+		color: #ffffff !important;
+		border: none !important;
+		border-radius: 999px !important;
+		font-weight: 700 !important;
+		text-transform: none !important;
+		box-shadow: none !important;
+	}
+
+	.popular-products .kollab-view-more .button:hover {
+		background: #000000 !important;
+		color: #ffffff !important;
+	}
+
 	@media screen and (max-width: 768px) {
-		.popular-products .section-header__title__block {
-			align-items: center;
+		.popular-products .kollab-view-more {
+			margin-top: 16px;
 		}
 
-		.popular-products .section-header__button {
-			width: 100%;
-			justify-content: center;
-			margin-top: 18px;
-		}
-
-		.popular-products .section-header__button .button,
-		.popular-products .section-header__button a {
+		.popular-products .kollab-view-more .button {
 			width: 100%;
 			max-width: 280px;
 			min-height: 46px;
-			background: #F12C18 !important;
-			color: #ffffff !important;
-			border: none !important;
-			border-radius: 999px !important;
-			font-weight: 700 !important;
-			text-transform: none !important;
-			box-shadow: none !important;
+		}
+	}
+
+	/* Tighter section spacing per David's request. Wins the cascade because
+	   it's the last block in the file (equal specificity, later = wins). */
+	.popular-products {
+		padding-top: 32px !important;
+		padding-bottom: 32px !important;
+	}
+
+	.popular-products .section-header {
+		margin-bottom: 16px !important;
+	}
+
+	@media screen and (max-width: 768px) {
+		.popular-products {
+			padding-top: 20px !important;
+			padding-bottom: 24px !important;
 		}
 
-		.popular-products .section-header__button .button:hover,
-		.popular-products .section-header__button a:hover {
-			background: #000000 !important;
-			color: #ffffff !important;
-		}
-
-		.popular-products .section-header__button-arrow {
-			display: none !important;
+		.popular-products .section-header {
+			margin-bottom: 12px !important;
 		}
 	}
 {% endstyle %}
@@ -1788,14 +1808,12 @@
 			</div>
 			<button class='kollab-product-carousel__arrow kollab-product-carousel__arrow--next' type='button' aria-label='Next products' data-product-carousel-next>&rsaquo;</button>
 		</div>
-	</div>
-	{% if section.settings.section_header_type == 'type1' %}
-		<div class='section-header_btn'>
-			{% if section.settings.button_label != blank %}
+		{% if section.settings.button_label != blank %}
+			<div class='kollab-view-more'>
 				{% render 'button', layout: section %}
-			{% endif %}
-		</div>
-	{% endif %}
+			</div>
+		{% endif %}
+	</div>
 </div>
 
 <script>
