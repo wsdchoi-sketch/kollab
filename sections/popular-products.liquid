@@ -1674,7 +1674,7 @@
 			<button class='kollab-product-carousel__arrow kollab-product-carousel__arrow--prev' type='button' aria-label='Previous products' data-product-carousel-prev>&lsaquo;</button>
 			<div class='kollab-product-carousel__viewport'>
 				<div class='kollab-product-grid' data-product-carousel-track>
-					{% for product in product_list limit: 5 %}
+					{% for product in product_list limit: 8 %}
 						{% assign product_image_alt = product.featured_media.alt | default: product.title %}
 						{% assign first_available_variant = product.selected_or_first_available_variant %}
 						{% assign image_media_count = 0 %}
@@ -1827,7 +1827,7 @@
 		{
 			"type": "product_list",
 			"id": "product_list",
-			"limit": 5,
+			"limit": 8,
 			"label": "t:sections.all.product_card.product_list.label"
 		},
 		{
