@@ -1,0 +1,23 @@
+<div class="kollab-free-ship-strip">{{ section.settings.text | default: 'Free shipping on orders over $50' }}</div>
+
+<style>
+.kollab-free-ship-strip{background:#F12C18;color:#fff;font-size:15px;font-weight:700;text-align:center;padding:10px 12px;}
+</style>
+
+{% schema %}
+{
+  "name": "Free Shipping Strip",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "Text",
+      "default": "Free shipping on orders over $50"
+    }
+  ],
+  "presets": [
+    { "name": "Free Shipping Strip" }
+  ]
+}
+{% endschema %}
