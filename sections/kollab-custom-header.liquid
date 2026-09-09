@@ -513,7 +513,7 @@
 	}
 
 	@media screen and (max-width: 900px) {
-		.kollab-header {
+		.kollab-sticky-wrap {
 			position: sticky;
 			top: 0;
 			z-index: 80;
@@ -617,6 +617,7 @@
 	}
 </style>
 
+<div class="kollab-sticky-wrap">
 {%- if section.settings.announce_text != blank -%}
 	<div class="kollab-announce">{{ section.settings.announce_text }}</div>
 {%- endif -%}
@@ -711,6 +712,7 @@
 		</div>
 	</div>
 </header>
+</div>
 
 <div class="kollab-cart-drawer" data-kollab-cart-drawer hidden>
 	<div class="kollab-cart-drawer__overlay" data-kollab-cart-close></div>
