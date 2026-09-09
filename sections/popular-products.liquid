@@ -1671,10 +1671,14 @@
 
 	.popular-products .kollab-view-more .button {
 		min-width: 220px;
+		min-height: 44px;
+		padding: 9px 24px;
 		background: #F12C18 !important;
 		color: #ffffff !important;
 		border: none !important;
 		border-radius: 999px !important;
+		font-family: Arial, Helvetica, sans-serif !important;
+		font-size: 14px !important;
 		font-weight: 700 !important;
 		text-transform: none !important;
 		box-shadow: none !important;
@@ -1683,6 +1687,14 @@
 	.popular-products .kollab-view-more .button:hover {
 		background: #000000 !important;
 		color: #ffffff !important;
+	}
+
+	/* Fix images cropping top/bottom in the product grid — contain instead
+	   of cover, so the full product photo shows inside the fixed-height
+	   media box rather than being cropped to fill it. */
+	.popular-products .kollab-product-card__media img {
+		object-fit: contain;
+		background: #eeeeee;
 	}
 
 	@media screen and (max-width: 768px) {
