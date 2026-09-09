@@ -1,0 +1,12 @@
+  .nwip-rv{ padding:0 22px 56px; }
+  .nwip-rv-grid{ max-width:1100px; margin:0 auto; display:grid;
+    grid-template-columns:repeat(4,1fr); gap:24px; }
+  .nwip-rv-card{ text-decoration:none; color:inherit; display:block; }
+  .nwip-rv-card img{ width:100%; aspect-ratio:1/1; object-fit:cover; background:#F4F5F3; }
+  .nwip-rv-card .vd{ font-size:11px; letter-spacing:.06em; text-transform:uppercase;
+    color:#5C6266; margin-top:14px; }
+  .nwip-rv-card .nm{ font-size:14px; margin-top:4px; line-height:1.4; color:#16181A; }
+  .nwip-rv-card .price{ margin-top:4px; }
+  @media (max-width:700px){
+    .nwip-rv-grid{ grid-template-columns:repeat(2,1fr); gap:16px; }
+  }

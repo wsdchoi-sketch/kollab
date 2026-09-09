@@ -5,6 +5,12 @@
   'price' snippet class structure (price / price--on-sale / price-item--sale
   / price-item--regular) so sale pricing looks identical too.
   No app, no server calls — localStorage only.
+
+  REFACTOR (file split, no functional change): CSS moved to
+  assets/nest-wip-recently-viewed.css, JS moved to
+  assets/nest-wip-recently-viewed.js. No Liquid variables were used
+  inside the JS itself (data comes in via data-* attributes on the
+  markup), so no inline shim script was needed.
 {%- endcomment -%}
 
 {%- render 'section-header',
@@ -23,78 +29,9 @@
   <div class="nwip-rv-grid" id="nwipRecentlyViewedGrid"></div>
 </div>
 
-<style>
-  .nwip-rv{ padding:0 22px 56px; }
-  .nwip-rv-grid{ max-width:1100px; margin:0 auto; display:grid;
-    grid-template-columns:repeat(4,1fr); gap:24px; }
-  .nwip-rv-card{ text-decoration:none; color:inherit; display:block; }
-  .nwip-rv-card img{ width:100%; aspect-ratio:1/1; object-fit:cover; background:#F4F5F3; }
-  .nwip-rv-card .vd{ font-size:11px; letter-spacing:.06em; text-transform:uppercase;
-    color:#5C6266; margin-top:14px; }
-  .nwip-rv-card .nm{ font-size:14px; margin-top:4px; line-height:1.4; color:#16181A; }
-  .nwip-rv-card .price{ margin-top:4px; }
-  @media (max-width:700px){
-    .nwip-rv-grid{ grid-template-columns:repeat(2,1fr); gap:16px; }
-  }
-</style>
+{{ 'nest-wip-recently-viewed.css' | asset_url | stylesheet_tag }}
 
-<script>
-  (function(){
-    var KEY = 'nwip_recently_viewed';
-    var MAX = 8;
-    var root = document.getElementById('nwipRecentlyViewed');
-    if (!root) return;
-
-    var current = {
-      handle: root.dataset.currentHandle,
-      vendor: root.dataset.currentVendor,
-      title: root.dataset.currentTitle,
-      url: root.dataset.currentUrl,
-      image: root.dataset.currentImage,
-      price: root.dataset.currentPrice,
-      compare: root.dataset.currentCompare
-    };
-
-    var list = [];
-    try { list = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch (e) { list = []; }
-
-    list = list.filter(function(p){ return p.handle !== current.handle; });
-    if (current.handle) list.unshift(current);
-    list = list.slice(0, MAX);
-    try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
-
-    var others = list.filter(function(p){ return p.handle !== current.handle; });
-    if (others.length === 0) return;
-
-    var grid = document.getElementById('nwipRecentlyViewedGrid');
-    others.forEach(function(p){
-      var a = document.createElement('a');
-      a.className = 'nwip-rv-card';
-      a.href = p.url;
-
-      var priceHtml;
-      if (p.compare) {
-        priceHtml =
-          '<div class="price price--on-sale"><dl>' +
-          '<div class="price__sale"><dd><span class="price-item price-item--sale">' + p.price + '</span></dd>' +
-          '<dd class="price__compare"><span class="price-item price-item--regular">' + p.compare + '</span></dd></div>' +
-          '</dl></div>';
-      } else {
-        priceHtml =
-          '<div class="price"><dl><div class="price__regular"><dd><span class="price-item price-item--regular">' + p.price + '</span></dd></div></dl></div>';
-      }
-
-      a.innerHTML =
-        '<img src="' + p.image + '" alt="' + (p.title || '').replace(/"/g, '&quot;') + '" loading="lazy">' +
-        '<div class="vd">' + (p.vendor || '') + '</div>' +
-        '<div class="nm">' + p.title + '</div>' +
-        priceHtml;
-      grid.appendChild(a);
-    });
-
-    root.hidden = false;
-  })();
-</script>
+{{ 'nest-wip-recently-viewed.js' | asset_url | script_tag }}
 
 {% schema %}
 {
