@@ -106,8 +106,8 @@
     line-height:1.75; color:var(--ink60); }
   .nwip-detail-wrap img{ margin:0 auto 20px; }
 
-  .nwip-announce{ background:var(--ink); color:#fff; font-size:12.5px; font-weight:500;
-    letter-spacing:.04em; text-align:center; padding:10px 12px; }
+  .nwip-announce{ background:#F12C18; color:#fff; font-size:15px; font-weight:700;
+    letter-spacing:0; text-align:center; padding:10px 12px; }
 
   /* ---- Sticky add-to-cart bar ---- */
   .nwip-sticky-atc{ --ink:#16181A; --ink60:#5C6266; --ink30:#A8AEB1; --line:#E3E5E1; --surface:#F4F5F3;
