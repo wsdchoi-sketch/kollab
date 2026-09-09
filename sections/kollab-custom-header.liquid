@@ -4,6 +4,15 @@
 %}
 
 <style>
+	.kollab-announce {
+		background: #000000;
+		color: #ffffff;
+		font-size: 15px;
+		font-weight: 700;
+		text-align: center;
+		padding: 10px 12px;
+	}
+
 	.kollab-header {
 		position: relative;
 		z-index: 50;
@@ -608,6 +617,10 @@
 	}
 </style>
 
+{%- if section.settings.announce_text != blank -%}
+	<div class="kollab-announce">{{ section.settings.announce_text }}</div>
+{%- endif -%}
+
 <header class="kollab-header">
 	<div class="kollab-header__inner">
 		<button class="kollab-header__menu-toggle" type="button" aria-label="Open menu" aria-controls="KollabMobileMenu" aria-expanded="false">
@@ -972,6 +985,13 @@
 			"default": 110,
 			"unit": "px",
 			"label": "Logo width"
+		},
+		{
+			"type": "text",
+			"id": "announce_text",
+			"label": "Announcement text",
+			"default": "Free shipping on orders over $50",
+			"info": "Leave blank to hide the bar."
 		}
 	]
 }
