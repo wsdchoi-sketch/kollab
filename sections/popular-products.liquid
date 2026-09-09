@@ -1655,6 +1655,49 @@
 			font-size: 24px !important;
 		}
 	}
+
+	/* Redesign the "View More" button on mobile: the shared section-header
+	   snippet switches .section-header__title__block to a column layout
+	   under 990px, and the button box (.section-header__button) stretches
+	   full-width but keeps its inner justify-content:flex-start, which
+	   sticks the pill button to the left edge. Center it as a proper
+	   full-width-ish pill below the heading instead, scoped to this
+	   section only. */
+	@media screen and (max-width: 768px) {
+		.popular-products .section-header__title__block {
+			align-items: center;
+		}
+
+		.popular-products .section-header__button {
+			width: 100%;
+			justify-content: center;
+			margin-top: 18px;
+		}
+
+		.popular-products .section-header__button .button,
+		.popular-products .section-header__button a {
+			width: 100%;
+			max-width: 280px;
+			min-height: 46px;
+			background: #F12C18 !important;
+			color: #ffffff !important;
+			border: none !important;
+			border-radius: 999px !important;
+			font-weight: 700 !important;
+			text-transform: none !important;
+			box-shadow: none !important;
+		}
+
+		.popular-products .section-header__button .button:hover,
+		.popular-products .section-header__button a:hover {
+			background: #000000 !important;
+			color: #ffffff !important;
+		}
+
+		.popular-products .section-header__button-arrow {
+			display: none !important;
+		}
+	}
 {% endstyle %}
 
 {% assign product_list = section.settings.product_list %}
