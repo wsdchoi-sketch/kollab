@@ -5,7 +5,7 @@
  * This file may be updated by the Shopify admin theme editor
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
- * (sync retry)
+ * (sync retry v2)
  * ------------------------------------------------------------
  */
 {
@@ -209,4 +209,437 @@
       "custom_css": [],
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
-        "custom_liquid": "<style>\n  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');\n\n  .kollab-title {\n\n    font-family: \"Instrument Serif\", serif !important;\n    font-size: 48px;\n    font-weight: 400;\n    line-height: 1.2;\n    margin: 0;\n    color: #1f1f1f;\n    text-align: center;\npadding-top:20px;\n  }\n\n  .kollab-title i {\n    font-family: \"Instrument Serif\", serif !important;\n    font-style: italic;\n    font-weight: 400;\n  }\n</style>\n\n<h1 class=\"kollab-title\"><i>#letskollab</i></h1>\"\n      }\n    },\n    \"rich_text_zLNpXX\": {\n      \"type\": \"rich-text\",\n      \"blocks\": {\n        \"heading_UwfTyq\": {\n          \"type\": \"heading\",\n          \"settings\": {\n            \"heading\": \"<strong>follow us </strong><em><strong>@kollab-la</strong></em>\",\n            \"heading_size\": \"h1\"\n          }\n        }\n      },\n      \"block_order\": [\n        \"heading_UwfTyq\"\n      ],\n      \"custom_css\": [\n        \"h2.title--section em {color: #dc0100;}\"\n      ],\n      \"name\": \"t:sections.rich-text.presets.name\",\n      \"settings\": {\n        \"color_scheme\": \"\",\n        \"full_width\": true,\n        \"content_horizontal\": \"center\",\n        \"margin_top\": \"s\",\n        \"margin_bottom\": \"no-indent\",\n        \"padding_top\": \"s\",\n        \"padding_bottom\": \"no-indent\"\n      }\n    },\n    \"custom_liquid_8P3kkx\": {\n      \"type\": \"custom-liquid\",\n      \"name\": \"t:sections.custom-liquid.presets.name\",\n      \"settings\": {\n        \"custom_liquid\": \"<img style=\\\"margin-top: 1em; width: 100%;\\\" src=\\\"https://cdn.shopify.com/s/files/1/0588/2088/6577/files/home-collage.png\\\">\"\n      }\n    },\n    \"newsletter_EDWgym\": {\n      \"type\": \"newsletter\",\n      \"custom_css\": [\n        \".newsletter__form {max-width: 60.5rem; width: 100%; text-align: center;}\",\n        \"h2.newsletter__title,h2.newsletter__title em {font-family: \\\"Instrument Serif\\\", serif !important; font-weight: 400 !important; line-height: 1.1; letter-spacing: 0;}\",\n        \"h2.newsletter__title em {color: #dc0100; font-style: italic !important;}\"\n      ],\n      \"name\": \"Newsletter\",\n      \"settings\": {\n        \"color_scheme\": \"scheme-ec7c760c-742c-40f4-b9e6-dad5ef7af9c4\",\n        \"position\": \"center\",\n        \"heading\": \"Stay <em>Updated</em>\",\n        \"text\": \"<p>By subscribing, you agree to our terms & conditions.</p>\",\n        \"newsletter_text\": \"<p>By subscribing, you agree to our terms & conditions.</p>\",\n        \"button_style\": \"primary\",\n        \"margin_top\": \"m\",\n        \"margin_bottom\": \"no-indent\",\n        \"padding_top\": \"m\",\n        \"padding_bottom\": \"m\"\n      }\n    },\n    \"lookbook_KfNLay\": {\n      \"type\": \"lookbook\",\n      \"blocks\": {\n        \"categories_jaJpG6\": {\n          \"type\": \"categories\",\n          \"settings\": {\n            \"product\": \"newsku_130\",\n            \"image_ratio\": \"square\",\n            \"image\": \"shopify://shop_images/Screenshot_2025-10-28_at_11.50.41_PM.png\",\n            \"heading\": \"WEGLAN\",\n            \"description\": \"\"\n          }\n        },\n        \"categories_x73Arp\": {\n          \"type\": \"categories\",\n          \"settings\": {\n            \"product\": \"newsku_6\",\n            \"image_ratio\": \"square\",\n            \"video\": \"shopify://files/videos/FocuSee Project 2025-10-28 23-54-31.mp4\",\n            \"heading\": \"Boundless Thought\",\n            \"description\": \"\"\n          }\n        },\n        \"categories_j4Cawt\": {\n          \"type\": \"categories\",\n          \"settings\": {\n            \"product\": \"vanilla-taste-burnt-cherry-vanilla-body-cream\",\n            \"image_ratio\": \"square\",\n            \"image\": \"shopify://shop_images/Screenshot_2025-10-28_at_11.58.44_PM.png\",\n            \"heading\": \"골든 필 바닐라 핸드크림 30ML\",\n            \"description\": \"\"\n          }\n        }\n      },\n      \"block_order\": [\n        \"categories_jaJpG6\",\n        \"categories_x73Arp\",\n        \"categories_j4Cawt\"\n      ],\n      \"disabled\": true,\n      \"settings\": {\n        \"scroll_type\": false,\n        \"subheading\": \"NEW\",\n        \"heading\": \"<strong>NEW BRANDS</strong>\",\n        \"description\": \"\",\n        \"enable_border_top\": true,\n        \"button_label\": \"\",\n        \"button_link\": \"\",\n        \"button_style\": \"primary\",\n        \"button_arrow\": false,\n        \"margin_top\": \"no-indent\",\n        \"margin_bottom\": \"l\"\n      }\n    },\n    \"brands_DGtCJF\": {\n      \"type\": \"brands\",\n      \"blocks\": {\n        \"logo_nzHzp9\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/Observco_logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_xhUHKE\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/Differ_Deeper_logo.jpg\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_eaKGNh\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/muzmak_logo.jpg\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_RY8DJX\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/sampar_logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_ng3Vt6\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/amarda_logo2.jpg\",\n            \"image_width\": 130,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_eQ6ReX\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/arencia_logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_ygPNYf\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/weglan_logo_update.jpg\",\n            \"image_width\": 185,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_AyPkFw\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/Vanilla_Taste_logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_GakW4j\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/Muzigae_mansion_logo_2.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_8QXzj4\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/wellinus_logo_green.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_P6CEkX\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/seleve-logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_qAGEkr\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/olliwello-logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_a67YMU\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/iottie_logo_black_header.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_cVqFTM\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/shaishaishai_logotype.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_t7xwwe\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/raume_logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_ATCr7K\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/sumsae_logo.png\",\n            \"image_width\": 150,\n            \"brand_link\": \"\"\n          }\n        }\n      },\n      \"block_order\": [\n        \"logo_nzHzp9\",\n        \"logo_xhUHKE\",\n        \"logo_eaKGNh\",\n        \"logo_RY8DJX\",\n        \"logo_ng3Vt6\",\n        \"logo_eQ6ReX\",\n        \"logo_ygPNYf\",\n        \"logo_AyPkFw\",\n        \"logo_GakW4j\",\n        \"logo_8QXzj4\",\n        \"logo_P6CEkX\",\n        \"logo_qAGEkr\",\n        \"logo_a67YMU\",\n        \"logo_cVqFTM\",\n        \"logo_t7xwwe\",\n        \"logo_ATCr7K\"\n      ],\n      \"settings\": {\n        \"ticker_speed\": 40,\n        \"direction\": \"left\",\n        \"margin_top\": \"xs\",\n        \"margin_bottom\": \"xs\"\n      }\n    },\n    \"brands_BGpVkG\": {\n      \"type\": \"brands\",\n      \"blocks\": {\n        \"logo_GywJDm\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_width\": 100,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_K3Fcna\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_width\": 100,\n            \"brand_link\": \"\"\n          }\n        },\n        \"logo_i4DTV4\": {\n          \"type\": \"logo\",\n          \"settings\": {\n            \"image_1\": \"shopify://shop_images/472f9b229ea5abb04fb3c573f27ebb9b.png\",\n            \"image_width\": 140,\n            \"brand_link\": \"\"\n          }\n        }\n      },\n      \"block_order\": [\n        \"logo_GywJDm\",\n        \"logo_K3Fcna\",\n        \"logo_i4DTV4\"\n      ],\n      \"disabled\": true,\n      \"name\": \"t:sections.brands.name\",\n      \"settings\": {\n        \"ticker_speed\": 37,\n        \"direction\": \"right\",\n        \"margin_top\": \"no-indent\",\n        \"margin_bottom\": \"xs\"\n      }\n    },\n    \"slideshow_AixCf4\": {\n      \"type\": \"slideshow\",\n      \"blocks\": {\n        \"slideshow_item_PrFCBJ\": {\n          \"type\": \"slideshow_item\",\n          \"settings\": {\n            \"color_scheme\": \"\",\n            \"subheading\": \"\",\n            \"heading\": \"Your Feature Showcase\",\n            \"text\": \"<p>Use this space to provide details about what’s being featured in this slide, whether it’s a new launch, a trending product, or an exclusive deal.</p>\",\n            \"button_label\": \"View More\",\n            \"button_link\": \"\",\n            \"button_style\": \"primary\",\n            \"button_arrow\": true,\n            \"overlay_opacity\": 20,\n            \"article\": \"\"\n          }\n        },\n        \"slideshow_item_YUqTYa\": {\n          \"type\": \"slideshow_item\",\n          \"settings\": {\n            \"color_scheme\": \"\",\n            \"subheading\": \"\",\n            \"heading\": \"Your Feature Showcase\",\n            \"text\": \"<p>Use this space to provide details about what’s being featured in this slide, whether it’s a new launch, a trending product, or an exclusive deal.</p>\",\n            \"button_label\": \"View More\",\n            \"button_link\": \"\",\n            \"button_style\": \"primary\",\n            \"button_arrow\": true,\n            \"overlay_opacity\": 20,\n            \"article\": \"\"\n          }\n        },\n        \"slideshow_item_DGjCP3\": {\n          \"type\": \"slideshow_item\",\n          \"settings\": {\n            \"color_scheme\": \"\",\n            \"subheading\": \"\",\n            \"heading\": \"Your Feature Showcase\",\n            \"text\": \"<p>Use this space to provide details about what’s being featured in this slide, whether it’s a new launch, a trending product, or an exclusive deal.</p>\",\n            \"button_label\": \"View More\",\n            \"button_link\": \"\",\n            \"button_style\": \"primary\",\n            \"button_arrow\": true,\n            \"overlay_opacity\": 20,\n            \"article\": \"\"\n          }\n        }\n      },\n      \"block_order\": [\n        \"slideshow_item_PrFCBJ\",\n        \"slideshow_item_YUqTYa\",\n        \"slideshow_item_DGjCP3\"\n      ],\n      \"disabled\": true,\n      \"name\": \"t:sections.slideshow.name\",\n      \"settings\": {\n        \"section_header_type\": \"type1\",\n        \"enable_border_top\": false,\n        \"subheading\": \"\",\n        \"heading\": \"\",\n        \"description\": \"\",\n        \"button_label\": \"\",\n        \"button_link\": \"\",\n        \"button_style\": \"primary\",\n        \"button_arrow\": false,\n        \"section_layout\": \"full\",\n        \"section_alignment\": \"left\",\n        \"vertical_alignment\": \"center\",\n        \"container_size\": \"small\",\n        \"image_size\": \"medium\",\n        \"transition_effect\": \"stretch\",\n        \"is_autoplay\": false,\n        \"show_pagination\": true,\n        \"slideshow_speed\": 1.1,\n        \"slideshow_delay\": 3,\n        \"margin_top\": \"no-indent\",\n        \"margin_bottom\": \"no-indent\"\n      }\n    },\n    \"1772434023f313a0df\": {\n      \"type\": \"apps\",\n      \"disabled\": true,\n      \"settings\": {\n        \"include_margins\": true\n      }\n    },\n    \"contact_form_a3GtqL\": {\n      \"type\": \"contact-form\",\n      \"custom_css\": [],\n      \"name\": \"t:sections.contact-form.presets.name\",\n      \"settings\": {\n        \"heading\": \"<strong>Contact </strong><em><strong>Us</strong></em>\",\n        \"description\": \"\",\n        \"enable_border_top\": false,\n        \"form_heading\": \"Get in Touch\",\n        \"form_desc\": \"<p>Use the form below to send us a message<br/>our team will respond as quickly as possible.</p>\",\n        \"additional_text\": \"\",\n        \"margin_top\": \"m\",\n        \"margin_bottom\": \"m\"\n      }\n    }\n  },\n  \"order\": [\n    \"custom_liquid_YUBPUp\",\n    \"custom_liquid_eWHRwW\",\n    \"image_banner_qbAKAq\",\n    \"popular_products_EpxFXV\",\n    \"custom_liquid_4nG6gC\",\n    \"highlight_features_zyHrL8\",\n    \"1761729198bbbe3cd6\",\n    \"ticker_n4Hqni\",\n    \"custom_liquid_Jt6zy7\",\n    \"rich_text_zLNpXX\",\n    \"custom_liquid_8P3kkx\",\n    \"newsletter_EDWgym\",\n    \"lookbook_KfNLay\",\n    \"brands_DGtCJF\",\n    \"brands_BGpVkG\",\n    \"slideshow_AixCf4\",\n    \"1772434023f313a0df\",\n    \"contact_form_a3GtqL\"\n  ]\n}
+        "custom_liquid": "<style>\n  @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');\n\n  .kollab-title {\n\n    font-family: \"Instrument Serif\", serif !important;\n    font-size: 48px;\n    font-weight: 400;\n    line-height: 1.2;\n    margin: 0;\n    color: #1f1f1f;\n    text-align: center;\npadding-top:20px;\n  }\n\n  .kollab-title i {\n    font-family: \"Instrument Serif\", serif !important;\n    font-style: italic;\n    font-weight: 400;\n  }\n</style>\n\n<h1 class=\"kollab-title\"><i>#letskollab</i></h1>"
+      }
+    },
+    "rich_text_zLNpXX": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_UwfTyq": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>follow us </strong><em><strong>@kollab-la</strong></em>",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_UwfTyq"
+      ],
+      "custom_css": [
+        "h2.title--section em {color: #dc0100;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "color_scheme": "",
+        "full_width": true,
+        "content_horizontal": "center",
+        "margin_top": "s",
+        "margin_bottom": "no-indent",
+        "padding_top": "s",
+        "padding_bottom": "no-indent"
+      }
+    },
+    "custom_liquid_8P3kkx": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<img style=\"margin-top: 1em; width: 100%;\" src=\"https://cdn.shopify.com/s/files/1/0588/2088/6577/files/home-collage.png\">"
+      }
+    },
+    "newsletter_EDWgym": {
+      "type": "newsletter",
+      "custom_css": [
+        ".newsletter__form {max-width: 60.5rem; width: 100%; text-align: center;}",
+        "h2.newsletter__title,h2.newsletter__title em {font-family: \"Instrument Serif\", serif !important; font-weight: 400 !important; line-height: 1.1; letter-spacing: 0;}",
+        "h2.newsletter__title em {color: #dc0100; font-style: italic !important;}"
+      ],
+      "name": "Newsletter",
+      "settings": {
+        "color_scheme": "scheme-ec7c760c-742c-40f4-b9e6-dad5ef7af9c4",
+        "position": "center",
+        "heading": "Stay <em>Updated</em>",
+        "text": "<p>By subscribing, you agree to our terms & conditions.</p>",
+        "newsletter_text": "<p>By subscribing, you agree to our terms & conditions.</p>",
+        "button_style": "primary",
+        "margin_top": "m",
+        "margin_bottom": "no-indent",
+        "padding_top": "m",
+        "padding_bottom": "m"
+      }
+    },
+    "lookbook_KfNLay": {
+      "type": "lookbook",
+      "blocks": {
+        "categories_jaJpG6": {
+          "type": "categories",
+          "settings": {
+            "product": "newsku_130",
+            "image_ratio": "square",
+            "image": "shopify://shop_images/Screenshot_2025-10-28_at_11.50.41_PM.png",
+            "heading": "WEGLAN",
+            "description": ""
+          }
+        },
+        "categories_x73Arp": {
+          "type": "categories",
+          "settings": {
+            "product": "newsku_6",
+            "image_ratio": "square",
+            "video": "shopify://files/videos/FocuSee Project 2025-10-28 23-54-31.mp4",
+            "heading": "Boundless Thought",
+            "description": ""
+          }
+        },
+        "categories_j4Cawt": {
+          "type": "categories",
+          "settings": {
+            "product": "vanilla-taste-burnt-cherry-vanilla-body-cream",
+            "image_ratio": "square",
+            "image": "shopify://shop_images/Screenshot_2025-10-28_at_11.58.44_PM.png",
+            "heading": "골든 필 바닐라 핸드크림 30ML",
+            "description": ""
+          }
+        }
+      },
+      "block_order": [
+        "categories_jaJpG6",
+        "categories_x73Arp",
+        "categories_j4Cawt"
+      ],
+      "disabled": true,
+      "settings": {
+        "scroll_type": false,
+        "subheading": "NEW",
+        "heading": "<strong>NEW BRANDS</strong>",
+        "description": "",
+        "enable_border_top": true,
+        "button_label": "",
+        "button_link": "",
+        "button_style": "primary",
+        "button_arrow": false,
+        "margin_top": "no-indent",
+        "margin_bottom": "l"
+      }
+    },
+    "brands_DGtCJF": {
+      "type": "brands",
+      "blocks": {
+        "logo_nzHzp9": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/Observco_logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_xhUHKE": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/Differ_Deeper_logo.jpg",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_eaKGNh": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/muzmak_logo.jpg",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_RY8DJX": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/sampar_logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_ng3Vt6": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/amarda_logo2.jpg",
+            "image_width": 130,
+            "brand_link": ""
+          }
+        },
+        "logo_eQ6ReX": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/arencia_logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_ygPNYf": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/weglan_logo_update.jpg",
+            "image_width": 185,
+            "brand_link": ""
+          }
+        },
+        "logo_AyPkFw": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/Vanilla_Taste_logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_GakW4j": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/Muzigae_mansion_logo_2.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_8QXzj4": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/wellinus_logo_green.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_P6CEkX": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/seleve-logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_qAGEkr": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/olliwello-logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_a67YMU": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/iottie_logo_black_header.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_cVqFTM": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/shaishaishai_logotype.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_t7xwwe": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/raume_logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        },
+        "logo_ATCr7K": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/sumsae_logo.png",
+            "image_width": 150,
+            "brand_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_nzHzp9",
+        "logo_xhUHKE",
+        "logo_eaKGNh",
+        "logo_RY8DJX",
+        "logo_ng3Vt6",
+        "logo_eQ6ReX",
+        "logo_ygPNYf",
+        "logo_AyPkFw",
+        "logo_GakW4j",
+        "logo_8QXzj4",
+        "logo_P6CEkX",
+        "logo_qAGEkr",
+        "logo_a67YMU",
+        "logo_cVqFTM",
+        "logo_t7xwwe",
+        "logo_ATCr7K"
+      ],
+      "settings": {
+        "ticker_speed": 40,
+        "direction": "left",
+        "margin_top": "xs",
+        "margin_bottom": "xs"
+      }
+    },
+    "brands_BGpVkG": {
+      "type": "brands",
+      "blocks": {
+        "logo_GywJDm": {
+          "type": "logo",
+          "settings": {
+            "image_width": 100,
+            "brand_link": ""
+          }
+        },
+        "logo_K3Fcna": {
+          "type": "logo",
+          "settings": {
+            "image_width": 100,
+            "brand_link": ""
+          }
+        },
+        "logo_i4DTV4": {
+          "type": "logo",
+          "settings": {
+            "image_1": "shopify://shop_images/472f9b229ea5abb04fb3c573f27ebb9b.png",
+            "image_width": 140,
+            "brand_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "logo_GywJDm",
+        "logo_K3Fcna",
+        "logo_i4DTV4"
+      ],
+      "disabled": true,
+      "name": "t:sections.brands.name",
+      "settings": {
+        "ticker_speed": 37,
+        "direction": "right",
+        "margin_top": "no-indent",
+        "margin_bottom": "xs"
+      }
+    },
+    "slideshow_AixCf4": {
+      "type": "slideshow",
+      "blocks": {
+        "slideshow_item_PrFCBJ": {
+          "type": "slideshow_item",
+          "settings": {
+            "color_scheme": "",
+            "subheading": "",
+            "heading": "Your Feature Showcase",
+            "text": "<p>Use this space to provide details about what’s being featured in this slide, whether it’s a new launch, a trending product, or an exclusive deal.</p>",
+            "button_label": "View More",
+            "button_link": "",
+            "button_style": "primary",
+            "button_arrow": true,
+            "overlay_opacity": 20,
+            "article": ""
+          }
+        },
+        "slideshow_item_YUqTYa": {
+          "type": "slideshow_item",
+          "settings": {
+            "color_scheme": "",
+            "subheading": "",
+            "heading": "Your Feature Showcase",
+            "text": "<p>Use this space to provide details about what’s being featured in this slide, whether it’s a new launch, a trending product, or an exclusive deal.</p>",
+            "button_label": "View More",
+            "button_link": "",
+            "button_style": "primary",
+            "button_arrow": true,
+            "overlay_opacity": 20,
+            "article": ""
+          }
+        },
+        "slideshow_item_DGjCP3": {
+          "type": "slideshow_item",
+          "settings": {
+            "color_scheme": "",
+            "subheading": "",
+            "heading": "Your Feature Showcase",
+            "text": "<p>Use this space to provide details about what’s being featured in this slide, whether it’s a new launch, a trending product, or an exclusive deal.</p>",
+            "button_label": "View More",
+            "button_link": "",
+            "button_style": "primary",
+            "button_arrow": true,
+            "overlay_opacity": 20,
+            "article": ""
+          }
+        }
+      },
+      "block_order": [
+        "slideshow_item_PrFCBJ",
+        "slideshow_item_YUqTYa",
+        "slideshow_item_DGjCP3"
+      ],
+      "disabled": true,
+      "name": "t:sections.slideshow.name",
+      "settings": {
+        "section_header_type": "type1",
+        "enable_border_top": false,
+        "subheading": "",
+        "heading": "",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "primary",
+        "button_arrow": false,
+        "section_layout": "full",
+        "section_alignment": "left",
+        "vertical_alignment": "center",
+        "container_size": "small",
+        "image_size": "medium",
+        "transition_effect": "stretch",
+        "is_autoplay": false,
+        "show_pagination": true,
+        "slideshow_speed": 1.1,
+        "slideshow_delay": 3,
+        "margin_top": "no-indent",
+        "margin_bottom": "no-indent"
+      }
+    },
+    "1772434023f313a0df": {
+      "type": "apps",
+      "disabled": true,
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "contact_form_a3GtqL": {
+      "type": "contact-form",
+      "custom_css": [],
+      "name": "t:sections.contact-form.presets.name",
+      "settings": {
+        "heading": "<strong>Contact </strong><em><strong>Us</strong></em>",
+        "description": "",
+        "enable_border_top": false,
+        "form_heading": "Get in Touch",
+        "form_desc": "<p>Use the form below to send us a message<br/>our team will respond as quickly as possible.</p>",
+        "additional_text": "",
+        "margin_top": "m",
+        "margin_bottom": "m"
+      }
+    }
+  },
+  "order": [
+    "custom_liquid_YUBPUp",
+    "custom_liquid_eWHRwW",
+    "image_banner_qbAKAq",
+    "popular_products_EpxFXV",
+    "custom_liquid_4nG6gC",
+    "highlight_features_zyHrL8",
+    "1761729198bbbe3cd6",
+    "ticker_n4Hqni",
+    "custom_liquid_Jt6zy7",
+    "rich_text_zLNpXX",
+    "custom_liquid_8P3kkx",
+    "newsletter_EDWgym",
+    "lookbook_KfNLay",
+    "brands_DGtCJF",
+    "brands_BGpVkG",
+    "slideshow_AixCf4",
+    "1772434023f313a0df",
+    "contact_form_a3GtqL"
+  ]
+}
