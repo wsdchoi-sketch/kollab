@@ -13,6 +13,11 @@
 		font-family: Arial, Helvetica, sans-serif;
 	}
 
+	.kollab-header-section {
+		position: relative;
+		z-index: var(--header-z-index, 1000);
+	}
+
 	.kollab-header,
 	.kollab-header * {
 		box-sizing: border-box;
@@ -580,6 +585,12 @@
 		.kollab-header__mega {
 			display: none !important;
 		}
+
+		.kollab-header__nav .kollab-header__item:first-child .kollab-header__link {
+			color: #f12c18;
+			font-weight: 700;
+			border-bottom-color: #f12c18;
+		}
 	}
 </style>
 
@@ -931,7 +942,7 @@
 {% schema %}
 {
 	"name": "Kollab custom header",
-	"class": "shopify-section-header",
+	"class": "kollab-header-section",
 	"settings": [
 		{
 			"type": "image_picker",
