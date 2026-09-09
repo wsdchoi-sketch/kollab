@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "t:sections.header.settings.header-group.label",
@@ -5,11 +14,11 @@
     "announcement_bar_free_shipping": {
       "type": "announcement-bar",
       "custom_css": [
-        ".announcement-bar.color-background-2{background:#f12c18!important}",
-        ".announcement-bar__text{color:#fff!important;font-weight:700;font-size:15px}",
-        ".announcement-wrapper{justify-content:center}",
-        ".announcement-wrapper>div:first-child{display:none}",
-        ".icon-close{display:none!important}"
+        ".announcement-bar.color-background-2 {background: #f12c18 !important;}",
+        ".announcement-bar__text {color: #fff !important; font-weight: 700; font-size: 15px;}",
+        ".announcement-wrapper {justify-content: center;}",
+        ".announcement-wrapper > div:first-child {display: none;}",
+        ".icon-close {display: none !important;}"
       ],
       "settings": {
         "height": 40,
@@ -23,10 +32,18 @@
         "logo": "shopify://shop_images/Kollab_LOGO-01_551f6dc3-b25b-4223-9c11-6c3d3a3fc4a9.png",
         "logo_width": 110
       }
+    },
+    "kollab_free_ship_strip_Ei8EBF": {
+      "type": "kollab-free-ship-strip",
+      "name": "Free Shipping Strip",
+      "settings": {
+        "text": "Free shipping on orders over $50"
+      }
     }
   },
   "order": [
     "announcement_bar_free_shipping",
-    "header"
+    "header",
+    "kollab_free_ship_strip_Ei8EBF"
   ]
 }
