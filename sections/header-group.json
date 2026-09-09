@@ -2,6 +2,21 @@
   "type": "header",
   "name": "t:sections.header.settings.header-group.label",
   "sections": {
+    "announcement_bar_free_shipping": {
+      "type": "announcement-bar",
+      "custom_css": [
+        ".announcement-bar.color-background-2{background:#000!important}",
+        ".announcement-bar__text{color:#fff!important;font-weight:700;font-size:15px}",
+        ".announcement-wrapper{justify-content:center}",
+        ".announcement-wrapper>div:first-child{display:none}",
+        ".icon-close{display:none!important}"
+      ],
+      "settings": {
+        "height": 40,
+        "color_scheme": "background-2",
+        "text": "<p>Free shipping on orders over $50</p>"
+      }
+    },
     "header": {
       "type": "kollab-custom-header",
       "settings": {
@@ -11,6 +26,7 @@
     }
   },
   "order": [
+    "announcement_bar_free_shipping",
     "header"
   ]
 }
