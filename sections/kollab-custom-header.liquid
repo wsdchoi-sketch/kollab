@@ -586,10 +586,24 @@
 			display: none !important;
 		}
 
+		.kollab-header__nav .kollab-header__item:first-child {
+			padding: 6px 8px;
+		}
+
 		.kollab-header__nav .kollab-header__item:first-child .kollab-header__link {
-			color: #f12c18;
+			width: 100%;
+			min-height: 34px;
+			background: #f12c18;
+			color: #ffffff;
+			border: none;
+			border-radius: 4px;
 			font-weight: 700;
-			border-bottom-color: #f12c18;
+		}
+
+		.kollab-header__nav .kollab-header__item:first-child .kollab-header__link:hover,
+		.kollab-header__nav .kollab-header__item:first-child .kollab-header__link:focus-visible {
+			color: #ffffff;
+			background: #d81f0e;
 		}
 	}
 </style>
