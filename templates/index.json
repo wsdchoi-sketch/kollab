@@ -36,11 +36,14 @@
           "cosrx-one-step-original-blemish-pore-clear-pad-300ml-100-pads",
           "de-maf-my-glow-oil-20ml",
           "sumsae-isoflavone-hydrating-essence",
-          "de-maf-i-glow-jojoba-oil-multi-balm-1"
+          "de-maf-i-glow-jojoba-oil-multi-balm-1",
+          "seleve-glow-caviar-ampoule",
+          "ciel-etoile-calming-cream-50g",
+          "uahage-sebyuk-serum-daily-antioxidant-b-30ml"
         ],
         "per_row": 4,
         "section_header_type": "type2",
-        "mobile_slider_grid_layout": "slider",
+        "mobile_slider_grid_layout": "grid",
         "heading": "SHOP <em>NOW</em>",
         "subheading": "",
         "description": "",
@@ -85,120 +88,6 @@
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
         "custom_liquid": "<section class=\"kollab-calendar-section\">\n\n    <div class=\"calendar-header\">\n        <p class=\"calendar-subtitle\">WHAT'S HAPPENING</p>\n        <h2>Upcoming <span>Events</span></h2>\n    </div>\n\n    <div class=\"calendar-embed-wrap\">\n        <iframe\n            src=\"https://luma.com/embed/calendar/cal-xVZvsoSO9NSiT44/events?lt=light\"\n            width=\"100%\"\n            height=\"300\"\n            frameborder=\"0\"\n            style=\"border: none; border-radius: 18px;\"\n            allowfullscreen=\"\"\n            aria-hidden=\"false\"\n            tabindex=\"0\"\n        ></iframe>\n    </div>\n\n</section>\n\n<style>\n\n.kollab-calendar-section{\n    padding:70px 6% 80px;\n    background:#fff;\n    font-family:Arial, sans-serif;\n}\n\n.calendar-header{\n    text-align:center;\n    margin-bottom:36px;\n}\n\n.calendar-subtitle{\n    color:#F12C18;\n    font-size:13px;\n    font-weight:700;\n    letter-spacing:0;\n    margin-bottom:10px;\n}\n\n.calendar-header h2{\n    font-size:clamp(38px,5vw,68px);\n    margin:0;\n    font-weight:900;\n    color:#000;\n    line-height:1;\n}\n\n.calendar-header h2 span{\n    color:#F12C18;\n    font-style:italic;\n}\n\n.calendar-embed-wrap{\n    max-width:880px;\n    margin:0 auto;\n    border:1px solid #d8d8d8;\n    border-radius:18px;\n    overflow:hidden;\n    background:#fff;\n}\n\n.calendar-embed-wrap iframe{\n    display:block;\n    width:100%;\n}\n\n@media(max-width:768px){\n\n    .kollab-calendar-section{\n        padding:56px 5% 60px;\n    }\n\n    .calendar-header{\n        margin-bottom:24px;\n    }\n\n    .calendar-embed-wrap iframe{\n        height:340px;\n    }\n\n}\n\n</style>"
-      }
-    },
-    "collection-grid": {
-      "type": "collection-grid",
-      "blocks": {
-        "categories-1": {
-          "type": "categories",
-          "settings": {
-            "collection": "muzmak",
-            "button_label": "",
-            "button_link": "",
-            "button_arrow": true,
-            "column_start": 1,
-            "column_end": 2,
-            "row_start": "unset",
-            "row_end": "unset"
-          }
-        },
-        "categories-2": {
-          "type": "categories",
-          "settings": {
-            "collection": "vanilla-taste",
-            "collection_image": "shopify://shop_images/Vanilla_Taste_logo.png",
-            "button_label": "",
-            "button_link": "",
-            "button_arrow": true,
-            "column_start": 4,
-            "column_end": 4,
-            "row_start": "unset",
-            "row_end": "unset"
-          }
-        },
-        "categories_ADxhdF": {
-          "type": "categories",
-          "settings": {
-            "collection": "self-beauty",
-            "collection_image": "shopify://shop_images/brand_title_9113928cd2-2033-444d-909a-d3d44113196.jpg",
-            "button_label": "",
-            "button_link": "",
-            "button_arrow": true,
-            "column_start": 3,
-            "column_end": 4,
-            "row_start": "unset",
-            "row_end": "unset"
-          }
-        },
-        "categories_tUq6Cx": {
-          "type": "categories",
-          "settings": {
-            "collection": "lemiu",
-            "button_label": "",
-            "button_link": "",
-            "button_arrow": true,
-            "column_start": 3,
-            "column_end": 3,
-            "row_start": "unset",
-            "row_end": "unset"
-          }
-        },
-        "categories_xnPtMy": {
-          "type": "categories",
-          "settings": {
-            "collection": "sungboon-editor",
-            "button_label": "",
-            "button_link": "",
-            "button_arrow": false,
-            "column_start": 2,
-            "column_end": 2,
-            "row_start": "1",
-            "row_end": "4"
-          }
-        }
-      },
-      "block_order": [
-        "categories-1",
-        "categories-2",
-        "categories_ADxhdF",
-        "categories_tUq6Cx",
-        "categories_xnPtMy"
-      ],
-      "disabled": true,
-      "custom_css": [
-        ".collection-card__content {display: none;}"
-      ],
-      "settings": {
-        "section_header_type": "type1",
-        "show_arrows": true,
-        "enable_border_top": true,
-        "subheading": "",
-        "heading": "Our Collections",
-        "description": "",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "primary",
-        "button_arrow": false,
-        "section_layout": "slider",
-        "is_autoplay": true,
-        "slider_per_row": 3,
-        "slider_speed": 1.1,
-        "slider_delay": 3,
-        "columns": 2,
-        "blocks_spacing": "m",
-        "image_ratio": "square",
-        "card_type": "overlay",
-        "hover_effect": "zoom",
-        "text_horizontal": "center",
-        "overlay_opacity": 10,
-        "heading_size": "h2",
-        "desc_size": "medium-font",
-        "text_animation": true,
-        "show_collection_desc": false,
-        "show_collection_button": true,
-        "margin_top": "no-indent",
-        "margin_bottom": "l"
       }
     },
     "highlight_features_zyHrL8": {
@@ -738,7 +627,6 @@
     "image_banner_qbAKAq",
     "popular_products_EpxFXV",
     "custom_liquid_4nG6gC",
-    "collection-grid",
     "highlight_features_zyHrL8",
     "1761729198bbbe3cd6",
     "ticker_n4Hqni",
