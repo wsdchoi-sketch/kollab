@@ -4,13 +4,6 @@
   "sections": {
     "announcement_bar_free_shipping": {
       "type": "announcement-bar",
-      "custom_css": [
-        ".announcement-bar.color-background-2{background:#000!important}",
-        ".announcement-bar__text{color:#fff!important;font-weight:700;font-size:15px}",
-        ".announcement-wrapper{justify-content:center}",
-        ".announcement-wrapper>div:first-child{display:none}",
-        ".icon-close{display:none!important}"
-      ],
       "settings": {
         "height": 40,
         "color_scheme": "background-2",
