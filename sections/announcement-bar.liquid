@@ -6,6 +6,7 @@
 	}
 </style>
 
+{%- if template == 'index' -%}
 <div
 	class="announcement-bar color-{{ section.settings.color_scheme }} background"
 	role="region"
@@ -44,6 +45,7 @@
 		</div>
 	</div>
 </div>
+{%- endif -%}
 {% javascript %}
 	const announcementHeight = () => {
 		// Select all elements
