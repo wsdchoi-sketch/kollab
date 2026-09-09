@@ -6,7 +6,7 @@
       "type": "announcement-bar",
       "custom_css": [
         ".announcement-bar {background: #f12c18 !important;}",
-        ".announcement-bar__text {color: #ffffff !important; font-weight: 700;}",
+        ".announcement-bar__text {color: #ffffff !important; font-weight: 700; font-size: 15px;}",
         ".announcement-wrapper {justify-content: center;}",
         ".announcement-wrapper > div:first-child {display: none;}",
         ".icon-close {display: none !important;}"
