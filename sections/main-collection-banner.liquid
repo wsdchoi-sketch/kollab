@@ -54,6 +54,22 @@ else
 	[data-id="{{ section.id }}"] .have-overlay {
 		--overlay-alpha : {{ section.settings.overlay_opacity }}%;
 	}
+
+	.collection-banner-section {
+		border-bottom: 0;
+	}
+
+	.collection-banner__title {
+		display: none;
+	}
+
+	.collection-banner__text {
+		margin-bottom: 0;
+	}
+
+	.collection-banner-section .collection-banner {
+		padding: 0.4rem 0;
+	}
 {% endstyle %}
 
 {% if section.settings.section_size == 'container' %}
