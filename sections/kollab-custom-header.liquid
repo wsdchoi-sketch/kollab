@@ -512,10 +512,22 @@
 		font-weight: 700;
 	}
 
+	.kollab-header-spacer {
+		display: none;
+	}
+
+	@media screen and (max-width: 900px) {
+		.kollab-header-spacer {
+			display: block;
+		}
+	}
+
 	@media screen and (max-width: 900px) {
 		.kollab-sticky-wrap {
-			position: sticky;
+			position: fixed;
 			top: 0;
+			left: 0;
+			right: 0;
 			z-index: 80;
 		}
 
@@ -713,6 +725,7 @@
 	</div>
 </header>
 </div>
+<div class="kollab-header-spacer" id="kollabHeaderSpacer"></div>
 
 <div class="kollab-cart-drawer" data-kollab-cart-drawer hidden>
 	<div class="kollab-cart-drawer__overlay" data-kollab-cart-close></div>
@@ -761,6 +774,32 @@
 </div>
 
 <script>
+	(function () {
+		var wrap = document.querySelector(".kollab-sticky-wrap");
+		var spacer = document.getElementById("kollabHeaderSpacer");
+
+		if (!wrap || !spacer) {
+			return;
+		}
+
+		function syncSpacer() {
+			if (window.matchMedia("(max-width: 900px)").matches) {
+				spacer.style.height = wrap.offsetHeight + "px";
+			} else {
+				spacer.style.height = "";
+			}
+		}
+
+		syncSpacer();
+		window.addEventListener("resize", syncSpacer);
+		window.addEventListener("orientationchange", function () {
+			setTimeout(syncSpacer, 150);
+		});
+		document.addEventListener("shopify:section:load", function () {
+			setTimeout(syncSpacer, 50);
+		});
+	}());
+
 	(function () {
 		var header = document.querySelector(".kollab-header");
 
