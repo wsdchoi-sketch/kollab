@@ -5,8 +5,8 @@
     "announcement_bar_free_shipping": {
       "type": "announcement-bar",
       "custom_css": [
-        ".announcement-bar {background: #f12c18 !important;}",
-        ".announcement-bar__text {color: #ffffff !important; font-weight: 700; font-size: 15px;}",
+        "html body .announcement-bar.color-background-2.background {background: #f12c18 !important; background-color: #f12c18 !important; background-image: none !important;}",
+        "html body .announcement-bar.color-background-2.background .announcement-bar__text, html body .announcement-bar.color-background-2.background .announcement-bar__text * {color: #ffffff !important; font-weight: 700; font-size: 15px;}",
         ".announcement-wrapper {justify-content: center;}",
         ".announcement-wrapper > div:first-child {display: none;}",
         ".icon-close {display: none !important;}"
