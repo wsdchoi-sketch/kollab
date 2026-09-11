@@ -1,1 +1,212 @@
-PLACEHOLDER
+/* NEST WIP PDP v3 — full marketing-page redesign.
+   Self-contained: loads its own display fonts so it doesn't depend on
+   whatever font the active theme preset happens to use elsewhere. */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Jost:wght@400;500;600&display=swap');
+
+.nwip3{
+  --ink:#1B1B1B; --ink60:#6B6B68; --ink30:#A8A8A4; --line:#E4E4E2;
+  --surface:#F1F1F0; --cream:#F9F9F9; --red:#DC0100; --red-dark:#B80100;
+  font-family:'Jost', Helvetica, Arial, sans-serif; color:var(--ink);
+  background:#fff;
+}
+.nwip3 *{ box-sizing:border-box; }
+.nwip3 img{ max-width:100%; display:block; }
+.nwip3 .serif{ font-family:'Instrument Serif', Georgia, serif; font-weight:400; }
+.nwip3 .accent{ color:var(--red); font-style:italic; }
+.nwip3 button{ font-family:inherit; }
+.nwip3 details summary{ list-style:none; cursor:pointer; }
+.nwip3 details summary::-webkit-details-marker{ display:none; }
+
+/* ---------- Hero: gallery + buy box ---------- */
+.nwip3-hero{ display:grid; grid-template-columns:1fr 1fr; }
+.nwip3-gallery{ background:var(--surface); padding:28px; }
+.nwip3-shot{ background:#fff; }
+.nwip3-thumbs{ display:grid; grid-template-columns:repeat(6,1fr); gap:7px; margin-top:10px; }
+.nwip3-thumbs button{ background:#fff; border:1px solid transparent; padding:0; cursor:pointer; }
+.nwip3-thumbs button.on{ border-color:var(--ink); }
+.nwip3-thumbs figcaption,
+.nwip3-gallery-caption{ font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--ink60); margin-top:12px; }
+.nwip3-gallery-mobile{ display:none; overflow-x:auto; scroll-snap-type:x mandatory; gap:8px; }
+
+.nwip3-buy{ padding:56px 48px; }
+.nwip3-eyebrow{ font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ink60); margin-bottom:14px; }
+.nwip3-title{ font-size:clamp(34px,4vw,52px); line-height:1.08; margin:0; }
+.nwip3-desc{ font-size:16px; line-height:1.55; color:var(--ink); margin-top:20px; max-width:46ch; }
+
+.nwip3-price-row{ margin-top:26px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.nwip3-price-row .price-item--sale,
+.nwip3-price-row .price__regular .price-item--regular{ font-size:26px; font-weight:500; color:var(--ink); }
+.nwip3-price-row .price__compare .price-item--regular{ font-size:17px; font-weight:400;
+  color:#C0392B; text-decoration:line-through; margin-left:4px; }
+.nwip3-price-meta{ font-size:12px; color:var(--ink60); letter-spacing:.04em; text-transform:uppercase; }
+.nwip3-review-link{ font-size:12.5px; color:var(--ink60); text-decoration:underline;
+  text-underline-offset:2px; margin-top:6px; display:inline-block; }
+
+.nwip3-sizes{ display:flex; gap:8px; flex-wrap:wrap; margin-top:22px; }
+.nwip3-size{ border:1px solid var(--line); background:#fff; padding:11px 17px;
+  font-size:13px; border-radius:999px; cursor:pointer; transition:.15s; color:var(--ink); }
+.nwip3-size[aria-pressed="true"]{ border-color:var(--ink); background:var(--ink); color:#fff; }
+.nwip3-size[disabled]{ opacity:.4; cursor:not-allowed; }
+
+.nwip3-qty-row{ display:flex; gap:10px; margin-top:24px; }
+.nwip3-qty{ display:flex; align-items:center; border:1px solid var(--line); border-radius:999px;
+  overflow:hidden; flex-shrink:0; }
+.nwip3-qty button{ width:40px; height:48px; border:none; background:#fff; cursor:pointer;
+  font-size:17px; color:var(--ink); }
+.nwip3-qty button:hover{ background:var(--surface); }
+.nwip3-qty input{ width:34px; text-align:center; border:none; font-size:14px; -moz-appearance:textfield; }
+.nwip3-qty input::-webkit-outer-spin-button,
+.nwip3-qty input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+
+.nwip3-atc{ flex:1; background:var(--red); color:#fff; border:none; padding:0 18px;
+  font-size:13.5px; font-weight:500; letter-spacing:.06em; text-transform:uppercase;
+  border-radius:999px; cursor:pointer; transition:.15s; height:48px; }
+.nwip3-atc:hover{ background:var(--red-dark); }
+.nwip3-atc[disabled]{ background:var(--surface); color:var(--ink60);
+  border:1px solid var(--line); cursor:not-allowed; }
+
+.nwip3-dynamic-checkout{ margin-top:12px; display:flex; gap:10px; align-items:stretch; }
+.nwip3-dynamic-checkout > div{ flex:1; min-width:0; }
+.nwip3-dynamic-checkout .shopify-payment-button__button{ border-radius:999px !important; height:48px !important; }
+.nwip3-more-payment{ flex:1; height:48px; border-radius:999px; border:none;
+  background:var(--ink); color:#fff; font-size:12.5px; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase; cursor:pointer; white-space:nowrap; }
+.nwip3-more-payment:hover{ background:#000; }
+
+.nwip3-policies{ margin-top:22px; display:flex; flex-direction:column; gap:9px; }
+.nwip3-policy-row{ display:flex; align-items:flex-start; gap:9px; font-size:13.5px;
+  color:var(--ink60); line-height:1.5; }
+.nwip3-policy-row svg{ width:17px; height:17px; flex-shrink:0; margin-top:2px; color:var(--ink60); }
+.nwip3-policy-row a{ color:var(--ink); text-decoration:underline; text-underline-offset:2px; }
+
+/* ---------- Buy-box accordion: Description / Key Ingredients / Shipping ---------- */
+.nwip3-acc{ border-top:1px solid var(--ink); margin-top:34px; }
+.nwip3-acc details{ border-bottom:1px solid var(--line); }
+.nwip3-acc summary{ padding:18px 0; display:flex; justify-content:space-between;
+  align-items:center; gap:14px; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; font-weight:500; }
+.nwip3-acc summary .ic{ width:11px; height:11px; position:relative; flex-shrink:0; }
+.nwip3-acc summary .ic:before,.nwip3-acc summary .ic:after{ content:''; position:absolute; background:var(--ink); transition:transform .2s; }
+.nwip3-acc summary .ic:before{ top:5px; left:0; width:11px; height:1px; }
+.nwip3-acc summary .ic:after{ left:5px; top:0; width:1px; height:11px; }
+.nwip3-acc details[open] summary .ic:after{ transform:scaleY(0); }
+.nwip3-acc .bd{ padding:0 0 24px; font-size:14px; line-height:1.75; color:var(--ink60); }
+.nwip3-acc .bd p{ margin:0 0 12px; }
+.nwip3-inci{ font-family:ui-monospace,monospace; font-size:11px; line-height:1.85; word-break:break-word; }
+.nwip3-pending{ font-size:13px; font-style:italic; }
+
+/* ---------- Marquee ticker ---------- */
+.nwip3-marquee{ background:var(--ink); overflow:hidden; padding:15px 0; }
+.nwip3-marquee-track{ display:flex; width:max-content; animation:nwip3-scroll 22s linear infinite; }
+.nwip3-marquee-track span{ display:flex; align-items:center; gap:10px;
+  font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:#fff;
+  padding:0 26px; white-space:nowrap; }
+.nwip3-marquee-track span:after{ content:'◆'; color:var(--red); font-size:9px; margin-left:26px; }
+@keyframes nwip3-scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+/* ---------- Generic section shell ---------- */
+.nwip3-section{ padding:100px 44px; }
+.nwip3-section-tight{ padding:0 44px 100px; }
+.nwip3-eyebrow-lbl{ font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--ink60); margin-bottom:14px; }
+.nwip3-h2{ font-size:clamp(30px,4vw,46px); line-height:1.1; margin:0; }
+.nwip3-section-head{ max-width:640px; margin:0 auto 56px; text-align:left; }
+.nwip3-section-head.center{ text-align:center; margin-left:auto; margin-right:auto; }
+
+/* ---------- Video / reels wrapper (heading only; app block renders the carousel) ---------- */
+.nwip3-video{ background:var(--red); color:#fff; }
+.nwip3-video .nwip3-eyebrow-lbl{ color:rgba(255,255,255,.75); }
+.nwip3-video .nwip3-h2{ color:#fff; }
+.nwip3-video-note{ font-size:13px; color:rgba(255,255,255,.7); margin-top:14px; max-width:52ch; }
+
+/* ---------- Key benefits ---------- */
+.nwip3-benefits-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:32px;
+  border-top:1px solid var(--ink); padding-top:32px; margin-top:32px; }
+.nwip3-benefit-num{ font-family:'Instrument Serif', serif; font-size:24px; color:var(--red); margin-bottom:10px; }
+.nwip3-benefit-title{ font-size:15px; font-weight:600; margin:0 0 8px; }
+.nwip3-benefit-desc{ font-size:13.5px; line-height:1.6; color:var(--ink60); margin:0; }
+
+/* ---------- Ingredient highlight band (single hero stat) ---------- */
+.nwip3-ingredient-band{ background:var(--red); color:#fff; display:grid;
+  grid-template-columns:1fr 1fr; align-items:center; }
+.nwip3-ingredient-band-text{ padding:80px 60px; }
+.nwip3-ingredient-band .stat{ font-family:'Instrument Serif', serif; font-size:clamp(56px,7vw,88px);
+  line-height:1; margin:0; }
+.nwip3-ingredient-band .label{ font-size:13px; letter-spacing:.16em; text-transform:uppercase; margin:6px 0 20px; }
+.nwip3-ingredient-band p{ font-size:15px; line-height:1.6; max-width:40ch; color:rgba(255,255,255,.92); }
+.nwip3-ingredient-band-img{ height:100%; min-height:340px; background:rgba(255,255,255,.08); }
+.nwip3-ingredient-band-img img{ width:100%; height:100%; object-fit:cover; }
+
+/* ---------- Usage-area table ("One product, everywhere you need it") ---------- */
+.nwip3-usage-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.nwip3-usage-img{ background:var(--surface); }
+.nwip3-usage-rows{ margin-top:24px; }
+.nwip3-usage-row{ display:grid; grid-template-columns:140px 1fr; gap:18px; padding:18px 0;
+  border-top:1px solid var(--line); font-size:14.5px; }
+.nwip3-usage-row:last-child{ border-bottom:1px solid var(--line); }
+.nwip3-usage-row .area{ font-weight:600; }
+.nwip3-usage-row .note{ color:var(--ink60); }
+
+/* ---------- Ingredient cards ("what's inside") ---------- */
+.nwip3-ingredients-note{ font-size:12.5px; color:var(--ink60); font-style:italic; margin-top:-30px; margin-bottom:40px; }
+.nwip3-ing-cards{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
+.nwip3-ing-card-img{ background:#fff; aspect-ratio:1.2/1; overflow:hidden; }
+.nwip3-ing-card-img img{ width:100%; height:100%; object-fit:cover; }
+.nwip3-ing-card h3{ font-size:19px; font-weight:600; margin:20px 0 8px; }
+.nwip3-ing-card p{ font-size:13.5px; line-height:1.6; color:var(--ink60); margin:0; }
+.nwip3-ing-clean-tags{ display:flex; flex-wrap:wrap; gap:10px; margin-top:44px; }
+.nwip3-ing-clean-tags span{ font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  border:1px solid var(--line); border-radius:999px; padding:8px 16px; color:var(--ink60); }
+
+/* ---------- How to use ---------- */
+.nwip3-howto-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:36px; margin-top:32px; }
+.nwip3-howto-step .step-lbl{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--red); margin-bottom:10px; }
+.nwip3-howto-step h3{ font-size:18px; font-weight:600; margin:0 0 8px; }
+.nwip3-howto-step p{ font-size:13.5px; line-height:1.6; color:var(--ink60); margin:0; }
+
+/* ---------- FAQ ---------- */
+.nwip3-faq-grid{ display:grid; grid-template-columns:1fr 1.4fr; gap:60px; }
+.nwip3-faq details{ border-bottom:1px solid var(--line); }
+.nwip3-faq summary{ padding:20px 0; font-size:16px; display:flex; justify-content:space-between; gap:14px; }
+.nwip3-faq summary:after{ content:'+'; font-size:19px; color:var(--ink30); line-height:1; }
+.nwip3-faq details[open] summary:after{ content:'\2013'; }
+.nwip3-faq .a{ padding:0 0 20px; font-size:14px; color:var(--ink60); line-height:1.7; max-width:60ch; }
+
+/* ---------- Sticky add-to-cart bar ---------- */
+.nwip3-sticky-atc{ --ink:#1B1B1B; --ink60:#6B6B68; --surface:#F1F1F0;
+  position:fixed; left:50%; bottom:18px; transform:translate(-50%,140%);
+  z-index:40; width:min(680px, calc(100% - 32px)); background:#fff; border-radius:16px;
+  box-shadow:0 10px 40px rgba(0,0,0,.16); padding:14px 16px; transition:transform .28s ease; }
+.nwip3-sticky-atc.show{ transform:translate(-50%,0); }
+.nwip3-sticky-inner{ display:flex; align-items:center; gap:12px; }
+.nwip3-sticky-thumb{ width:46px; height:46px; border-radius:8px; object-fit:cover;
+  background:var(--surface); flex-shrink:0; }
+.nwip3-sticky-info{ flex:1; min-width:0; }
+.nwip3-sticky-title{ font-size:13px; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.nwip3-sticky-price{ font-size:13px; color:var(--ink60); margin-top:2px; }
+.nwip3-sticky-btn{ height:44px; white-space:nowrap; padding:0 20px; flex-shrink:0; }
+.nwip3-ship-gauge{ margin-top:11px; }
+.nwip3-ship-gauge-track{ height:4px; background:var(--surface); border-radius:99px; overflow:hidden; }
+.nwip3-ship-gauge-fill{ height:100%; width:0%; background:var(--ink); transition:width .3s ease; }
+.nwip3-ship-gauge-label{ font-size:11px; color:var(--ink60); margin-top:6px; text-align:center; }
+
+@media (max-width:900px){
+  .nwip3-hero{ grid-template-columns:1fr; }
+  .nwip3-buy{ padding:32px 22px; }
+  .nwip3-gallery-desktop{ display:none; }
+  .nwip3-gallery-mobile{ display:flex; }
+  .nwip3-section{ padding:64px 22px; }
+  .nwip3-section-tight{ padding:0 22px 64px; }
+  .nwip3-benefits-grid{ grid-template-columns:1fr 1fr; }
+  .nwip3-ingredient-band{ grid-template-columns:1fr; }
+  .nwip3-ingredient-band-text{ padding:48px 26px; }
+  .nwip3-ingredient-band-img{ min-height:220px; }
+  .nwip3-usage-grid{ grid-template-columns:1fr; gap:28px; }
+  .nwip3-ing-cards{ grid-template-columns:1fr; }
+  .nwip3-howto-grid{ grid-template-columns:1fr; gap:28px; }
+  .nwip3-faq-grid{ grid-template-columns:1fr; gap:20px; }
+}
+@media (min-width:901px){
+  .nwip3-gallery{ position:sticky; top:20px; align-self:start; }
+}
