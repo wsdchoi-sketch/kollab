@@ -1,1 +1,108 @@
-PLACEHOLDER
+{
+  "sections": {
+    "main": {
+      "type": "nest-wip-product-v3",
+      "settings": {
+        "show_top_banner": false,
+        "top_banner_text": "Complimentary shipping over $50",
+        "shipping_note": "Complimentary standard shipping over $50",
+        "free_shipping_threshold": 50,
+        "returns_note": "Easy 30-day returns",
+        "benefits_eyebrow": "Key benefits",
+        "benefits_heading": "Made for the places that ask for more.",
+        "ingredient_band_eyebrow": "Key ingredient",
+        "usage_eyebrow": "All-in-one",
+        "usage_heading": "One product, everywhere you need it.",
+        "ingredients_eyebrow": "Ingredients",
+        "ingredients_heading": "What's doing the work.",
+        "howto_eyebrow": "How to use",
+        "howto_heading": "Simple, and built to repeat.",
+        "faq_eyebrow": "FAQ",
+        "faq_heading": "Questions, answered."
+      }
+    },
+    "video": {
+      "type": "nest-wip-v3-video",
+      "blocks": {
+        "reelup_shoppable_videos_reels_reelup_product_slider_v3": {
+          "type": "shopify://apps/reelup-shoppable-videos-reels/blocks/reelup_product_slider/a8ec9e4d-d192-44f7-9c23-595f9ee7dd5b",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "reelup_shoppable_videos_reels_reelup_product_slider_v3"
+      ],
+      "settings": {
+        "eyebrow": "In use",
+        "heading": "Watch it, then shop it."
+      }
+    },
+    "apps": {
+      "type": "apps",
+      "blocks": {
+        "judge_me_reviews_review_widget_v3": {
+          "type": "shopify://apps/judge-me-reviews/blocks/review_widget/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+          "settings": {
+            "review_data": "sample_data",
+            "max_width": 1200,
+            "show_shop_reviews": false,
+            "empty_state": "empty_widget"
+          }
+        }
+      },
+      "block_order": [
+        "judge_me_reviews_review_widget_v3"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "you-may-also-like": {
+      "type": "product-recommendations",
+      "settings": {
+        "products_to_show": 4,
+        "per_row": 4,
+        "section_header_type": "type1",
+        "subheading": "",
+        "heading": "Pairs well with",
+        "description": "",
+        "enable_border_top": true,
+        "button_label": "",
+        "button_link": "",
+        "button_style": "primary",
+        "button_arrow": false,
+        "show_two_cards": true,
+        "autoplay": false,
+        "stop_autoplay": true,
+        "show_arrows": false,
+        "slideshow_speed": 1.1,
+        "slideshow_delay": 3,
+        "image_ratio": "portrait",
+        "image_fit": "cover",
+        "show_sku": false,
+        "show_vendor": false,
+        "show_collection_name": true,
+        "show_color_swatch": false,
+        "product_variant_type": "color",
+        "show_desc": false,
+        "margin_top": "m",
+        "margin_bottom": "no-indent"
+      }
+    },
+    "recently-viewed": {
+      "type": "nest-wip-recently-viewed",
+      "settings": {
+        "heading": "Recently viewed",
+        "section_header_type": "type1",
+        "enable_border_top": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "video",
+    "apps",
+    "you-may-also-like",
+    "recently-viewed"
+  ]
+}
