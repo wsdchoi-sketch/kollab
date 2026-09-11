@@ -1,1 +1,513 @@
-PLACEHOLDER
+{%- comment -%}
+  NEST WIP PDP v3.0 — new full marketing-page PDP template, built from the
+  Netlify design mockup (nimble-otter-7ee870.netlify.app), 2026-09.
+  Separate from nest-wip-product-v2 — that draft is untouched.
+
+  Reusable across every KOLLAB product. Product-specific copy comes from
+  `product.metafields.custom` (same `custom` namespace v2 already uses) plus
+  a few new keys documented inline below. Every new block degrades to a
+  plain-language placeholder or hides itself when the metafield is blank,
+  so the template is safe to preview on any product today, before content
+  is filled in.
+
+  New metafield formats introduced in this section (all under `custom`,
+  all plain text so no app is needed to edit them in Admin):
+    - key_benefits_v3      list.single_line_text_field, each line "Title|Description"
+                            (falls back to the existing `key_benefits` list,
+                            shown as plain bullets with no description)
+    - ingredient_highlight  single_line_text_field, "STAT|LABEL|Description"
+                            e.g. "30%|Jojoba Seed Oil|A high-concentration base..."
+                            (section hides if blank)
+    - ingredient_cards      list.single_line_text_field, each line "Name|Description"
+                            images are pulled positionally from the product's
+                            own image list (2nd image onward), so add photos
+                            in the order you list ingredients
+                            (section hides if blank)
+    - usage_areas           list.single_line_text_field, each line "Area|Note"
+                            e.g. "Eye area|Softens dryness around fine lines"
+                            (section hides if blank)
+    - how_to_use_steps      list.single_line_text_field, each line "Title|Description"
+                            (falls back to plain `how_to_use` text with no
+                            step numbers; else a pending note)
+    - marquee_stat          single_line_text_field, short ticker highlight
+                            e.g. "30% JOJOBA OIL" (falls back to vendor name)
+  Existing v2 metafields reused as-is: hero_line, descriptor, key_benefits,
+  hero_ingredients, how_to_use, inci_list, country_of_origin, faq, am_pm.
+
+  Video/reels ("Watch it, then shop it") and Customer Reviews are NOT built
+  here — wire the ReelUp and Judge.me app blocks the same way
+  templates/product.nest-wip-v2.json already does (see the new
+  templates/product.nest-wip-v3.json this ships alongside).
+{%- endcomment -%}
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign ship_threshold = section.settings.free_shipping_threshold | default: 50 -%}
+{%- assign mf = product.metafields.custom -%}
+
+{%- assign clean_title = product.title -%}
+{%- if clean_title contains ']' -%}
+  {%- assign clean_title = clean_title | split: ']' | last | strip -%}
+{%- endif -%}
+
+{{ 'nest-wip-v3.css' | asset_url | stylesheet_tag }}
+
+<div class="nwip3">
+
+  {%- if section.settings.show_top_banner -%}
+    <div class="nwip3-marquee" style="padding:10px 0;">
+      <div class="nwip3-marquee-track"><span>{{ section.settings.top_banner_text | default: 'Complimentary shipping over $50' }}</span></div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ============ HERO: GALLERY + BUY BOX ============ {%- endcomment -%}
+  <div class="nwip3-hero">
+
+    <div class="nwip3-gallery">
+      {%- if product.images.size > 0 -%}
+        {%- assign hero_img = product.images.first -%}
+        {%- assign hero_alt = hero_img.alt | default: clean_title | escape -%}
+
+        <div class="nwip3-gallery-desktop">
+          <div class="nwip3-shot" id="nwip3Main">
+            {{ hero_img | image_url: width: 1200 | image_tag: id: 'nwip3MainImg', class: 'nwip3-main-img', alt: hero_alt, loading: 'eager', width: 1200 }}
+          </div>
+          <div class="nwip3-thumbs">
+            {%- for image in product.images limit: 6 -%}
+              {%- assign t_alt = image.alt | default: clean_title | escape -%}
+              {%- assign t_full = image | image_url: width: 1200 -%}
+              <button type="button"
+                class="{% if forloop.first %}on{% endif %}"
+                data-full="{{ t_full }}"
+                onclick="nwip3Swap(this)">
+                {{ image | image_url: width: 200 | image_tag: alt: t_alt, loading: 'lazy', width: 200 }}
+              </button>
+            {%- endfor -%}
+          </div>
+          <div class="nwip3-gallery-caption">{{ product.vendor }} {{ clean_title | truncate: 24 }}</div>
+        </div>
+
+        <div class="nwip3-gallery-mobile">
+          {%- for image in product.images -%}
+            {%- assign m_alt = image.alt | default: clean_title | escape -%}
+            <div style="flex:0 0 100%; scroll-snap-align:center;">
+              {{ image | image_url: width: 1200 | image_tag: alt: m_alt, loading: 'lazy', width: 1200 }}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="nwip3-pending">No product images.</div>
+      {%- endif -%}
+    </div>
+
+    <div class="nwip3-buy">
+      <div class="nwip3-eyebrow">{{ shop.name | default: 'KOLLAB' }} &nbsp;&#9670;&nbsp; {{ product.vendor }}</div>
+      <h1 class="nwip3-title serif">{{ clean_title }}</h1>
+
+      {%- if mf.hero_line != blank -%}
+        <p class="nwip3-desc">{{ mf.hero_line }}</p>
+      {%- elsif product.description != blank -%}
+        <p class="nwip3-desc">{{ product.description | strip_html | truncatewords: 32 }}</p>
+      {%- endif -%}
+
+      <div class="nwip3-price-row" id="nwip3PriceBox">
+        {%- render 'price', product: product, use_variant: true, show_badges: true -%}
+      </div>
+      {%- if current_variant.weight != blank and current_variant.weight > 0 -%}
+        <div class="nwip3-price-meta">{{ current_variant.weight_in_unit }} {{ current_variant.weight_unit }}</div>
+      {%- endif -%}
+      <a href="#nwip3-reviews-anchor" class="nwip3-review-link">
+        {%- if product.metafields.judgeme.badge != blank -%}{{ product.metafields.judgeme.badge }}{%- else -%}Be the first to write a review{%- endif -%}
+      </a>
+
+      {%- form 'product', product, id: 'nwip3-form' -%}
+        <input type="hidden" name="id" id="nwip3VariantId" value="{{ current_variant.id }}">
+
+        {%- if product.variants.size > 1 -%}
+          <div class="nwip3-sizes">
+            {%- for variant in product.variants -%}
+              {%- assign v_price = variant.price | money -%}
+              {%- assign v_compare = '' -%}
+              {%- if variant.compare_at_price > variant.price -%}{%- assign v_compare = variant.compare_at_price | money -%}{%- endif -%}
+              <button type="button" class="nwip3-size"
+                aria-pressed="{% if variant.id == current_variant.id %}true{% else %}false{% endif %}"
+                data-variant-id="{{ variant.id }}"
+                data-price="{{ v_price }}"
+                data-compare="{{ v_compare }}"
+                data-available="{{ variant.available }}"
+                onclick="nwip3Select(this)"
+                {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <div class="nwip3-qty-row">
+          <div class="nwip3-qty">
+            <button type="button" onclick="nwip3Qty(-1)" aria-label="Decrease quantity">&minus;</button>
+            <input type="number" name="quantity" id="nwip3QtyInput" value="1" min="1" inputmode="numeric">
+            <button type="button" onclick="nwip3Qty(1)" aria-label="Increase quantity">+</button>
+          </div>
+
+          {%- if current_variant.available -%}
+            <button type="submit" name="add" class="nwip3-atc" id="nwip3Atc">
+              Add to bag &nbsp;&#9670;&nbsp; <span id="nwip3AtcPrice">{{ current_variant.price | money }}</span>
+            </button>
+          {%- else -%}
+            <button type="button" class="nwip3-atc" id="nwip3Atc" disabled>Sold out</button>
+          {%- endif -%}
+        </div>
+
+        <div class="nwip3-dynamic-checkout">
+          <div>{{ form | payment_button }}</div>
+          <button type="submit" name="checkout" class="nwip3-more-payment">More payment options</button>
+        </div>
+      {%- endform -%}
+
+      <div class="nwip3-policies">
+        <div class="nwip3-policy-row">
+          {%- render 'icon-shipping' -%}
+          <span>
+            {%- if section.settings.shipping_note != blank -%}{{ section.settings.shipping_note }}. {% endif -%}
+            {%- if shop.shipping_policy.url != blank -%}
+              <a href="{{ shop.shipping_policy.url }}">View shipping policy</a>
+            {%- endif -%}
+          </span>
+        </div>
+        <div class="nwip3-policy-row">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.4">
+            <path d="M20 11a8 8 0 1 0-2.6 5.9M20 11V6m0 5h-5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>
+            {%- if section.settings.returns_note != blank -%}{{ section.settings.returns_note }}. {%- endif -%}
+            {%- if shop.refund_policy.url != blank -%}
+              <a href="{{ shop.refund_policy.url }}">View return policy</a>
+            {%- endif -%}
+          </span>
+        </div>
+      </div>
+
+      {%- comment -%} ---- Description / Key Ingredients / Shipping & Returns ---- {%- endcomment -%}
+      <div class="nwip3-acc">
+        <details open>
+          <summary><span>Description</span><span class="ic"></span></summary>
+          <div class="bd">
+            {%- if product.description != blank -%}
+              {{ product.description }}
+            {%- else -%}
+              <div class="nwip3-pending">Please see product images for detail.</div>
+            {%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Key ingredients</span><span class="ic"></span></summary>
+          <div class="bd">
+            {%- if mf.hero_ingredients != blank -%}
+              <p>{{ mf.hero_ingredients | newline_to_br }}</p>
+            {%- endif -%}
+            {%- if mf.inci_list != blank -%}
+              <p class="nwip3-inci">{{ mf.inci_list | newline_to_br }}</p>
+            {%- elsif mf.hero_ingredients == blank -%}
+              <div class="nwip3-pending">Please see product images for detail.</div>
+            {%- endif -%}
+          </div>
+        </details>
+
+        <details>
+          <summary><span>Shipping &amp; returns</span><span class="ic"></span></summary>
+          <div class="bd">
+            <p>{{ section.settings.shipping_note | default: 'Complimentary standard shipping over $50' }}.</p>
+            <p>{{ section.settings.returns_note | default: 'Easy 30-day returns' }}.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%} ============ MARQUEE ============ {%- endcomment -%}
+  {%- assign marquee_text = mf.marquee_stat | default: product.vendor -%}
+  <div class="nwip3-marquee">
+    <div class="nwip3-marquee-track">
+      {%- for i in (1..8) -%}
+        <span>{{ shop.name | default: 'KOLLAB' }}</span><span>{{ marquee_text }}</span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- comment -%} ============ KEY BENEFITS ============ {%- endcomment -%}
+  <div class="nwip3-section">
+    <div class="nwip3-section-head">
+      <div class="nwip3-eyebrow-lbl">{{ section.settings.benefits_eyebrow | default: 'Key benefits' }}</div>
+      <h2 class="nwip3-h2 serif">{{ section.settings.benefits_heading | default: 'Made for the places that ask for more.' }}</h2>
+    </div>
+
+    {%- assign benefits_detailed = mf.key_benefits_v3.value -%}
+    {%- if benefits_detailed != blank -%}
+      <div class="nwip3-benefits-grid">
+        {%- for line in benefits_detailed limit: 4 -%}
+          {%- assign parts = line | split: '|' -%}
+          <div>
+            <div class="nwip3-benefit-num serif">0{{ forloop.index }}</div>
+            <h3 class="nwip3-benefit-title">{{ parts[0] | strip }}</h3>
+            {%- if parts.size > 1 -%}<p class="nwip3-benefit-desc">{{ parts[1] | strip }}</p>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- elsif mf.key_benefits.value != blank -%}
+      <div class="nwip3-benefits-grid">
+        {%- for b in mf.key_benefits.value limit: 4 -%}
+          <div>
+            <div class="nwip3-benefit-num serif">0{{ forloop.index }}</div>
+            <h3 class="nwip3-benefit-title">{{ b }}</h3>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="nwip3-pending">Please see product images for detail.</div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ============ INGREDIENT HIGHLIGHT BAND ============ {%- endcomment -%}
+  {%- assign ih = mf.ingredient_highlight | split: '|' -%}
+  {%- if mf.ingredient_highlight != blank and ih.size >= 2 -%}
+    <div class="nwip3-ingredient-band">
+      <div class="nwip3-ingredient-band-text">
+        <div class="nwip3-eyebrow-lbl" style="color:rgba(255,255,255,.75);">{{ section.settings.ingredient_band_eyebrow | default: 'Key ingredient' }}</div>
+        <p class="stat">{{ ih[0] | strip }}</p>
+        <p class="label">{{ ih[1] | strip }}</p>
+        {%- if ih.size >= 3 -%}<p>{{ ih[2] | strip }}</p>{%- endif -%}
+      </div>
+      <div class="nwip3-ingredient-band-img">
+        {%- if product.images.size > 1 -%}
+          {%- assign band_img = product.images[1] -%}
+          {%- assign band_alt = band_img.alt | default: clean_title | escape -%}
+          {{ band_img | image_url: width: 1000 | image_tag: alt: band_alt, loading: 'lazy', width: 1000 }}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ============ USAGE-AREA TABLE ============ {%- endcomment -%}
+  {%- assign usage_rows = mf.usage_areas.value -%}
+  {%- if usage_rows != blank -%}
+    <div class="nwip3-section">
+      <div class="nwip3-usage-grid">
+        <div class="nwip3-usage-img">
+          {%- if product.images.size > 2 -%}
+            {%- assign usage_img = product.images[2] -%}
+            {%- assign usage_alt = clean_title | escape -%}
+            {{ usage_img | image_url: width: 900 | image_tag: alt: usage_alt, loading: 'lazy', width: 900 }}
+          {%- endif -%}
+        </div>
+        <div>
+          <div class="nwip3-eyebrow-lbl">{{ section.settings.usage_eyebrow | default: 'All-in-one' }}</div>
+          <h2 class="nwip3-h2 serif">{{ section.settings.usage_heading | default: 'One product, everywhere you need it.' }}</h2>
+          <div class="nwip3-usage-rows">
+            {%- for row in usage_rows -%}
+              {%- assign parts = row | split: '|' -%}
+              <div class="nwip3-usage-row">
+                <div class="area">{{ parts[0] | strip }}</div>
+                {%- if parts.size > 1 -%}<div class="note">{{ parts[1] | strip }}</div>{%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ============ INGREDIENT CARDS ============ {%- endcomment -%}
+  {%- assign ing_cards = mf.ingredient_cards.value -%}
+  {%- if ing_cards != blank -%}
+    <div class="nwip3-section" style="background:var(--surface);">
+      <div class="nwip3-section-head">
+        <div class="nwip3-eyebrow-lbl">{{ section.settings.ingredients_eyebrow | default: 'Ingredients' }}</div>
+        <h2 class="nwip3-h2 serif">{{ section.settings.ingredients_heading | default: "What's doing the work." }}</h2>
+        {%- if mf.inci_list == blank -%}
+          <p class="nwip3-ingredients-note" style="margin-top:16px;">Full ingredient list pending.</p>
+        {%- endif -%}
+      </div>
+      <div class="nwip3-ing-cards">
+        {%- for card in ing_cards limit: 4 -%}
+          {%- assign parts = card | split: '|' -%}
+          {%- assign img_index = forloop.index | plus: 1 -%}
+          <div class="nwip3-ing-card">
+            <div class="nwip3-ing-card-img">
+              {%- if product.images.size > img_index -%}
+                {%- assign card_img = product.images[img_index] -%}
+                {%- assign card_alt = parts[0] | strip | escape -%}
+                {{ card_img | image_url: width: 800 | image_tag: alt: card_alt, loading: 'lazy', width: 800 }}
+              {%- endif -%}
+            </div>
+            <h3>{{ parts[0] | strip }}</h3>
+            {%- if parts.size > 1 -%}<p>{{ parts[1] | strip }}</p>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ============ HOW TO USE ============ {%- endcomment -%}
+  {%- assign howto_steps = mf.how_to_use_steps.value -%}
+  <div class="nwip3-section">
+    <div class="nwip3-section-head">
+      <div class="nwip3-eyebrow-lbl">{{ section.settings.howto_eyebrow | default: 'How to use' }}</div>
+      <h2 class="nwip3-h2 serif">{{ section.settings.howto_heading | default: 'Simple, and built to repeat.' }}</h2>
+    </div>
+    {%- if howto_steps != blank -%}
+      <div class="nwip3-howto-grid">
+        {%- for step in howto_steps limit: 3 -%}
+          {%- assign parts = step | split: '|' -%}
+          <div class="nwip3-howto-step">
+            <div class="step-lbl">Step 0{{ forloop.index }}</div>
+            <h3>{{ parts[0] | strip }}</h3>
+            {%- if parts.size > 1 -%}<p>{{ parts[1] | strip }}</p>{%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- elsif mf.how_to_use != blank -%}
+      <div class="nwip3-howto-step" style="max-width:60ch;">
+        <p>{{ mf.how_to_use | newline_to_br }}</p>
+        {%- if mf.am_pm != blank -%}<p><strong>When:</strong> {{ mf.am_pm }}</p>{%- endif -%}
+      </div>
+    {%- else -%}
+      <div class="nwip3-pending">Please see product images for detail.</div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ============ FAQ ============ {%- endcomment -%}
+  {%- if mf.faq != blank -%}
+    <div class="nwip3-section">
+      <div class="nwip3-faq-grid">
+        <div>
+          <div class="nwip3-eyebrow-lbl">{{ section.settings.faq_eyebrow | default: 'FAQ' }}</div>
+          <h2 class="nwip3-h2 serif">{{ section.settings.faq_heading | default: 'Questions, answered.' }}</h2>
+        </div>
+        <div class="nwip3-faq">
+          {%- assign faq_pairs = mf.faq | strip | split: ';;' -%}
+          {%- for pair in faq_pairs -%}
+            {%- assign qa = pair | split: '|' -%}
+            {%- if qa.size >= 2 -%}
+              <details {% if forloop.first %}open{% endif %}>
+                <summary>{{ qa[0] | strip }}</summary>
+                <div class="a">{{ qa[1] | strip }}</div>
+              </details>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div id="nwip3-reviews-anchor"></div>
+</div>
+
+{%- comment -%} ============ STICKY ADD TO CART ============ {%- endcomment -%}
+<div class="nwip3-sticky-atc" id="nwip3StickyAtc">
+  <div class="nwip3-sticky-inner">
+    {%- if product.featured_image -%}
+      <img class="nwip3-sticky-thumb" src="{{ product.featured_image | image_url: width: 100 }}" alt="">
+    {%- endif -%}
+    <div class="nwip3-sticky-info">
+      <div class="nwip3-sticky-title">{{ clean_title }}</div>
+      <div class="nwip3-sticky-price" id="nwip3StickyPrice">{{ current_variant.price | money }}</div>
+    </div>
+    {%- if current_variant.available -%}
+      <button type="button" class="nwip3-atc nwip3-sticky-btn" id="nwip3StickyBtn" onclick="nwip3StickyAdd()">
+        Add to bag &middot; <span id="nwip3StickyAtcPrice">{{ current_variant.price | money }}</span>
+      </button>
+    {%- else -%}
+      <button type="button" class="nwip3-atc nwip3-sticky-btn" disabled>Sold out</button>
+    {%- endif -%}
+  </div>
+  <div class="nwip3-ship-gauge">
+    <div class="nwip3-ship-gauge-track"><div class="nwip3-ship-gauge-fill" id="nwip3ShipFill"></div></div>
+    <div class="nwip3-ship-gauge-label" id="nwip3ShipLabel"></div>
+  </div>
+</div>
+
+<script>
+  window.nwip3ShipThreshold = {{ ship_threshold | times: 100 }};
+  window.nwip3CurrentVariantId = {{ current_variant.id | json }};
+</script>
+{{ 'nest-wip-v3.js' | asset_url | script_tag }}
+
+{% schema %}
+{
+  "name": "NEST WIP Product v3.0",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_top_banner",
+      "label": "Show top ticker",
+      "default": false,
+      "info": "Theme already shows a global announcement bar — leave off unless you want a second one."
+    },
+    {
+      "type": "text",
+      "id": "top_banner_text",
+      "label": "Top ticker text",
+      "default": "Complimentary shipping over $50"
+    },
+    {
+      "type": "header",
+      "content": "Shipping & returns"
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "label": "Shipping note",
+      "default": "Complimentary standard shipping over $50"
+    },
+    {
+      "type": "number",
+      "id": "free_shipping_threshold",
+      "label": "Free shipping min ($)",
+      "default": 50
+    },
+    {
+      "type": "text",
+      "id": "returns_note",
+      "label": "Returns note",
+      "default": "Easy 30-day returns"
+    },
+    {
+      "type": "header",
+      "content": "Key benefits copy"
+    },
+    { "type": "text", "id": "benefits_eyebrow", "label": "Eyebrow", "default": "Key benefits" },
+    { "type": "text", "id": "benefits_heading", "label": "Heading", "default": "Made for the places that ask for more." },
+    {
+      "type": "header",
+      "content": "Ingredient band copy"
+    },
+    { "type": "text", "id": "ingredient_band_eyebrow", "label": "Eyebrow", "default": "Key ingredient" },
+    {
+      "type": "header",
+      "content": "Usage table copy"
+    },
+    { "type": "text", "id": "usage_eyebrow", "label": "Eyebrow", "default": "All-in-one" },
+    { "type": "text", "id": "usage_heading", "label": "Heading", "default": "One product, everywhere you need it." },
+    {
+      "type": "header",
+      "content": "Ingredient cards copy"
+    },
+    { "type": "text", "id": "ingredients_eyebrow", "label": "Eyebrow", "default": "Ingredients" },
+    { "type": "text", "id": "ingredients_heading", "label": "Heading", "default": "What's doing the work." },
+    {
+      "type": "header",
+      "content": "How to use copy"
+    },
+    { "type": "text", "id": "howto_eyebrow", "label": "Eyebrow", "default": "How to use" },
+    { "type": "text", "id": "howto_heading", "label": "Heading", "default": "Simple, and built to repeat." },
+    {
+      "type": "header",
+      "content": "FAQ copy"
+    },
+    { "type": "text", "id": "faq_eyebrow", "label": "Eyebrow", "default": "FAQ" },
+    { "type": "text", "id": "faq_heading", "label": "Heading", "default": "Questions, answered." }
+  ]
+}
+{% endschema %}
