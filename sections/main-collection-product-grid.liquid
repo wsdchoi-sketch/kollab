@@ -105,6 +105,23 @@
 		padding-bottom: 0;
 	}
 
+	/* Breadcrumb and Sort-by share one row (toolbar is relocated here by JS,
+	   since the breadcrumb lives in theme.liquid outside this section). */
+	body.body-template-collection .breadcrumb_margin .container {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		row-gap: 10px;
+		column-gap: 16px;
+	}
+
+	body.body-template-collection .kollab-collection-toolbar.kollab-toolbar--merged {
+		margin: 0 !important;
+		padding-bottom: 0 !important;
+		border-bottom: 0 !important;
+	}
+
 	.collection-grid-section .kollab-collection-shell {
 		display: grid;
 		grid-template-columns: 260px minmax(0, 1fr);
@@ -604,7 +621,7 @@
 
 	.collection-grid-section .kollab-product-card__price {
 		display: flex;
-		justify-content: flex-end;
+		justify-content: center;
 		gap: 14px;
 		align-items: baseline;
 		width: 100%;
@@ -1050,7 +1067,7 @@
 		}
 
 		.collection-grid-section .kollab-product-card__price {
-			align-items: flex-end;
+			align-items: center;
 			flex-direction: column;
 			gap: 2px;
 			min-height: 34px;
@@ -1340,6 +1357,25 @@
 		</main>
 	</div>
 </div>
+
+<script>
+	(() => {
+		const mergeToolbarWithBreadcrumb = () => {
+			const container = document.querySelector('.breadcrumb_margin .container');
+			const toolbar = document.querySelector('.kollab-collection-toolbar');
+			if (!container || !toolbar || toolbar.dataset.merged === 'true') return;
+			toolbar.dataset.merged = 'true';
+			toolbar.classList.add('kollab-toolbar--merged');
+			container.appendChild(toolbar);
+		};
+
+		if (document.readyState === 'loading') {
+			document.addEventListener('DOMContentLoaded', mergeToolbarWithBreadcrumb);
+		} else {
+			mergeToolbarWithBreadcrumb();
+		}
+	})();
+</script>
 
 <script>
 	(() => {
