@@ -473,7 +473,7 @@
         "logo_ATCr7K"
       ],
       "settings": {
-        "ticker_speed": 40,
+        "ticker_speed": 15,
         "direction": "left",
         "margin_top": "xs",
         "margin_bottom": "xs"
