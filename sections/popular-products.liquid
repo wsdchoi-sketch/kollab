@@ -1797,11 +1797,13 @@
 									<a href='{{ product.url }}'>{{ product.title }}</a>
 								</h3>
 								<p class='kollab-product-card__description'>
-									{% if product.description != blank %}
-										{{ product.description | strip_html | truncate: 70 }}
-									{% else %}
-										Product description
-									{% endif %}
+									{%- assign card_description = product.description | strip_html -%}
+									{%- if card_description == blank -%}
+										{%- assign card_description = product.metafields.custom.hero_line.value | default: product.metafields.custom.hero_line -%}
+									{%- endif -%}
+									{%- if card_description != blank -%}
+										{{ card_description | strip_html | truncate: 70 }}
+									{%- endif -%}
 								</p>
 								{% if product.compare_at_price > product.price %}
 									<div class='kollab-product-card__price kollab-product-card__price--sale'>
