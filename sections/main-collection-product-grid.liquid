@@ -89,12 +89,20 @@
 	}
 
 	body.body-template-collection .breadcrumb_margin {
-		margin-top: 2.4rem;
-		margin-bottom: 1.6rem;
+		margin-top: 1.2rem;
+		margin-bottom: 1rem;
 	}
 
 	body.body-template-collection .breadcrumb__delimiter {
 		padding: 0 1rem;
+	}
+
+	/* The collection banner renders mostly empty on this page (hidden title,
+	   no description) but still carries the theme's default section padding
+	   — trim it so it does not leave a large empty gap above the toolbar. */
+	body.body-template-collection .collection-banner-section.spaced-section--full-width {
+		padding-top: 0.6rem;
+		padding-bottom: 0;
 	}
 
 	.collection-grid-section .kollab-collection-shell {
@@ -608,7 +616,7 @@
 	}
 
 	.collection-grid-section .kollab-product-card__price--sale {
-		justify-content: space-between;
+		justify-content: flex-start;
 	}
 
 	.collection-grid-section .kollab-product-card__regular {
@@ -628,7 +636,6 @@
 	.collection-grid-section .kollab-product-card__sale {
 		color: #F12C18;
 		font-weight: 400;
-		margin-left: auto;
 	}
 
 	.collection-grid-section .kollab-product-card__inventory {
@@ -1297,11 +1304,13 @@
 										<a href='{{ product.url }}'>{{ product.title }}</a>
 									</h3>
 									<p class='kollab-product-card__description'>
-										{% if product.description != blank %}
-											{{ product.description | strip_html | truncate: 70 }}
-										{% else %}
-											Product description
-										{% endif %}
+										{%- assign card_description = product.description | strip_html -%}
+										{%- if card_description == blank -%}
+											{%- assign card_description = product.metafields.custom.hero_line.value | default: product.metafields.custom.hero_line -%}
+										{%- endif -%}
+										{%- if card_description != blank -%}
+											{{ card_description | strip_html | truncate: 70 }}
+										{%- endif -%}
 									</p>
 									{% if product.compare_at_price > product.price %}
 										<div class='kollab-product-card__price kollab-product-card__price--sale'>
@@ -1313,18 +1322,11 @@
 											<span class='kollab-product-card__regular'>{{ product.price | money }}</span>
 										</div>
 									{% endif %}
-									<p class='kollab-product-card__inventory'>
-										{% if add_to_cart_available %}
-											In Stock
-										{% else %}
-											Sold Out
-										{% endif %}
-									</p>
 									<form class='kollab-product-card__form' method='post' action='{{ routes.cart_add_url }}' data-kollab-ajax-cart-form>
 										<input type='hidden' name='id' value='{{ add_to_cart_variant.id }}'>
 										<input type='hidden' name='quantity' value='1'>
 										<button class='kollab-product-card__quick' type='submit' {% unless add_to_cart_available %}disabled{% endunless %}>
-											{% if add_to_cart_available %}Add to Cart{% else %}Unavailable{% endif %}
+											{% if add_to_cart_available %}Add to Cart{% else %}Sold Out{% endif %}
 										</button>
 									</form>
 								</div>
