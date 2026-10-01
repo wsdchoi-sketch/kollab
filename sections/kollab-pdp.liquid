@@ -22,7 +22,7 @@
   .kx{--red:#DD1E26;--ink:#1B1B1B;--paper:#F9F9F9;--mute:#6B6B68;--line:#E4E4E2;--soft:#F1F1F0;font-family:'Jost',Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);font-weight:400;overflow-x:hidden}
   .kx *{box-sizing:border-box}
   .kx p,.kx li,.kx span,.kx div,.kx summary,.kx button,.kx input,.kx select{font-family:'Jost',Helvetica,Arial,sans-serif!important;text-transform:none}
-  .kx h1,.kx h2,.kx h3,.kx .kx-serif,.kx .kx-statement-text p,.kx .kx-hero-ing,.kx .kx-benefit .kx-serif{font-family:'Instrument Serif',Georgia,serif!important;text-transform:none!important;font-weight:400!important}
+  .kx h1,.kx h2,.kx h3,.kx .kx-serif,.kx .kx-statement-text p:not(.kx-eyebrow),.kx .kx-hero-ing,.kx .kx-benefit .kx-serif{font-family:'Instrument Serif',Georgia,serif!important;text-transform:none!important;font-weight:400!important}
   .kx .kx-eyebrow,.kx .kx-acc summary,.kx .kx-add,.kx .kx-tape span,.kx .kx-sticky button,.kx .kx-when p:first-child{text-transform:uppercase!important}
   .kx .kx-faq .kx-acc summary{text-transform:none!important}
   .kx img,.kx video{display:block;max-width:100%}
@@ -88,7 +88,7 @@
   @media(min-width:990px){.kx-statement{grid-template-columns:1fr 1fr}}
   .kx-statement-text{background:var(--red);color:#fff;padding:clamp(52px,7vw,104px) clamp(24px,5vw,80px);display:flex;flex-direction:column;justify-content:center}
   .kx-statement-text p{margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:clamp(32px,3.8vw,54px);line-height:1.1;letter-spacing:-.01em;max-width:20ch}
-  .kx-statement-img{background:#EDEDEC;min-height:340px}
+  .kx-statement-img{background:#EDEDEC;min-height:340px;max-height:620px;overflow:hidden}
   .kx-statement-img img{width:100%;height:100%;object-fit:cover}
 
   .kx-howto{display:grid;grid-template-columns:1fr;gap:clamp(32px,5vw,80px);align-items:center}
@@ -109,6 +109,20 @@
   .kx .kx-faq .kx-acc summary{font-size:19px!important;letter-spacing:0;text-transform:none;font-weight:400;padding:24px 0}
 
   .kx-reels{margin-top:26px}
+  .jdgm-widget .jdgm-rev-widg__title{font-family:'Instrument Serif',Georgia,serif!important;font-weight:400!important;font-size:clamp(36px,5vw,60px)!important;text-transform:none!important;letter-spacing:-.02em!important}
+  .jdgm-widget .jdgm-write-rev-link,.jdgm-widget .jdgm-ask-question-btn{background:#DD1E26!important;color:#fff!important;border:0!important;border-radius:0!important;letter-spacing:.18em!important;text-transform:uppercase!important;font-family:'Jost',sans-serif!important;padding:16px 28px!important}
+  .jdgm-widget .jdgm-star{color:#DD1E26!important}
+  #kx-{{ section.id }} .kx-eyebrow{font-size:12px!important;font-family:'Jost',Helvetica,Arial,sans-serif!important}
+  #kx-{{ section.id }} .kx-statement-text .kx-eyebrow{color:#fff!important}
+  #kx-{{ section.id }} .kx-faq .kx-acc summary{font-size:19px!important;line-height:1.4!important}
+  #kx-{{ section.id }} .kx-faq .kx-acc .kx-body{font-size:17px!important}
+  #kx-{{ section.id }} .kx-noreviews .kx-body{font-size:17px!important}
+  #kx-{{ section.id }} .kx-noreviews h3{font-size:34px!important}
+  #kx-{{ section.id }} .kx-rec p{font-size:16px!important}
+  #kx-{{ section.id }} .kx-rec .kx-eyebrow{font-size:11px!important}
+  #kx-{{ section.id }} .kx-rec .kx-serif{font-size:20px!important}
+  #kx-{{ section.id }} .kx-acc summary{font-size:13px!important}
+  #kx-{{ section.id }} .kx-perks li{font-size:16px!important}
   .kx-ing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(24px,3vw,52px)}
   .kx-ing-img{aspect-ratio:1/1;background:#E4E4E2;overflow:hidden;margin-bottom:24px}
   .kx-ing-img img{width:100%;height:100%;object-fit:cover}
@@ -333,6 +347,7 @@
     </section>
   {%- endif -%}
 
+  {%- if section.settings.show_reviews_box -%}
   <section class="kx-ingred" id="kx-reviews">
     <div class="kx-wrap">
       <p class="kx-eyebrow">Customer reviews</p>
@@ -347,6 +362,7 @@
       {%- endif -%}
     </div>
   </section>
+  {%- endif -%}
 
   {%- assign rel = product.collections.first.products -%}
   {%- if rel.size > 1 -%}
@@ -412,6 +428,7 @@
   "class": "kx-section",
   "settings": [
     { "type": "text", "id": "how_to_video_url", "label": "How-to video URL (.mp4 from Content > Files)", "info": "Used when the product has no custom.how_to_video metafield." },
+    { "type": "checkbox", "id": "show_reviews_box", "label": "Show built-in \"No reviews yet\" box", "default": true, "info": "Turn off when Judge.me is added below this section." },
     { "type": "html", "id": "reviews_html", "label": "Reviews app embed (optional)" },
     { "type": "text", "id": "perk_1", "label": "Perk 1", "default": "Complimentary shipping over $50" },
     { "type": "text", "id": "perk_2", "label": "Perk 2", "default": "Dispatched from Los Angeles in 1–2 business days" },
