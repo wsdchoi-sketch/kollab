@@ -1,0 +1,423 @@
+{%- comment -%}
+  KOLLAB product page v2. Self-contained section: reads product data and
+  product.metafields.custom.* only. Does not modify or depend on other theme sections.
+{%- endcomment -%}
+{%- liquid
+  assign mf = product.metafields.custom
+  assign v = product.selected_or_first_available_variant
+  assign form_id = 'kx-form-' | append: section.id
+  assign short_title = product.title
+  if product.title contains ']'
+    assign short_title = product.title | split: ']' | last | strip
+  endif
+  assign faq_text = mf.faq | metafield_text
+  assign video_url = section.settings.how_to_video_url
+-%}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  .kx{--red:#DD1E26;--ink:#1B1B1B;--paper:#F9F9F9;--mute:#6B6B68;--line:#E4E4E2;--soft:#F1F1F0;font-family:'Jost',Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);font-weight:400;overflow-x:hidden}
+  .kx *{box-sizing:border-box}
+  .kx p,.kx li,.kx span,.kx div,.kx summary,.kx button,.kx input,.kx select{font-family:'Jost',Helvetica,Arial,sans-serif!important;text-transform:none}
+  .kx h1,.kx h2,.kx h3,.kx .kx-serif,.kx .kx-statement-text p,.kx .kx-hero-ing,.kx .kx-benefit .kx-serif{font-family:'Instrument Serif',Georgia,serif!important;text-transform:none!important;font-weight:400!important}
+  .kx .kx-eyebrow,.kx .kx-acc summary,.kx .kx-add,.kx .kx-tape span,.kx .kx-sticky button,.kx .kx-when p:first-child{text-transform:uppercase!important}
+  .kx .kx-faq .kx-acc summary{text-transform:none!important}
+  .kx img,.kx video{display:block;max-width:100%}
+  .kx-serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400}
+  .kx-eyebrow{margin:0 0 16px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--mute);font-weight:500}
+  .kx-h2{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(36px,5vw,64px);line-height:1;letter-spacing:-.02em}
+  .kx-h2 em,.kx-title em{font-style:italic;color:var(--red)}
+  .kx-wrap{max-width:1560px;margin:0 auto;padding:clamp(60px,8vw,112px) clamp(20px,4vw,44px)}
+  .kx .kx-body{font-size:17px!important;line-height:1.7!important;color:#3C3C39;font-weight:400!important}
+
+  .kx-top{display:grid;grid-template-columns:1fr;max-width:1560px;margin:0 auto}
+  @media(min-width:990px){.kx-top{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}}
+  .kx-gallery{padding:clamp(16px,3vw,40px)}
+  .kx-stage{background:#EDEDEC;aspect-ratio:4/5;overflow:hidden;max-height:72vh;max-width:620px;margin:0 auto}
+  .kx-thumbs{max-width:620px;margin-left:auto!important;margin-right:auto!important}
+  .kx-stage img{width:100%;height:100%;object-fit:cover}
+  .kx-thumbs{display:flex;gap:8px;margin-top:8px;overflow-x:auto}
+  .kx-thumb{flex:0 0 auto;width:76px;height:95px;padding:0;border:0;background:#EDEDEC;cursor:pointer;outline:2px solid transparent;outline-offset:-2px}
+  .kx-thumb[aria-current="true"]{outline-color:var(--red)}
+  .kx-thumb img{width:100%;height:100%;object-fit:cover}
+
+  .kx-info{display:flex;align-items:center;padding:clamp(24px,4vw,64px) clamp(20px,4vw,56px)}
+  .kx-info-in{width:100%;max-width:520px}
+  .kx-title{margin:0;font-family:'Instrument Serif',Georgia,serif;font-weight:400;font-size:clamp(44px,5.6vw,72px);line-height:.98;letter-spacing:-.02em}
+  .kx .kx-desc{margin:22px 0 0;font-size:19px!important;line-height:1.65;color:#3C3C39;font-weight:300;max-width:44ch}
+  .kx-price{display:flex;align-items:baseline;gap:16px;margin:30px 0 0;padding-top:26px;border-top:1px solid var(--line)}
+  .kx-price .kx-serif{font-size:36px}
+  .kx-price s{color:var(--mute);font-size:18px}
+  .kx-row{display:flex;gap:8px;margin:26px 0 10px;flex-wrap:wrap}
+  .kx-qty{display:flex;align-items:center;border:1px solid #D8D8D5}
+  .kx-qty button{width:48px;height:58px;border:0;background:none;font-size:18px;cursor:pointer;color:var(--ink)}
+  .kx-qty input{width:36px;border:0;background:none;text-align:center;font:inherit;font-size:16px;-moz-appearance:textfield}
+  .kx-qty input::-webkit-outer-spin-button,.kx-qty input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .kx-add{flex:1 1 220px;height:58px;border:0;background:var(--red);color:#fff;font:inherit;font-weight:500;font-size:13px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:background .2s}
+  .kx-add:hover{background:var(--ink)}
+  .kx-add[disabled]{background:#BDBDBA;cursor:not-allowed}
+  .kx-select{width:100%;height:52px;margin-top:22px;border:1px solid #D8D8D5;background:var(--paper);font:inherit;font-size:15px;padding:0 14px}
+  .kx-form .shopify-payment-button__button{border-radius:0;min-height:52px}
+  .kx .kx-perks{list-style:none;margin:28px 0 0;padding:22px 0 0;border-top:1px solid var(--line);display:grid;gap:10px;font-size:16px!important;color:#3C3C39;font-weight:300}
+
+  .kx-acc{border-bottom:1px solid var(--line)}
+  .kx-acc summary{list-style:none;cursor:pointer;padding:20px 0;display:flex;justify-content:space-between;gap:20px;font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+  .kx-acc summary::-webkit-details-marker{display:none}
+  .kx-acc summary span{color:var(--red);transition:transform .2s}
+  .kx-acc[open] summary span{transform:rotate(45deg)}
+  .kx-acc > div{padding-bottom:22px}
+
+  .kx-tape{background:var(--ink);overflow:hidden;padding:16px 0;white-space:nowrap}
+  .kx-tape-in{display:inline-flex;gap:40px;animation:kx-tape 36s linear infinite}
+  .kx-tape span{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--paper);font-weight:500}
+  .kx-tape i{display:inline-block;width:11px;height:11px;margin-left:40px;background:linear-gradient(135deg,#F4F4F4,#8E9196 40%,#FDFDFD 52%,#6E7276 70%,#EDEDED);clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%)}
+  @keyframes kx-tape{to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.kx-tape-in{animation:none}}
+
+  .kx-apps{padding:clamp(40px,5vw,72px) clamp(20px,4vw,44px);max-width:1560px;margin:0 auto}
+
+  .kx-benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+  .kx-benefit{border-top:1px solid var(--red);padding:26px 30px 40px 0}
+  .kx-benefit .kx-serif{margin:0 0 20px;font-size:40px;line-height:1;color:var(--red)}
+  .kx .kx-benefit p:last-child{margin:0;font-size:20px!important;line-height:1.5;max-width:30ch}
+
+  .kx-statement{display:grid;grid-template-columns:1fr}
+  @media(min-width:990px){.kx-statement{grid-template-columns:1fr 1fr}}
+  .kx-statement-text{background:var(--red);color:#fff;padding:clamp(52px,7vw,104px) clamp(24px,5vw,80px);display:flex;flex-direction:column;justify-content:center}
+  .kx-statement-text p{margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:clamp(32px,3.8vw,54px);line-height:1.1;letter-spacing:-.01em;max-width:20ch}
+  .kx-statement-img{background:#EDEDEC;min-height:340px}
+  .kx-statement-img img{width:100%;height:100%;object-fit:cover}
+
+  .kx-howto{display:grid;grid-template-columns:1fr;gap:clamp(32px,5vw,80px);align-items:center}
+  @media(min-width:990px){.kx-howto{grid-template-columns:minmax(0,.9fr) minmax(0,1fr)}}
+  .kx-video{background:var(--ink);aspect-ratio:4/5;overflow:hidden;max-height:680px;max-width:540px}
+  .kx-video video{width:100%;height:100%;object-fit:cover}
+  .kx-when{margin-top:28px;padding-top:20px;border-top:1px solid var(--ink)}
+  .kx-when p:first-child{margin:0 0 8px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;font-weight:500}
+
+  .kx-ingred{background:var(--soft)}
+  .kx-ingred-grid{display:grid;grid-template-columns:1fr;gap:clamp(28px,4vw,72px)}
+  @media(min-width:990px){.kx-ingred-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}}
+  .kx-hero-ing{margin:0;font-family:'Instrument Serif',Georgia,serif;font-size:clamp(24px,2.6vw,34px);line-height:1.3}
+  .kx .kx-inci{font-size:14.5px!important;line-height:1.8;color:#3C3C39;font-weight:300}
+
+  .kx-faq{display:grid;grid-template-columns:1fr;gap:clamp(28px,4vw,72px)}
+  @media(min-width:990px){.kx-faq{grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)}}
+  .kx .kx-faq .kx-acc summary{font-size:19px!important;letter-spacing:0;text-transform:none;font-weight:400;padding:24px 0}
+
+  .kx-reels{margin-top:26px}
+  .kx-ing-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:clamp(24px,3vw,52px)}
+  .kx-ing-img{aspect-ratio:1/1;background:#E4E4E2;overflow:hidden;margin-bottom:24px}
+  .kx-ing-img img{width:100%;height:100%;object-fit:cover}
+  .kx-steps{list-style:none;margin:0;padding:0;display:grid;gap:22px}
+  .kx-steps li{border-top:1px solid var(--ink);padding-top:16px}
+  .kx-noreviews{border:1px solid #D8D8D5;background:var(--paper);padding:clamp(44px,6vw,88px) 28px;text-align:center}
+  .kx-recs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:clamp(16px,2vw,26px)}
+  .kx-rec{color:var(--ink);text-decoration:none}
+  .kx-rec-img{aspect-ratio:1/1;background:#EDEDEC;overflow:hidden;margin-bottom:16px}
+  .kx-rec-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+  .kx-rec:hover img{transform:scale(1.04)}
+  .kx-sticky{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--paper);border-top:1px solid #D8D8D5;padding:12px clamp(16px,3vw,32px);display:flex;align-items:center;gap:16px;transform:translateY(110%);transition:transform .3s ease}
+  .kx-sticky.is-on{transform:none}
+  .kx-sticky img{width:46px;height:46px;object-fit:cover;background:#EDEDEC;flex:0 0 auto}
+  .kx-sticky div{flex:1 1 auto;min-width:0}
+  .kx-sticky p{margin:0;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .kx-sticky button{flex:0 0 auto;margin-right:110px;border:0;background:var(--red);color:#fff;font:inherit;font-weight:500;font-size:12px;letter-spacing:.18em;text-transform:uppercase;padding:16px 26px;cursor:pointer}
+</style>
+
+<div class="kx" id="kx-{{ section.id }}">
+
+  <section class="kx-top">
+    <div class="kx-gallery">
+      <div class="kx-stage">
+        {%- if product.featured_media -%}
+          <img data-kx-main src="{{ product.featured_media | image_url: width: 1400 }}" alt="{{ product.featured_media.alt | default: product.title | escape }}" width="1400" height="1750" fetchpriority="high">
+        {%- endif -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="kx-thumbs">
+          {%- for m in product.media -%}
+            {%- if m.media_type == 'image' -%}
+              <button type="button" class="kx-thumb" data-kx-src="{{ m | image_url: width: 1400 }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="Show image {{ forloop.index }}">
+                <img src="{{ m | image_url: width: 200 }}" alt="" loading="lazy" width="200" height="250">
+              </button>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="kx-info">
+      <div class="kx-info-in">
+        <p class="kx-eyebrow">Kollab &nbsp;&#9670;&nbsp; {{ product.vendor }}</p>
+        <h1 class="kx-title">{{ short_title }}</h1>
+        {%- if mf.descriptor != blank -%}
+          <p class="kx-desc">{{ mf.descriptor }}</p>
+        {%- endif -%}
+
+        <div class="kx-price">
+          <span class="kx-serif" data-kx-price>{{ v.price | money }}</span>
+          {%- if v.compare_at_price > v.price -%}<s>{{ v.compare_at_price | money }}</s>{%- endif -%}
+        </div>
+
+        {%- form 'product', product, id: form_id, class: 'kx-form', novalidate: 'novalidate' -%}
+          {%- if product.has_only_default_variant -%}
+            <input type="hidden" name="id" value="{{ v.id }}">
+          {%- else -%}
+            <select name="id" class="kx-select" aria-label="Choose option">
+              {%- for variant in product.variants -%}
+                <option value="{{ variant.id }}" {% if variant == v %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>{{ variant.title }} · {{ variant.price | money }}</option>
+              {%- endfor -%}
+            </select>
+          {%- endif -%}
+          <div class="kx-row">
+            <div class="kx-qty">
+              <button type="button" data-kx-step="-1" aria-label="Decrease quantity">&minus;</button>
+              <input type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+              <button type="button" data-kx-step="1" aria-label="Increase quantity">+</button>
+            </div>
+            <button type="submit" name="add" class="kx-add" {% unless v.available %}disabled{% endunless %}>
+              {%- if v.available -%}Add to bag{%- else -%}Sold out{%- endif -%}
+            </button>
+          </div>
+          {{ form | payment_button }}
+        {%- endform -%}
+
+        <ul class="kx-perks">
+          <li>{{ section.settings.perk_1 }}</li>
+          <li>{{ section.settings.perk_2 }}</li>
+          <li>{{ section.settings.perk_3 }}</li>
+        </ul>
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="kx-reels">
+            <p class="kx-eyebrow" style="margin:0 0 12px">See it in use</p>
+            {%- for block in section.blocks -%}{%- if block.type == '@app' -%}{% render block %}{%- endif -%}{%- endfor -%}
+          </div>
+        {%- endif -%}
+        <div style="margin-top:26px;border-top:1px solid var(--line)">
+          {%- if product.description != blank -%}
+            <details class="kx-acc" open><summary>Description<span>+</span></summary><div class="kx-body">{{ product.description }}</div></details>
+          {%- endif -%}
+          {%- if mf.hero_ingredients != blank -%}
+            <details class="kx-acc"><summary>Key ingredients<span>+</span></summary><div class="kx-body">{{ mf.hero_ingredients | newline_to_br }}</div></details>
+          {%- endif -%}
+          <details class="kx-acc"><summary>Shipping &amp; returns<span>+</span></summary><div class="kx-body">{{ section.settings.perk_1 }}. {{ section.settings.perk_3 }}.</div></details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="kx-tape" aria-hidden="true">
+    <div class="kx-tape-in">
+      {%- for i in (1..12) -%}
+        <span>{% cycle 'Kollab', product.vendor %}<i></i></span>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  {%- if mf.key_benefits != blank -%}
+    <section class="kx-wrap">
+      <p class="kx-eyebrow">Key benefits</p>
+      <h2 class="kx-h2" style="margin-bottom:clamp(40px,5vw,68px)">Made for the places that <em>ask for more.</em></h2>
+      <div class="kx-benefits">
+        {%- for b in mf.key_benefits.value -%}
+          <article class="kx-benefit">
+            <p class="kx-serif">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</p>
+            <p>{{ b }}</p>
+          </article>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if mf.hero_line != blank -%}
+    <section class="kx-statement">
+      <div class="kx-statement-text"><p class="kx-eyebrow" style="color:#fff;opacity:.9;margin-bottom:22px">Why it works</p><p>{{ mf.hero_line }}</p></div>
+      <div class="kx-statement-img">
+        {%- assign stmt = product.media[1] | default: product.featured_media -%}
+        {%- if stmt -%}<img src="{{ stmt | image_url: width: 1200 }}" alt="" loading="lazy" width="1200" height="1200">{%- endif -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if mf.how_to_use != blank or video_url != blank or mf.how_to_video != blank -%}
+    <section class="kx-wrap">
+      <div class="kx-howto">
+        {%- if mf.how_to_video != blank -%}
+          <div class="kx-video">{{ mf.how_to_video.value | video_tag: controls: true, playsinline: true, muted: true, loop: true, preload: 'metadata' }}</div>
+        {%- elsif video_url != blank -%}
+          <div class="kx-video">
+            <video src="{{ video_url }}" controls playsinline muted loop preload="metadata" {% if product.featured_media %}poster="{{ product.featured_media | image_url: width: 900 }}"{% endif %}></video>
+          </div>
+        {%- endif -%}
+        <div>
+          <p class="kx-eyebrow">How to use</p>
+          <h2 class="kx-h2" style="margin-bottom:32px">Swipe, press, <em>reapply.</em></h2>
+          {%- if mf.how_to_use != blank -%}
+            {%- assign steps = mf.how_to_use | newline_to_br | replace: '<br />', '. ' | split: '. ' -%}
+            {%- if steps.size < 2 -%}
+              <div class="kx-body">{{ mf.how_to_use | newline_to_br }}</div>
+            {%- else -%}
+            <ol class="kx-steps">
+              {%- for st in steps -%}{%- assign t = st | strip | remove_last: '.' -%}{%- if t != blank -%}
+                <li><p class="kx-eyebrow" style="color:var(--ink);margin:0 0 10px">Step {{ forloop.index | prepend: '0' | slice: -2, 2 }}</p><p class="kx-body" style="margin:0">{{ t }}.</p></li>
+              {%- endif -%}{%- endfor -%}
+            </ol>
+            {%- endif -%}
+          {%- endif -%}
+          {%- if mf.am_pm != blank -%}
+            <div class="kx-when"><p>When</p><p class="kx-body" style="margin:0">{{ mf.am_pm }}</p></div>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if mf.hero_ingredients != blank or mf.inci_list != blank -%}
+    <section class="kx-ingred">
+      <div class="kx-wrap">
+        <p class="kx-eyebrow">Ingredients</p>
+        <h2 class="kx-h2" style="margin-bottom:clamp(36px,4vw,60px)">What&rsquo;s <em>inside.</em></h2>
+        <div class="kx-ing-cards">
+          {%- assign im2 = product.media[2] | default: product.featured_media -%}
+          {%- assign im3 = product.media[3] | default: product.media[1] -%}
+          <article>
+            {%- if im2 -%}<div class="kx-ing-img"><img src="{{ im2 | image_url: width: 900 }}" alt="" loading="lazy" width="900" height="900"></div>{%- endif -%}
+            {%- if mf.hero_ingredients != blank -%}<p class="kx-hero-ing">{{ mf.hero_ingredients | newline_to_br }}</p>{%- endif -%}
+          </article>
+          <article>
+            {%- if im3 -%}<div class="kx-ing-img"><img src="{{ im3 | image_url: width: 900 }}" alt="" loading="lazy" width="900" height="900"></div>{%- endif -%}
+            {%- if mf.inci_list != blank -%}
+              <details class="kx-acc" style="border-top:1px solid #D8D8D5;border-bottom-color:#D8D8D5"><summary>Full ingredient list<span>+</span></summary><div class="kx-inci">{{ mf.inci_list | newline_to_br }}</div></details>
+            {%- endif -%}
+          </article>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  {%- if faq_text != blank -%}
+    <section class="kx-wrap">
+      <div class="kx-faq">
+        <div>
+          <p class="kx-eyebrow">FAQ</p>
+          <h2 class="kx-h2">Questions, <em>answered.</em></h2>
+        </div>
+        <div style="border-top:1px solid var(--line)">
+          {%- assign lines = faq_text | newline_to_br | split: '<br />' -%}
+          {%- assign q = '' -%}
+          {%- assign a = '' -%}
+          {%- for raw in lines -%}
+            {%- assign line = raw | strip -%}
+            {%- if line == blank -%}{%- continue -%}{%- endif -%}
+            {%- assign last_char = line | slice: -1, 1 -%}
+            {%- if last_char == '?' -%}
+              {%- if q != blank -%}
+                <details class="kx-acc"><summary>{{ q }}<span>+</span></summary><div class="kx-body">{{ a }}</div></details>
+              {%- endif -%}
+              {%- assign q = line -%}
+              {%- assign a = '' -%}
+            {%- else -%}
+              {%- assign a = a | append: ' ' | append: line | strip -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if q != blank -%}
+            <details class="kx-acc"><summary>{{ q }}<span>+</span></summary><div class="kx-body">{{ a }}</div></details>
+          {%- endif -%}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+
+  <section class="kx-ingred" id="kx-reviews">
+    <div class="kx-wrap">
+      <p class="kx-eyebrow">Customer reviews</p>
+      <h2 class="kx-h2" style="margin-bottom:clamp(32px,4vw,52px)">What people <em>say.</em></h2>
+      {%- if section.settings.reviews_html != blank -%}
+        {{ section.settings.reviews_html }}
+      {%- else -%}
+        <div class="kx-noreviews">
+          <h3 class="kx-serif" style="margin:0 0 12px;font-size:32px">No reviews yet</h3>
+          <p class="kx-body" style="margin:0 auto 28px;max-width:42ch">Be the first to share how you use it. Reviews help other customers more than anything we can write.</p>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+
+  {%- assign rel = product.collections.first.products -%}
+  {%- if rel.size > 1 -%}
+    <section class="kx-wrap">
+      <p class="kx-eyebrow">You may also like</p>
+      <h2 class="kx-h2" style="margin-bottom:clamp(28px,3vw,44px)">Pairs well <em>with.</em></h2>
+      <div class="kx-recs">
+        {%- assign shown = 0 -%}
+        {%- for r in rel -%}
+          {%- if r.id == product.id or shown >= 4 -%}{%- continue -%}{%- endif -%}
+          {%- assign shown = shown | plus: 1 -%}
+          <a href="{{ r.url }}" class="kx-rec">
+            <div class="kx-rec-img">{%- if r.featured_media -%}<img src="{{ r.featured_media | image_url: width: 600 }}" alt="{{ r.title | escape }}" loading="lazy" width="600" height="600">{%- endif -%}</div>
+            <p class="kx-eyebrow" style="margin:0 0 8px">{{ r.vendor }}</p>
+            <p style="margin:0 0 8px;font-size:16px;line-height:1.4">{{ r.title | split: ']' | last | strip }}</p>
+            <p class="kx-serif" style="margin:0;font-size:20px">{{ r.price | money }}</p>
+          </a>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endif -%}
+
+  <div class="kx-sticky" data-kx-sticky aria-hidden="true">
+    {%- if product.featured_media -%}<img src="{{ product.featured_media | image_url: width: 120 }}" alt="" width="46" height="46">{%- endif -%}
+    <div><p>{{ short_title }}</p><p style="color:var(--mute);font-size:13px">{{ v.price | money }}</p></div>
+    <button type="submit" form="{{ form_id }}" name="add" tabindex="-1" {% unless v.available %}disabled{% endunless %}>Add to bag</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('kx-{{ section.id }}');
+    if (!root) return;
+    var main = root.querySelector('[data-kx-main]');
+    root.querySelectorAll('.kx-thumb').forEach(function (t) {
+      t.addEventListener('click', function () {
+        if (main) main.src = t.dataset.kxSrc;
+        root.querySelectorAll('.kx-thumb').forEach(function (o) { o.setAttribute('aria-current', o === t ? 'true' : 'false'); });
+      });
+    });
+    root.querySelectorAll('[data-kx-step]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var input = b.parentNode.querySelector('input');
+        input.value = Math.max(1, (parseInt(input.value, 10) || 1) + parseInt(b.dataset.kxStep, 10));
+      });
+    });
+    var form = root.querySelector('.kx-form');
+    var sticky = root.querySelector('[data-kx-sticky]');
+    if (form && sticky && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) {
+        var on = !e[0].isIntersecting && e[0].boundingClientRect.top < 0;
+        sticky.classList.toggle('is-on', on);
+        sticky.setAttribute('aria-hidden', on ? 'false' : 'true');
+      }).observe(form);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "KOLLAB Product v2",
+  "tag": "section",
+  "class": "kx-section",
+  "settings": [
+    { "type": "text", "id": "how_to_video_url", "label": "How-to video URL (.mp4 from Content > Files)", "info": "Used when the product has no custom.how_to_video metafield." },
+    { "type": "html", "id": "reviews_html", "label": "Reviews app embed (optional)" },
+    { "type": "text", "id": "perk_1", "label": "Perk 1", "default": "Complimentary shipping over $50" },
+    { "type": "text", "id": "perk_2", "label": "Perk 2", "default": "Dispatched from Los Angeles in 1–2 business days" },
+    { "type": "text", "id": "perk_3", "label": "Perk 3", "default": "Easy 30-day returns" }
+  ],
+  "blocks": [ { "type": "@app" } ],
+  "presets": [ { "name": "KOLLAB Product v2" } ]
+}
+{% endschema %}
