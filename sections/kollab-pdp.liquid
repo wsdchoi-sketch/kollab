@@ -213,8 +213,17 @@
           </div>
         {%- endif -%}
         <div style="margin-top:26px;border-top:1px solid var(--line)">
-          {%- if product.description != blank -%}
-            <details class="kx-acc" open><summary>Description<span>+</span></summary><div class="kx-body">{{ product.description }}</div></details>
+          {%- liquid
+            assign desc = product.description
+            if desc == blank
+              assign desc = mf.short_description | metafield_tag
+            endif
+            if desc == blank
+              assign desc = mf.hero_line
+            endif
+          -%}
+          {%- if desc != blank -%}
+            <details class="kx-acc" open><summary>Description<span>+</span></summary><div class="kx-body">{{ desc }}</div></details>
           {%- endif -%}
           {%- if mf.hero_ingredients != blank -%}
             <details class="kx-acc"><summary>Key ingredients<span>+</span></summary><div class="kx-body">{{ mf.hero_ingredients | newline_to_br }}</div></details>
@@ -272,12 +281,12 @@
           <p class="kx-eyebrow">How to use</p>
           <h2 class="kx-h2" style="margin-bottom:32px">Swipe, press, <em>reapply.</em></h2>
           {%- if mf.how_to_use != blank -%}
-            {%- assign steps = mf.how_to_use | newline_to_br | replace: '<br />', '. ' | split: '. ' -%}
+            {%- assign steps = mf.how_to_use | newline_to_br | replace: '<br />', '. ' | replace: ', then ', '. ' | replace: '; then ', '. ' | replace: '; ', '. ' | split: '. ' -%}
             {%- if steps.size < 2 -%}
               <div class="kx-body">{{ mf.how_to_use | newline_to_br }}</div>
             {%- else -%}
             <ol class="kx-steps">
-              {%- for st in steps -%}{%- assign t = st | strip | remove_last: '.' -%}{%- if t != blank -%}
+              {%- for st in steps -%}{%- assign t = st | strip | remove_last: '.' -%}{%- assign t1 = t | slice: 0 | upcase -%}{%- assign t2 = t | slice: 1, 999 -%}{%- assign t = t1 | append: t2 -%}{%- if t != blank -%}
                 <li><p class="kx-eyebrow" style="color:var(--ink);margin:0 0 10px">Step {{ forloop.index | prepend: '0' | slice: -2, 2 }}</p><p class="kx-body" style="margin:0">{{ t }}.</p></li>
               {%- endif -%}{%- endfor -%}
             </ol>
