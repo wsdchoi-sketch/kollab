@@ -1736,6 +1736,62 @@
 			margin-bottom: 12px !important;
 		}
 	}
+	/* View More lives in the section header, right of the title (desktop +
+	   mobile). Restyled from the theme button into a text link; grid box is
+	   closed with its own bottom border now that .kollab-view-more is gone. */
+	.popular-products .section-header__line .section-header__title__block {
+		flex-direction: row !important;
+		align-items: flex-end !important;
+		justify-content: space-between !important;
+		gap: 16px;
+	}
+
+	.popular-products .section-header__button {
+		display: flex !important;
+		flex: none;
+	}
+
+	.popular-products .section-header__btn-top .button {
+		min-width: 0 !important;
+		min-height: 44px !important;
+		padding: 0 !important;
+		background: transparent !important;
+		border: 0 !important;
+		border-radius: 0 !important;
+		box-shadow: none !important;
+		color: #000000 !important;
+		font-family: Arial, Helvetica, sans-serif !important;
+		font-size: 15px !important;
+		font-weight: 700 !important;
+		text-transform: none !important;
+		text-decoration: underline !important;
+		text-underline-offset: 4px;
+		white-space: nowrap;
+	}
+
+	.popular-products .section-header__btn-top .button:hover,
+	.popular-products .section-header__btn-top .button:focus-visible {
+		background: transparent !important;
+		color: #F12C18 !important;
+	}
+
+	.popular-products .section-header__btn-top .button .button-label::after {
+		content: " \2192";
+	}
+
+	.popular-products .kollab-product-carousel__viewport {
+		border-bottom: 1px solid #787878;
+	}
+
+	@media screen and (max-width: 989px) {
+		.popular-products .section-header__line .section_border_bottom .section-header__btn-top {
+			padding-bottom: 1.6rem;
+		}
+
+		.popular-products .section-header__btn-top .button {
+			font-size: 14px !important;
+		}
+	}
 {% endstyle %}
 
 {% assign product_list = section.settings.product_list %}
@@ -1825,11 +1881,6 @@
 			</div>
 			<button class='kollab-product-carousel__arrow kollab-product-carousel__arrow--next' type='button' aria-label='Next products' data-product-carousel-next>&rsaquo;</button>
 		</div>
-		{% if section.settings.button_label != blank %}
-			<div class='kollab-view-more'>
-				{% render 'button', layout: section %}
-			</div>
-		{% endif %}
 	</div>
 </div>
 
