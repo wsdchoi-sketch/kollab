@@ -23,7 +23,7 @@
 {%- endcomment -%}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
-{%- assign ship_threshold = section.settings.free_shipping_threshold | default: 50 -%}
+{%- assign ship_threshold = section.settings.free_shipping_threshold | default: 60 -%}
 
 {%- assign clean_title = product.title -%}
 {%- if clean_title contains ']' -%}
@@ -36,7 +36,7 @@
 
 <div class="nwip">
   {%- if section.settings.show_top_banner -%}
-    <div class="nwip-announce">{{ section.settings.top_banner_text | default: 'Free Shipping on orders over $50' }}</div>
+    <div class="nwip-announce">{{ section.settings.top_banner_text | default: 'Free Shipping on orders over $60' }}</div>
   {%- endif -%}
 
   <div class="nwip-grid">
@@ -302,7 +302,7 @@
       "type": "text",
       "id": "top_banner_text",
       "label": "Top banner text",
-      "default": "Free Shipping on orders over $50"
+      "default": "Free Shipping on orders over $60"
     },
     {
       "type": "text",
@@ -334,14 +334,14 @@
       "type": "text",
       "id": "shipping_note",
       "label": "Shipping note",
-      "default": "Free shipping on orders over $50",
+      "default": "Free shipping on orders over $60",
       "info": "Display text only."
     },
     {
       "type": "number",
       "id": "free_shipping_threshold",
       "label": "Free shipping min ($)",
-      "default": 50,
+      "default": 60,
       "info": "Used for the sticky cart's shipping progress gauge."
     },
     {

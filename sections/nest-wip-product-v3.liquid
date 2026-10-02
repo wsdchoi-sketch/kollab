@@ -41,7 +41,7 @@
 {%- endcomment -%}
 
 {%- assign current_variant = product.selected_or_first_available_variant -%}
-{%- assign ship_threshold = section.settings.free_shipping_threshold | default: 50 -%}
+{%- assign ship_threshold = section.settings.free_shipping_threshold | default: 60 -%}
 {%- assign mf = product.metafields.custom -%}
 
 {%- assign clean_title = product.title -%}
@@ -55,7 +55,7 @@
 
   {%- if section.settings.show_top_banner -%}
     <div class="nwip3-marquee" style="padding:10px 0;">
-      <div class="nwip3-marquee-track"><span>{{ section.settings.top_banner_text | default: 'Complimentary shipping over $50' }}</span></div>
+      <div class="nwip3-marquee-track"><span>{{ section.settings.top_banner_text | default: 'Complimentary shipping over $60' }}</span></div>
     </div>
   {%- endif -%}
 
@@ -217,7 +217,7 @@
         <details>
           <summary><span>Shipping &amp; returns</span><span class="ic"></span></summary>
           <div class="bd">
-            <p>{{ section.settings.shipping_note | default: 'Complimentary standard shipping over $50' }}.</p>
+            <p>{{ section.settings.shipping_note | default: 'Complimentary standard shipping over $60' }}.</p>
             <p>{{ section.settings.returns_note | default: 'Easy 30-day returns' }}.</p>
           </div>
         </details>
@@ -449,7 +449,7 @@
       "type": "text",
       "id": "top_banner_text",
       "label": "Top ticker text",
-      "default": "Complimentary shipping over $50"
+      "default": "Complimentary shipping over $60"
     },
     {
       "type": "header",
@@ -459,13 +459,13 @@
       "type": "text",
       "id": "shipping_note",
       "label": "Shipping note",
-      "default": "Complimentary standard shipping over $50"
+      "default": "Complimentary standard shipping over $60"
     },
     {
       "type": "number",
       "id": "free_shipping_threshold",
       "label": "Free shipping min ($)",
-      "default": 50
+      "default": 60
     },
     {
       "type": "text",

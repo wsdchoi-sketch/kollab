@@ -85,7 +85,7 @@
         var fill = document.getElementById('nwipShipFill');
         var label = document.getElementById('nwipShipLabel');
         if (!fill || !label) return;
-        var threshold = window.nwipShipThreshold || 5000;
+        var threshold = window.nwipShipThreshold || 6000;
         var pct = Math.min(100, (cart.total_price / threshold) * 100);
         fill.style.width = pct + '%';
         if (cart.total_price >= threshold) {

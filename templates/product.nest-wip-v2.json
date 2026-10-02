@@ -22,12 +22,12 @@
       ],
       "settings": {
         "show_top_banner": false,
-        "top_banner_text": "Free Shipping on orders over $50",
+        "top_banner_text": "Free Shipping on orders over $60",
         "heading": "Product Detail",
         "section_header_type": "type1",
         "enable_border_top": true,
-        "shipping_note": "Free shipping on orders over $50",
-        "free_shipping_threshold": 50,
+        "shipping_note": "Free shipping on orders over $60",
+        "free_shipping_threshold": 60,
         "returns_note": ""
       }
     },
