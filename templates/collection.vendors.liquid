@@ -1,0 +1,6 @@
+{%- layout none -%}
+{%- comment -%} Vendor list of storefront-visible products. Used by the Brand filter in main-collection-product-grid. {%- endcomment -%}
+{%- paginate collection.products by 250 -%}
+{%- assign vendors = collection.products | map: 'vendor' | uniq -%}
+{"pages":{{ paginate.pages | default: 1 }},"vendors":{{ vendors | json }}}
+{%- endpaginate -%}

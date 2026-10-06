@@ -1172,6 +1172,31 @@
 						{% endfor %}
 					</div>
 				</details>
+				<script>
+					/* Brand filter: show only vendors with products published to Online Store.
+					   collection.all_vendors also counts unpublished products, so check against
+					   templates/collection.vendors.liquid (storefront-visible products only). */
+					(function () {
+						var group = document.currentScript.previousElementSibling;
+						if (!group) return;
+						var base = {{ collection.url | default: '/collections/all' | json }};
+						var norm = function (v) { return (v || '').trim().toLowerCase(); };
+						var seen = {};
+						var load = function (page) {
+							return fetch(base + '?view=vendors&page=' + page, { credentials: 'same-origin' })
+								.then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+								.then(function (d) {
+									(d.vendors || []).forEach(function (v) { seen[norm(v)] = true; });
+									return page < d.pages ? load(page + 1) : null;
+								});
+						};
+						load(1).then(function () {
+							group.querySelectorAll('[data-filter-vendor]').forEach(function (b) {
+								if (!seen[norm(b.textContent)]) b.remove();
+							});
+						}).catch(function () {});
+					})();
+				</script>
 			{% endif %}
 			<details class='kollab-filter-group'>
 				<summary class='kollab-filter-group__summary'>Price Range</summary>
