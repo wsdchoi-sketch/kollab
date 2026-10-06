@@ -1,0 +1,47 @@
+{%- liquid
+assign ritual_handles = 'ciel-etoile-peeling-in-foam-150g,SELF,ciel-etoile-blooming-capsule-ampoule-13g-3-set,ciel-etoile-calming-cream-50g' | split: ','
+assign ritual_steps = 'Cleanse,Tone,Treat,Seal' | split: ','
+assign ritual_notes = 'Daily low-irritation deep cleanse.|Twenty seconds, then rinse.|Concentrated glow treatment.|Hibiscus seed oil and niacinamide.' | split: '|'
+assign bundle_ids = ''
+assign bundle_total = 0
+assign bundle_regular = 0
+-%}
+<section class="sec" id="ritual" style="padding-top:0">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kp-star" fill="#E3001B"/></svg>The Ciel étoilé ritual</div>
+<h2 class="big serif">Four products. <span class="i">One routine.</span></h2>
+<p class="lead"><span class="sent">The toner comes second, right after cleansing.</span><span class="sent">Everything here is from Ciel étoilé, so the formulas are made to layer.</span></p>
+<div style="height:40px"></div>
+<div class="rit">
+{%- for hd in ritual_handles -%}
+{%- if hd == 'SELF' -%}{%- assign rp = product -%}{%- else -%}{%- assign rp = all_products[hd] -%}{%- endif -%}
+{%- if rp.title != blank -%}
+{%- assign rv = rp.selected_or_first_available_variant -%}
+{%- assign rname = rp.title -%}
+{%- if rname contains ']' -%}{%- assign rname = rname | split: ']' | last | strip -%}{%- endif -%}
+{%- if rv.available -%}
+{%- assign bundle_ids = bundle_ids | append: rv.id | append: ',' -%}
+{%- assign bundle_total = bundle_total | plus: rv.price -%}
+{%- if rv.compare_at_price > rv.price -%}{%- assign bundle_regular = bundle_regular | plus: rv.compare_at_price -%}{%- else -%}{%- assign bundle_regular = bundle_regular | plus: rv.price -%}{%- endif -%}
+{%- endif -%}
+<div class="s{% if hd == 'SELF' %} me{% endif %}">
+<div class="n">STEP {{ forloop.index }} · {{ ritual_steps[forloop.index0] | upcase }}</div>
+<a class="img" href="{{ rp.url }}" aria-label="{{ rname | escape }}">{%- if rp.featured_image -%}<img src="{{ rp.featured_image | image_url: width: 600 }}" alt="{{ rname | escape }}" loading="lazy">{%- endif -%}</a>
+<h4><a href="{{ rp.url }}">{{ rname }}</a></h4>
+<p>{{ ritual_notes[forloop.index0] }}</p>
+<div class="pr">{%- if rv.compare_at_price > rv.price -%}<s>{{ rv.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}{{ rv.price | money_without_trailing_zeros }}</div>
+</div>
+{%- endif -%}
+{%- endfor -%}
+</div>
+{%- assign bundle_count = bundle_ids | split: ',' | size -%}
+{%- if bundle_count > 1 -%}
+<div class="gift" id="kp-bundle" data-ids="{{ bundle_ids }}">
+{%- if bow_image != blank -%}<img class="ribbon" src="{{ bow_image | image_url: width: 700 }}" alt="">{%- endif -%}
+<div class="lid"><span>Ciel étoilé × KOLLAB</span><span>Gift set</span></div>
+<div class="box">
+<div class="gl"><b>Complete the Ciel étoilé ritual</b><span class="sub2">All {{ bundle_count }} products, free shipping included.{%- if bundle_regular > bundle_total %} <em class="save">You save {{ bundle_regular | minus: bundle_total | money_without_trailing_zeros }}</em>{%- endif -%}</span></div>
+<button type="button" class="cta" id="kp-bundle-add"><span>Add all {{ bundle_count }}</span><b>{%- if bundle_regular > bundle_total -%}<s>{{ bundle_regular | money_without_trailing_zeros }}</s> {% endif -%}{{ bundle_total | money_without_trailing_zeros }}</b></button>
+</div>
+</div>
+{%- endif -%}
+</section>

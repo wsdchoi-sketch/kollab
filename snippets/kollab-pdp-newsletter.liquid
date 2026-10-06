@@ -1,0 +1,36 @@
+<style>
+.kpdp .serif,.kpdp h1.title,.kpdp h2.big,.kpdp .price .p,.kpdp .proof b,.kpdp .step .n,.kpdp .opt,.kpdp .card h3,.kpdp .ic .nm,.kpdp .rit h4,.kpdp .rit h4 a,.kpdp .tk .route b,.kpdp .tk h4,.kpdp .gift b,.kpdp .sticky .p,.kpdp .banner h2,.kpdp .banner h2 span,.kpdp .tank .num,.kpdp .news h2,.kpdp .news h2 em,.kpdp .qty input.q,.kpdp .kpdp-serif{font-family:'Instrument Serif',Georgia,serif!important;font-weight:400!important;letter-spacing:-0.01em!important;text-transform:none!important}
+.kpdp .i,.kpdp h1 .i,.kpdp h2 .i,.kpdp h3 .i,.kpdp .serif .i,.kpdp h2 span.i,.kpdp h1 span.i,.kpdp .banner h2 .i,.kpdp .news h2 em{font-family:'Instrument Serif',Georgia,serif!important;font-style:italic!important;font-weight:400!important;letter-spacing:-0.01em!important;text-transform:none!important}
+.kpdp .opt small,.kpdp .gift .cta span,.kpdp .gift .sub2{font-family:'Enkel','Helvetica Neue',Arial,sans-serif!important}
+.kpdp .card h3,.kpdp .card h3 *{color:#fff!important}
+.kpdp .card .lab{color:var(--red)!important}
+.kpdp .tank{aspect-ratio:1/1!important;background:#000!important}
+.kpdp .tank .cap{text-shadow:0 1px 10px rgba(0,0,0,.65)}
+.kpdp .gallery .stk-k{display:none!important}
+.kpdp .news{background:var(--red);color:#fff;padding:80px 0}
+.kpdp .news .grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:860px){.kpdp .news .grid{grid-template-columns:1fr;gap:32px}.kpdp .news{padding:60px 0}}
+.kpdp .news h2{font-size:clamp(34px,4.4vw,56px);line-height:1;margin:0;color:#fff}
+.kpdp .news h2 em{color:var(--black)}
+.kpdp .news form{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid #fff;gap:10px}
+.kpdp .news input[type=email]{background:none;border:0;color:#fff;font-family:inherit;font-size:15px;padding:16px 0;outline:none;box-shadow:none;border-radius:0;width:100%;min-width:0}
+.kpdp .news input[type=email]::placeholder{color:rgba(255,255,255,.75)}
+.kpdp .news button{background:none;border:0;color:#fff;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:0 4px;cursor:pointer}
+.kpdp .news button:hover{color:var(--black)}
+.kpdp .news .fine{font-size:12px;color:rgba(255,255,255,.85);margin:12px 0 0}
+.kpdp .news .ok{font-size:14px;color:var(--black);font-weight:700;margin:12px 0 0}
+.kpdp .news .err{font-size:13px;color:#fff;font-weight:700;margin:12px 0 0}
+</style>
+<section class="news" id="kp-newsletter"><div class="wrap"><div class="grid">
+<h2>Stay in the KOLLAB loop.<br><em>Drops, pop-ups, early access.</em></h2>
+<div>
+{%- form 'customer', id: 'kp-news-form', novalidate: 'novalidate' -%}
+<input type="hidden" name="contact[tags]" value="newsletter">
+<input type="email" name="contact[email]" id="kp-news-email" placeholder="Your email address" autocomplete="email" aria-label="Email address" required value="{{ form.email }}">
+<button type="submit">Join</button>
+{%- if form.posted_successfully? -%}<p class="ok" role="status" style="grid-column:1/-1;border-top:0">You're in. See you at the next drop.</p>{%- endif -%}
+{%- endform -%}
+<p class="fine">A little inspiration, never too much. One email a week from Downtown LA.</p>
+{%- if form.errors -%}<p class="err" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>{%- endif -%}
+</div>
+</div></div></section>
