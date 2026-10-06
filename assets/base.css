@@ -1,7 +1,7 @@
 /* Body Font */
 body,
 p,
-span:not([class*="jdgm"]),
+span:not([class*="jdgm"]):not([class*="font-icon"]),
 li,
 input,
 textarea,
