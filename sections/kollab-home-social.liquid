@@ -1,0 +1,31 @@
+{%- render 'kollab-home-head' -%}
+<section class="sec social" id="social">
+<div class="wrap">
+<div class="soc-row rv">
+<div>
+<div class="kicker"><svg><use href="#kh-star" fill="#E3001B"/></svg>Social</div>
+<h2 class="h2"><span class="ln">Tag us.</span><span class="ln i">#letskollab</span></h2>
+</div>
+<div class="handles">
+<a class="pill black" href="{{ section.settings.ig }}" target="_blank" rel="noopener">@kollab_la</a>
+<a class="pill ghost" href="{{ section.settings.tt }}">TikTok</a>
+<a class="pill ghost" href="{{ section.settings.yt }}">YouTube</a>
+</div>
+</div>
+<div class="ig-grid rv d1" aria-label="Instagram feed">
+<div class="polaroid"><span class="washi foil tc"></span><a class="ig r" href="{{ section.settings.ig }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#kh-star" fill="url(#kh-ch)"/></svg></a><span class="cap">new reel →</span></div>
+<div class="polaroid"><a class="ig" href="{{ section.settings.ig }}" target="_blank" rel="noopener">Seoul<br>Social<br>Club</a><span class="cap">atlanta, oct 16</span></div>
+<div class="polaroid"><span class="washi tl"></span><a class="ig k" href="{{ section.settings.ig }}" target="_blank" rel="noopener">LA:ON</a><span class="cap">k-zone @ KCCLA</span></div>
+<div class="polaroid"><a class="ig f" href="{{ section.settings.ig }}" target="_blank" rel="noopener">오늘도<br>예쁘다</a><span class="cap">at the shop ♥</span></div>
+<div class="polaroid"><span class="washi foil tr"></span><a class="ig" href="{{ section.settings.ig }}" target="_blank" rel="noopener">Bloom<br>Haus</a><span class="cap">dallas, soon</span></div>
+<div class="polaroid"><a class="ig r" href="{{ section.settings.ig }}" target="_blank" rel="noopener">Let's<br>kollab.</a><span class="cap">follow us!</span></div>
+</div>
+<div class="logos rv d2">
+<div class="lbl">Brands we kollab with</div>
+<div class="track" data-dup>{%- for v in shop.vendors limit: 40 -%}<span>{{ v | escape }}</span>{%- endfor -%}</div>
+</div>
+</div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Social","tag":"div","class":"khome","settings":[{"type":"text","id":"ig","label":"Instagram 주소","default":"https://instagram.com/kollab_la"},{"type":"text","id":"tt","label":"TikTok 주소","default":"https://www.tiktok.com/@kollab_la"},{"type":"text","id":"yt","label":"YouTube 주소","default":"https://www.youtube.com/@kollab_la"}],"presets":[{"name":"KOLLAB Home · Social"}]}
+{% endschema %}

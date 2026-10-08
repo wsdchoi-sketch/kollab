@@ -1,0 +1,56 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+<section class="sec contact" id="contact">
+<div class="wrap">
+<div class="rv">
+<div class="kicker"><svg><use href="#kh-star" fill="#E3001B"/></svg>Contact us</div>
+<h2 class="h2"><span class="ln">{{ s.h1 | escape }}</span><span class="ln i">{{ s.h2 | escape }}</span></h2>
+<div class="cinfo">
+<div class="row"><small>Visit</small><b><span>{{ s.addr1 | escape }}</span><span>{{ s.addr2 | escape }}</span></b></div>
+<div class="row"><small>Email</small><b><a href="mailto:{{ s.email | escape }}">{{ s.email | escape }}</a></b></div>
+<div class="row"><small>Website</small><b><a href="{{ shop.url }}">{{ shop.domain }}</a></b></div>
+</div>
+<div class="hand"><span>{{ s.hand1 | escape }}</span><span>{{ s.hand2 | escape }}</span></div>
+</div>
+{%- form 'contact', id: 'kh-contact', class: 'form rv d1' -%}
+<span class="washi foil tl"></span><span class="washi br"></span>
+{%- if form.posted_successfully? -%}
+<div class="sent" style="display:block" role="status">{{ s.sent | escape }}</div>
+{%- else -%}
+<div class="fld"><label>I am a</label>
+<div class="who" id="kh-who">
+<label><input type="radio" name="contact[I am a]" value="Brand" checked>Brand</label>
+<label><input type="radio" name="contact[I am a]" value="Influencer">Influencer</label>
+<label><input type="radio" name="contact[I am a]" value="Community">Community</label>
+<label><input type="radio" name="contact[I am a]" value="Vendor">Vendor</label>
+<label><input type="radio" name="contact[I am a]" value="Customer">Customer</label>
+</div>
+</div>
+<div class="two">
+<div class="fld"><label for="kh-cname">Name</label><input id="kh-cname" name="contact[name]" required placeholder="Your name" autocomplete="name" value="{{ form.name }}"></div>
+<div class="fld"><label for="kh-cemail">Email</label><input id="kh-cemail" name="contact[email]" type="email" required placeholder="you@brand.com" autocomplete="email" value="{{ form.email }}"></div>
+</div>
+<div class="fld"><label for="kh-ctopic">What do you have in mind?</label>
+<select id="kh-ctopic" name="contact[Topic]">
+<option>Retail at KOLLAB LA</option><option>Pop-up or city tour</option><option>Workshop or event</option><option>Paid collaboration</option><option>Vendor booth</option><option>Something else</option>
+</select>
+</div>
+<div class="fld"><label for="kh-cmsg">Message</label><textarea id="kh-cmsg" name="contact[body]" required placeholder="Tell us about your brand, your audience, or the event you are dreaming of.">{{ form.body }}</textarea></div>
+{%- if form.errors -%}<div class="ferr" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+<button class="pill red burst-on" type="submit" style="justify-self:start">Send message</button>
+{%- endif -%}
+{%- endform -%}
+</div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Contact","tag":"div","class":"khome","settings":[
+{"type":"text","id":"h1","label":"제목 1줄","default":"Say hi."},
+{"type":"text","id":"h2","label":"제목 2줄","default":"We read everything."},
+{"type":"text","id":"addr1","label":"주소 1줄","default":"731 S. Broadway, Unit 100"},
+{"type":"text","id":"addr2","label":"주소 2줄","default":"Los Angeles, CA 90014"},
+{"type":"text","id":"email","label":"이메일","default":"info@kollab-la.com"},
+{"type":"text","id":"hand1","label":"손글씨 1줄","default":"No bots here."},
+{"type":"text","id":"hand2","label":"손글씨 2줄","default":"A real human in a sheet mask reads this ☺"},
+{"type":"text","id":"sent","label":"전송 완료 문구","default":"Got it. A real human will write back soon."}
+],"presets":[{"name":"KOLLAB Home · Contact"}]}
+{% endschema %}

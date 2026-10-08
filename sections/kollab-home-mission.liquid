@@ -1,0 +1,29 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+{%- assign words = s.words | newline_to_br | split: '<br />' -%}
+<section class="mission" aria-label="What KOLLAB stands for">
+<div class="big l1" data-dup aria-hidden="true">{%- for w in words -%}{%- assign w2 = w | strip -%}{%- if w2 != blank -%}<span>{{ w2 | escape }}<svg viewBox="0 0 24 24"><use href="#kh-star" fill="url(#kh-ch)"/></svg></span>{%- endif -%}{%- endfor -%}</div>
+<div class="big l2" data-dup aria-hidden="true">{%- assign rwords = words | reverse -%}{%- for w in rwords -%}{%- assign w2 = w | strip -%}{%- if w2 != blank -%}<span>{{ w2 | escape }}<svg viewBox="0 0 24 24"><use href="#kh-star" fill="#fff"/></svg></span>{%- endif -%}{%- endfor -%}</div>
+<div class="wrap">
+<div class="state">
+<div class="rv">
+<h3>{{ s.h | escape }}</h3>
+<p style="margin-top:16px"><span>{{ s.p1 | escape }}</span><span>{{ s.p2 | escape }}</span></p>
+</div>
+<div class="nums rv d2">
+{%- for block in section.blocks -%}<div class="num" {{ block.shopify_attributes }}><b>{{ block.settings.num | escape }}</b><small>{{ block.settings.label | escape }}</small></div>{%- endfor -%}
+</div>
+</div>
+</div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Mission","tag":"div","class":"khome","max_blocks":4,"settings":[
+{"type":"textarea","id":"words","label":"흐르는 큰 글자 (한 줄에 하나)","default":"Create Community\nCollaboration\nEmpower Creators\nElevate Brands\nBridge Cultures\nInspire Connections"},
+{"type":"text","id":"h","label":"제목","default":"KOLLAB is where K-brands meet the U.S. market, in person."},
+{"type":"text","id":"p1","label":"설명 1","default":"More than a pop-up. A community built around your brand."},
+{"type":"text","id":"p2","label":"설명 2","default":"Workshops, creators, launches, collabs: all tailored to you."}
+],"blocks":[{"type":"stat","name":"숫자","settings":[
+{"type":"text","id":"num","label":"숫자","default":"30+"},
+{"type":"text","id":"label","label":"설명","default":"Events hosted"}
+]}],"presets":[{"name":"KOLLAB Home · Mission","blocks":[{"type":"stat"},{"type":"stat"},{"type":"stat"},{"type":"stat"}]}]}
+{% endschema %}

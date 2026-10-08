@@ -1,0 +1,19 @@
+<section class="celeb" id="km-celeb">
+  <div class="tape2" aria-hidden="true"><div class="trk" id="km-trk" data-items="{{ tape_items | escape }}"></div></div>
+  <div class="wrap">
+    <div class="chead">
+      <div>
+        <div class="kicker" style="color:#fff"><svg class="kstar" aria-hidden="true"><use href="#km-star" fill="url(#km-ch)"/></svg>{{ celeb_kicker }}</div>
+        <h2 class="big serif">{{ celeb_title }} <span class="i">{{ celeb_title_i }}</span></h2>
+        <p class="lead">{%- if celeb_line_1 != blank -%}<span class="sent">{{ celeb_line_1 }}</span>{%- endif -%}{%- if celeb_line_2 != blank -%}<span class="sent">{{ celeb_line_2 }}</span>{%- endif -%}</p>
+      </div>
+      <div class="cnav"><button type="button" aria-label="Previous" data-km-scroll="-1">←</button><button type="button" aria-label="Next" data-km-scroll="1">→</button></div>
+    </div>
+  </div>
+  <div class="pcs" id="km-pcs"><div class="pcrow">
+{%- assign tilts = '-4,3,-2,4,-3,2,-3,4' | split: ',' -%}{%- assign ci = 0 -%}
+{%- for block in blocks -%}{%- if block.type == 'celeb' -%}{%- assign cb = block.settings -%}{%- assign tilt = tilts[ci] | default: '-3' -%}
+<div class="pc" style="--r:{{ tilt }}deg;--d:{{ ci | times: 90 }}ms" {{ block.shopify_attributes }}><div class="ph2">{%- if cb.photo != blank -%}<img src="{{ cb.photo | image_url: width: 600 }}" alt="{{ cb.name | escape }}" loading="lazy">{%- else -%}<svg class="kstar" aria-hidden="true"><use href="#km-star" fill="url(#km-ch)"/></svg><span>Photo</span><small>Add in theme editor</small>{%- endif -%}</div><div class="sheen"></div><div class="cap"><b>{{ cb.name | default: 'Name' }}</b><small>{{ cb.seen_in | default: 'Seen in' }}</small></div>{%- if cb.tag != blank -%}<span class="tag">{{ cb.tag }}</span>{%- endif -%}</div>
+{%- assign ci = ci | plus: 1 -%}{%- endif -%}{%- endfor -%}
+  </div></div>
+</section>

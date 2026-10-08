@@ -1,0 +1,36 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+<section class="sec news" id="newsletter">
+<div class="wrap">
+<div class="rv">
+<div class="kicker" style="color:#fff"><svg><use href="#kh-star" fill="url(#kh-ch)"/></svg>Email newsletter</div>
+<h2 style="margin-top:18px"><span>{{ s.h1 | escape }}</span><span class="i">{{ s.h2 | escape }}</span></h2>
+<p><span>{{ s.p | escape }}</span></p>
+</div>
+<div class="rv d2">
+{%- form 'customer', id: 'kh-news', novalidate: 'novalidate' -%}
+<input type="hidden" name="contact[tags]" value="newsletter">
+{%- if form.posted_successfully? -%}
+<div class="ok" style="display:block" role="status">{{ s.ok | escape }}</div>
+{%- else -%}
+<div class="nform">
+<input type="email" name="contact[email]" placeholder="your@email.com" aria-label="Email address" autocomplete="email" required value="{{ form.email }}">
+<button class="pill black" type="submit">Subscribe</button>
+</div>
+{%- if form.errors -%}<div class="nnote" role="alert" style="opacity:1;font-weight:700">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</div>{%- endif -%}
+<div class="nnote">By subscribing, you agree to our <a href="{{ shop.terms_of_service.url | default: '/policies/terms-of-service' }}" style="text-decoration:underline">terms &amp; conditions</a>.</div>
+{%- endif -%}
+{%- endform -%}
+{%- if s.hand != blank -%}<div class="hand"><span>{{ s.hand | escape }}</span></div>{%- endif -%}
+</div>
+</div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Newsletter","tag":"div","class":"khome","settings":[
+{"type":"text","id":"h1","label":"제목 1줄","default":"A little inspiration,"},
+{"type":"text","id":"h2","label":"제목 2줄","default":"never too much."},
+{"type":"text","id":"p","label":"설명","default":"New drops, pop-up dates and creator picks."},
+{"type":"text","id":"hand","label":"손글씨","default":"Psst: surprise gifts and giveaways inside ☺"},
+{"type":"text","id":"ok","label":"구독 완료 문구","default":"You're in. Keep an eye on your inbox."}
+],"presets":[{"name":"KOLLAB Home · Newsletter"}]}
+{% endschema %}

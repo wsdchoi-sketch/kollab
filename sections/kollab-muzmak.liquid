@@ -1,0 +1,142 @@
+{%- liquid
+assign cv = product.selected_or_first_available_variant
+assign clean_title = product.title
+if clean_title contains ']'
+  assign clean_title = clean_title | split: ']' | last | strip
+endif
+assign design_name = clean_title
+assign shape_name = ''
+if clean_title contains '('
+  assign shape_name = clean_title | split: '(' | last | split: ')' | first | strip
+  assign design_name = clean_title | split: '(' | first | strip
+endif
+if design_name contains ' in '
+  assign design_name = design_name | split: ' in ' | last | strip
+endif
+if shape_name == 'Regular'
+  assign shape_name = 'Regular Square'
+endif
+if shape_name == 'Short'
+  assign shape_name = 'Short Square'
+endif
+assign intro = product.description | split: '</p>' | first | strip_html | strip
+if intro contains 'About MUZMAK'
+  assign intro = ''
+endif
+if intro.size > 220
+  assign intro = ''
+endif
+assign has_compare = false
+if cv.compare_at_price > cv.price
+  assign has_compare = true
+endif
+assign rating = product.metafields.reviews.rating.value
+assign rating_count = product.metafields.reviews.rating_count.value
+assign tags_list = section.settings.hashtags | newline_to_br | split: '<br />'
+assign coll_url = section.settings.collection_url
+if coll_url == blank
+  assign coll_url = '/collections/muzmak'
+endif
+-%}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@500;700&display=swap">
+{{ 'kollab-muzmak.css' | asset_url | stylesheet_tag }}
+{%- render 'kollab-muzmak-fonts' -%}
+<div class="kmz" id="kmz-{{ section.id }}" data-handle="{{ product.handle }}" data-shape="{{ shape_name | escape }}" data-design="{{ design_name | escape }}" data-collection="{{ section.settings.collection_handle | default: 'muzmak' }}">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="km-ch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#b9b9b9"/><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#8f8f8f"/></linearGradient>
+<linearGradient id="km-amb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#F7E3C4"/><stop offset=".55" stop-color="#EDB56A"/><stop offset="1" stop-color="#D27A22"/></linearGradient>
+<symbol id="km-star" viewBox="0 0 48 48"><path d="M24 2 28 20 46 24 28 28 24 46 20 28 2 24 20 20Z"/></symbol>
+<symbol id="km-nailA" viewBox="0 0 60 100"><path d="M8 96V44C8 18 22 4 30 4s22 14 22 40v52q-22 8-44 0z" fill="url(#km-amb)" stroke="#0A0A0A" stroke-width="1.5"/><path d="M30 30a12 12 0 1 0 10 18a9.5 9.5 0 1 1-10-18z" fill="#FFF6E2"/><path d="M16 84V50" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".55" fill="none"/></symbol>
+<symbol id="km-tipA" viewBox="0 0 100 140"><path d="M14 126 V66 C14 28 36 4 50 4 C64 4 86 28 86 66 V126 Q50 142 14 126 Z" fill="url(#km-amb)"/><path d="M50 44a18 18 0 1 0 15 27a14 14 0 1 1-15-27z" fill="#FFF6E2"/><path d="M28 116V72" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".55" fill="none"/></symbol>
+</defs></svg>
+
+<div class="wrap">
+<section class="hero">
+<div class="gallery">
+<div class="gal-top"><svg width="30" height="30" aria-hidden="true"><use href="#km-star" fill="url(#km-ch)" stroke="#777" stroke-width=".6"/></svg></div>
+<div class="main-img" id="km-main">
+{%- for image in product.images limit: 5 -%}
+<img class="slide{% if forloop.first %} on{% endif %}" src="{{ image | image_url: width: 1200 }}" alt="{{ image.alt | default: clean_title | escape }}"{% unless forloop.first %} loading="lazy"{% endunless %}>
+{%- endfor -%}
+</div>
+<div class="thumbs" id="km-thumbs">
+{%- for image in product.images limit: 5 -%}
+<button type="button" class="{% if forloop.first %}on{% endif %}" aria-label="Image {{ forloop.index }}"><img src="{{ image | image_url: width: 300 }}" alt="" loading="lazy"></button>
+{%- endfor -%}
+</div>
+</div>
+
+<div class="info">
+<a class="brand" href="{{ product.vendor | url_for_vendor }}"><svg class="kstar" aria-hidden="true"><use href="#km-star" fill="#fff"/></svg>{{ product.vendor }}</a>
+<h1 class="title serif">{{ design_name }} Nail Tips<br><span class="i">{{ section.settings.tagline }}</span></h1>
+<p class="sub">{%- if intro != blank -%}<span class="sent">{{ intro }}</span>{%- elsif section.settings.sub_1 != blank -%}<span class="sent">{{ section.settings.sub_1 }}</span>{%- endif -%}{%- if section.settings.sub_2 != blank -%}<span class="sent">{{ section.settings.sub_2 }}</span>{%- endif -%}</p>
+{%- if rating != blank and rating_count != blank -%}
+<div class="rating"><span class="s">★★★★★</span> {{ rating.rating | round: 1 }} <span>·</span> <a href="#judgeme_product_reviews">{{ rating_count }} review{% if rating_count != 1 %}s{% endif %}</a></div>
+{%- endif -%}
+<div class="price"><span class="p">{{ cv.price | money_without_trailing_zeros }}</span>{%- if has_compare -%}<s class="was">{{ cv.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}<small>{{ section.settings.size_label }}{% if shape_name != blank %} · {{ shape_name }} shape{% endif %}</small></div>
+
+<product-form class="buy-wrap" data-hide-errors="false">
+{%- form 'product', product, id: 'km-form', class: 'buy' -%}
+<input type="hidden" name="id" value="{{ cv.id }}">
+<div class="qty">
+<button type="button" class="up" id="km-up" aria-label="Increase quantity"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#E3001B"/><path d="M24 12 11.5 24.5l4 4L21 23v13h6V23l5.5 5.5 4-4z" fill="#fff"/></svg></button>
+<input class="q" type="number" name="quantity" id="km-q" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+<button type="button" id="km-down" aria-label="Decrease quantity"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0A0A0A"/><path d="M24 36 36.5 23.5l-4-4L27 25V12h-6v13l-5.5-5.5-4 4z" fill="#fff"/></svg></button>
+</div>
+{%- if cv.available -%}
+<button type="submit" name="add" class="cta" id="km-atc"><span>Add to bag</span><span class="dot">·</span><span>{{ cv.price | money_without_trailing_zeros }}</span></button>
+<button type="button" class="cta2" id="km-buy" data-variant="{{ cv.id }}">Buy it now</button>
+{%- else -%}
+<button type="submit" class="cta" disabled><span>Sold out</span></button>
+<button type="button" class="cta2" disabled>Buy it now</button>
+{%- endif -%}
+<div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+{%- endform -%}
+</product-form>
+
+<div class="chips">{%- for t in tags_list -%}{%- assign t2 = t | strip -%}{%- if t2 != blank -%}<span class="chip">{{ t2 }}</span>{%- endif -%}{%- endfor -%}{%- if shape_name != blank -%}<span class="chip">#{{ shape_name | downcase | remove: ' ' }}</span>{%- endif -%}</div>
+<div class="proof"><div><b>{{ section.settings.stat_1_value }}</b><span>{{ section.settings.stat_1_label }}</span></div><div><b>{{ section.settings.stat_2_value }}</b><span>{{ section.settings.stat_2_label }}</span></div><div><b>{{ section.settings.stat_3_value }}</b><span>{{ section.settings.stat_3_label }}</span></div><div><b class="t">{{ section.settings.stat_4_value }}</b><span>{{ section.settings.stat_4_label }}</span></div></div>
+
+<details open><summary>What it is</summary>
+<p>A full set of 36 press-on tips in the {{ design_name }} design{% if shape_name != blank %}, cut in a {{ shape_name | downcase }} silhouette{% endif %}.</p>
+<ul><li>Made with MUZMAK's patented TPU, a flexible material that bends with your nail and holds its shape for the next wear</li><li>The adhesive is already on the tip, so there is no curing step and no lamp</li><li>Waterproof, impact-resistant adhesive that MUZMAK says strengthens over time</li></ul>
+</details>
+<details><summary>How to use</summary><ol><li>Wipe each nail with an alcohol pad to remove oil and moisture.</li><li>Pick a tip slightly smaller than your natural nail.</li><li>Peel the protective film from the back, with the film tab facing your cuticle.</li><li>Press firmly and evenly for three seconds.</li></ol></details>
+<details><summary>Remove and reuse</summary><p>Put one or two drops of remover at the edge of the tip, lift the edge gently with a wooden stick, then push the tip off from the cuticle side. To wear the set again, peel off the old adhesive with tweezers, place a new refill adhesive on your nail and press the tip for three seconds.{%- if section.settings.refill_url != blank %} Refills are sold separately: <a href="{{ section.settings.refill_url }}">MUZMAK Adhesive Tips</a>.{%- endif -%}</p></details>
+<details><summary>Care and cautions</summary><p>Do not use on nails or skin with any abnormality. Keep the set sealed, in a cool and dry place, away from direct sunlight and out of reach of children. Moisture or foreign substances trapped during use can discolor or damage nails and the surrounding skin.</p></details>
+<details><summary>Shipping and returns</summary><p>Free shipping on orders over $60.{%- if shop.shipping_policy.url != blank %} See our <a href="{{ shop.shipping_policy.url }}">shipping</a>{%- endif -%}{%- if shop.refund_policy.url != blank %} and <a href="{{ shop.refund_policy.url }}">refund</a> policies.{%- endif -%}</p></details>
+</div>
+</section>
+</div>
+
+{%- render 'kollab-muzmak-celeb', blocks: section.blocks, celeb_kicker: section.settings.celeb_kicker, celeb_title: section.settings.celeb_title, celeb_title_i: section.settings.celeb_title_i, celeb_line_1: section.settings.celeb_line_1, celeb_line_2: section.settings.celeb_line_2, tape_items: section.settings.tape_items -%}
+
+{%- render 'kollab-muzmak-steps', steps_kicker: section.settings.steps_kicker, steps_title: section.settings.steps_title, steps_title_i: section.settings.steps_title_i, steps_line_1: section.settings.steps_line_1, steps_line_2: section.settings.steps_line_2 -%}
+
+{%- render 'kollab-muzmak-shapes', shape_kicker: section.settings.shape_kicker, shape_title: section.settings.shape_title, shape_title_i: section.settings.shape_title_i, shape_lead: section.settings.shape_lead, collection_url: coll_url -%}
+
+{%- render 'kollab-muzmak-benefits', ben_kicker: section.settings.ben_kicker, ben_title: section.settings.ben_title, ben_title_i: section.settings.ben_title_i, ben_lead: section.settings.ben_lead -%}
+
+{%- assign has_app = false -%}
+{%- for block in section.blocks -%}{%- if block.type == '@app' -%}{%- assign has_app = true -%}{%- endif -%}{%- endfor -%}
+{%- if has_app -%}
+<div class="wrap">
+<section class="sec" id="km-video" style="padding-top:0;position:relative">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#km-star" fill="#E3001B"/></svg>Shop the video</div>
+<div class="vhead"><h2 class="big serif">Watch them go on <span class="i">real hands.</span></h2>{%- if section.settings.sticker_heart != blank -%}<div class="spinbox"><img src="{{ section.settings.sticker_heart | image_url: width: 300 }}" alt="" loading="lazy"></div>{%- endif -%}</div>
+<div style="height:40px"></div>
+{%- for block in section.blocks -%}{%- if block.type == '@app' -%}<div {{ block.shopify_attributes }}>{% render block %}</div>{%- endif -%}{%- endfor -%}
+</section>
+</div>
+{%- endif -%}
+
+{%- render 'kollab-muzmak-picks', picks_kicker: section.settings.picks_kicker, picks_title: section.settings.picks_title, picks_title_i: section.settings.picks_title_i, picks_lead: section.settings.picks_lead, bow_image: section.settings.bow_image, gift_lid: section.settings.gift_lid, gift_lid_pill: section.settings.gift_lid_pill, gift_title_1: section.settings.gift_title_1, gift_title_2: section.settings.gift_title_2, gift_sub: section.settings.gift_sub, gift_save: section.settings.gift_save, gift_button: section.settings.gift_button, gift_was: section.settings.gift_was, gift_now: section.settings.gift_now, collection_url: coll_url -%}
+
+{%- render 'kollab-muzmak-events', blocks: section.blocks, events_url: section.settings.events_url -%}
+{%- render 'kollab-muzmak-newsletter', sticker_patch: section.settings.sticker_patch -%}
+
+<div class="sticky"><span class="p">{{ cv.price | money_without_trailing_zeros }}</span><button type="button" class="cta" id="km-sticky"{% unless cv.available %} disabled{% endunless %}><span>{% if cv.available %}Add to bag{% else %}Sold out{% endif %}</span></button></div>
+</div>
+<script src="{{ 'kollab-muzmak.js' | asset_url }}" defer></script>
+
+{% schema %}{"name": "KOLLAB MUZMAK PDP", "tag": "section", "class": "kollab-muzmak-section", "blocks": [{"type": "@app"}, {"type": "celeb", "name": "Celebrity photocard", "settings": [{"type": "image_picker", "id": "photo", "label": "Photo"}, {"type": "text", "id": "name", "label": "Name", "default": "Name"}, {"type": "text", "id": "seen_in", "label": "Seen in", "default": "Seen in", "info": "Drama, stage, SNS"}, {"type": "text", "id": "tag", "label": "Small red tag", "default": "№ 01"}]}, {"type": "event", "name": "Event ticket", "settings": [{"type": "text", "id": "date_label", "label": "Date (top bar)", "default": "Oct 13–17 · 2026"}, {"type": "text", "id": "from_code", "label": "From", "default": "LA"}, {"type": "text", "id": "to_code", "label": "To", "default": "KCCLA"}, {"type": "textarea", "id": "title", "label": "Title", "info": "New line = line break"}, {"type": "textarea", "id": "description", "label": "Description"}, {"type": "image_picker", "id": "poster", "label": "Poster image"}, {"type": "text", "id": "poster_url", "label": "Poster image URL", "info": "Used if no upload"}, {"type": "text", "id": "info_1_label", "label": "Info 1 label", "default": "Gate"}, {"type": "text", "id": "info_1_value", "label": "Info 1 value"}, {"type": "text", "id": "info_2_label", "label": "Info 2 label", "default": "Time"}, {"type": "text", "id": "info_2_value", "label": "Info 2 value"}, {"type": "text", "id": "info_3_label", "label": "Info 3 label", "default": "Fare"}, {"type": "text", "id": "info_3_value", "label": "Info 3 value"}, {"type": "text", "id": "button_label", "label": "Button text", "default": "Let's go"}, {"type": "url", "id": "link", "label": "Button link"}, {"type": "select", "id": "style", "label": "Top bar color", "default": "black", "options": [{"value": "black", "label": "Black"}, {"value": "red", "label": "Red"}]}]}], "max_blocks": 24, "settings": [{"type": "header", "content": "Brand images (upload PNGs)"}, {"type": "image_picker", "id": "sticker_heart", "label": "Finger-heart patch", "info": "Shown next to the 'real hands' title"}, {"type": "image_picker", "id": "sticker_patch", "label": "KOLLAB patch (newsletter)"}, {"type": "image_picker", "id": "bow_image", "label": "Gift ribbon corner bow"}, {"type": "header", "content": "Hero"}, {"type": "text", "id": "tagline", "label": "Headline (second line)", "default": "three seconds, on."}, {"type": "text", "id": "sub_1", "label": "Subtext line 1", "default": "Reusable press-on nails from MUZMAK.", "info": "Used when the product has no description"}, {"type": "text", "id": "sub_2", "label": "Subtext line 2", "default": "Peel the film, place the tip and press for three seconds."}, {"type": "text", "id": "size_label", "label": "Size label", "default": "36 tips"}, {"type": "textarea", "id": "hashtags", "label": "Hashtags", "default": "#pressonnails\n#reusable\n#nocuring", "info": "One per line; shape tag is added automatically"}, {"type": "text", "id": "stat_1_value", "label": "Stat 1 value", "default": "2 wks"}, {"type": "text", "id": "stat_1_label", "label": "Stat 1 label", "default": "Can stay up to"}, {"type": "text", "id": "stat_2_value", "label": "Stat 2 value", "default": "36"}, {"type": "text", "id": "stat_2_label", "label": "Stat 2 label", "default": "Tips per set"}, {"type": "text", "id": "stat_3_value", "label": "Stat 3 value", "default": "70+"}, {"type": "text", "id": "stat_3_label", "label": "Stat 3 label", "default": "Designs at KOLLAB"}, {"type": "text", "id": "stat_4_value", "label": "Stat 4 value", "default": "TPU"}, {"type": "text", "id": "stat_4_label", "label": "Stat 4 label", "default": "Patented material"}, {"type": "url", "id": "refill_url", "label": "Refill adhesive link"}, {"type": "header", "content": "Celebrities"}, {"type": "text", "id": "celeb_kicker", "label": "Kicker", "default": "As seen on"}, {"type": "text", "id": "celeb_title", "label": "Title", "default": "Loved by"}, {"type": "text", "id": "celeb_title_i", "label": "Title (italic part)", "default": "Korean celebrities."}, {"type": "text", "id": "celeb_line_1", "label": "Line 1", "default": "Shine like your K-pop idols with MUZMAK nail tips."}, {"type": "text", "id": "celeb_line_2", "label": "Line 2", "default": "Spotted on stage, on set and all over SNS."}, {"type": "text", "id": "tape_items", "label": "Red tape words", "default": "Loved by Korean celebrities|As seen on stage|MUZMAK × KOLLAB|Reusable nail tips from Seoul|Shine like your idols", "info": "Separate with |"}, {"type": "header", "content": "Five steps"}, {"type": "text", "id": "steps_kicker", "label": "Kicker", "default": "Five steps, one minute"}, {"type": "text", "id": "steps_title", "label": "Title", "default": "Hold to watch."}, {"type": "text", "id": "steps_title_i", "label": "Title (italic part)", "default": "Let go to pause."}, {"type": "text", "id": "steps_line_1", "label": "Line 1", "default": "Hold the screen or the button and the steps play in order."}, {"type": "text", "id": "steps_line_2", "label": "Line 2", "default": "Tap any step on the right to jump to it."}, {"type": "header", "content": "Pick a shape"}, {"type": "text", "id": "collection_handle", "label": "MUZMAK collection handle", "default": "muzmak"}, {"type": "url", "id": "collection_url", "label": "Shop all link"}, {"type": "text", "id": "shape_kicker", "label": "Kicker", "default": "Pick a shape"}, {"type": "text", "id": "shape_title", "label": "Title", "default": "Pick a shape."}, {"type": "text", "id": "shape_title_i", "label": "Title (italic part)", "default": "Every MUZMAK design in it appears."}, {"type": "text", "id": "shape_lead", "label": "Lead", "default": "Seven shapes, every design on the KOLLAB shelf right now."}, {"type": "header", "content": "Benefits"}, {"type": "text", "id": "ben_kicker", "label": "Kicker", "default": "Why it holds"}, {"type": "text", "id": "ben_title", "label": "Title", "default": "Five things"}, {"type": "text", "id": "ben_title_i", "label": "Title (italic part)", "default": "that earn their place."}, {"type": "text", "id": "ben_lead", "label": "Lead", "default": "The reasons a MUZMAK set behaves differently from a one-wear press-on."}, {"type": "header", "content": "Picked for you + gift box"}, {"type": "text", "id": "picks_kicker", "label": "Kicker", "default": "Picked for you"}, {"type": "text", "id": "picks_title", "label": "Title", "default": "Four more"}, {"type": "text", "id": "picks_title_i", "label": "Title (italic part)", "default": "you'll want next."}, {"type": "text", "id": "picks_lead", "label": "Lead", "default": "Either the same shape you chose above, or designs that look like this one in any shape."}, {"type": "text", "id": "gift_lid", "label": "Lid text", "default": "Buy 3, get 1 free"}, {"type": "text", "id": "gift_lid_pill", "label": "Lid pill", "default": "Any shape"}, {"type": "text", "id": "gift_title_1", "label": "Gift title line 1", "default": "Pick any four designs."}, {"type": "text", "id": "gift_title_2", "label": "Gift title line 2", "default": "Pay for three."}, {"type": "text", "id": "gift_sub", "label": "Gift subtext", "default": "Mix shapes and lengths however you like. The lowest-priced set is free."}, {"type": "text", "id": "gift_save", "label": "Savings text", "default": "You save $15"}, {"type": "text", "id": "gift_button", "label": "Button text", "default": "Pick your four"}, {"type": "text", "id": "gift_was", "label": "Was price", "default": "$60"}, {"type": "text", "id": "gift_now", "label": "Now price", "default": "$45"}, {"type": "header", "content": "Events"}, {"type": "url", "id": "events_url", "label": "All events link"}]}{% endschema %}

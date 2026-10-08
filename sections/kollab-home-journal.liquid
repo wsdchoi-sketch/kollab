@@ -1,0 +1,42 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+<section class="sec" id="blog">
+<div class="wrap">
+<div class="rv">
+<div class="kicker"><svg><use href="#kh-star" fill="#E3001B"/></svg>Journal</div>
+<h2 class="h2"><span class="ln">{{ s.h1 | escape }}</span><span class="ln i">{{ s.h2 | escape }}</span></h2>
+</div>
+<div class="mag-head rv d1">
+<div class="iss">KOLLAB Journal <span class="i">· {{ s.issue | escape }}</span></div>
+<div class="r"><small>{{ s.date | escape }}</small><a class="pill black" href="{{ s.all_url | default: '/blogs/news' }}">Read all</a></div>
+{%- if s.clip -%}<img class="clip" src="{{ s.clip | image_url: width: 200 }}" alt="" loading="lazy">{%- endif -%}
+</div>
+<div class="blog-grid">
+{%- for block in section.blocks -%}
+{%- assign b = block.settings -%}
+<a class="post rv d{{ forloop.index }}" href="{{ b.url | default: s.all_url | default: '/blogs/news' }}" aria-label="{{ b.aria | default: b.t1 | escape }}" {{ block.shopify_attributes }}>
+<div class="cover{% if b.style != 'black' %} {{ b.style }}{% endif %}"><div class="mast"><span>KOLLAB Journal</span><span>{{ b.tag | escape }}</span></div><span class="no">0{{ forloop.index }}</span><div class="t">{{ b.t1 | escape }}<span class="i">{{ b.t2 | escape }}</span></div></div>
+<div class="cap"><span>{{ b.cap | escape }}</span><span class="more">Read <i></i></span></div>
+</a>
+{%- endfor -%}
+</div>
+</div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Journal","tag":"div","class":"khome","max_blocks":3,"settings":[
+{"type":"text","id":"h1","label":"제목 1줄","default":"Notes from"},
+{"type":"text","id":"h2","label":"제목 2줄","default":"the shop floor."},
+{"type":"text","id":"issue","label":"호수","default":"Issue 10"},
+{"type":"text","id":"date","label":"연·월","default":"October 2026"},
+{"type":"url","id":"all_url","label":"Read all 링크"},
+{"type":"image_picker","id":"clip","label":"클립 그래픽"}
+],"blocks":[{"type":"story","name":"글 (매거진 표지)","settings":[
+{"type":"select","id":"style","label":"표지 색","options":[{"value":"black","label":"검정"},{"value":"red","label":"빨강"},{"value":"foil","label":"실버 호일"}],"default":"black"},
+{"type":"text","id":"tag","label":"분류","default":"Community"},
+{"type":"text","id":"t1","label":"표지 제목 1줄","default":"Why we"},
+{"type":"text","id":"t2","label":"표지 제목 2줄 (이탤릭)","default":"host workshops"},
+{"type":"text","id":"cap","label":"아래 캡션","default":"Workshops"},
+{"type":"url","id":"url","label":"글 링크"},
+{"type":"text","id":"aria","label":"전체 제목 (접근성)"}
+]}],"presets":[{"name":"KOLLAB Home · Journal","blocks":[{"type":"story"},{"type":"story"},{"type":"story"}]}]}
+{% endschema %}

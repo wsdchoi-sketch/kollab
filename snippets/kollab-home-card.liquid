@@ -1,0 +1,31 @@
+{%- liquid
+  assign nm = product.title
+  if nm contains ']'
+    assign nm = nm | split: ']' | last | strip
+  endif
+  assign nm = nm | remove_first: product.vendor | strip
+  if nm == blank
+    assign nm = product.title
+  endif
+  assign sale = false
+  if product.compare_at_price > product.price
+    assign sale = true
+    assign pct = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round
+  endif
+  assign v = product.selected_or_first_available_variant
+-%}
+<a class="card{% unless product.available %} sold{% endunless %}{% unless product.featured_image %} noimg{% endunless %}" href="{{ product.url }}">
+{%- if sticker != blank -%}<span class="staff">{{ sticker | escape }}</span>{%- endif -%}
+<div class="img">
+{%- if product.available == false -%}<span class="badge out">Sold out</span>
+{%- elsif tab == 'new' -%}<span class="badge new">New</span>
+{%- elsif sale -%}<span class="badge sale">-{{ pct }}%</span>
+{%- elsif tab == 'sets' -%}<span class="badge new">Set</span>
+{%- endif -%}
+{%- if product.featured_image -%}<img src="{{ product.featured_image | image_url: width: 600 }}" alt="{{ nm | escape }}" width="600" height="600" loading="lazy" onerror="this.closest('.card').classList.add('noimg');this.remove()">{%- endif -%}
+<div class="ph"><small>{{ product.vendor | escape }}</small><div class="big">{{ nm | split: ' ' | first | escape }}</div><small></small></div>
+{%- if product.available -%}<div class="add"><span class="pill red" role="button" data-add="{{ v.id }}">Add to bag</span></div>{%- endif -%}
+</div>
+<div class="body"><span class="bname"><svg viewBox="0 0 24 24"><use href="#kh-star" fill="#E3001B"/></svg>{{ product.vendor | escape }}</span><h3>{{ nm | escape }}</h3>
+<div class="pr{% if sale %} sale{% endif %}"><span class="now">{{ product.price | money }}</span>{% if sale %}<s>{{ product.compare_at_price | money }}</s>{% endif %}</div></div>
+</a>

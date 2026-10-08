@@ -1,0 +1,34 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+<section class="gallery" id="gallery">
+<div class="wrap">
+<div class="gal-head rv">
+<div>
+<div class="kicker"><svg><use href="#kh-star" fill="#E3001B"/></svg>Kollab Gallery</div>
+<h2 class="h2"><span class="ln">{{ s.h1 | escape }}</span><span class="ln i">{{ s.h2 | escape }}</span></h2>
+</div>
+{%- if s.hand != blank -%}<div class="hand">{{ s.hand | escape }}</div>{%- endif -%}
+</div>
+</div>
+<div class="gal-strip" aria-label="Event photos"><div class="gal-track" data-dup>
+{%- for block in section.blocks -%}
+{%- assign img = block.settings.image -%}
+{%- if img -%}
+<a class="shot" style="--ar:{{ img.width }}/{{ img.height }}" href="{{ s.link }}" target="_blank" rel="noopener" aria-label="{{ block.settings.alt | default: 'KOLLAB event photo' | escape }} — see more on Instagram" {{ block.shopify_attributes }}><img src="{{ img | image_url: height: 880 }}" alt="{{ block.settings.alt | escape }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy"></a>
+{%- elsif request.design_mode -%}
+<a class="shot f" href="{{ s.link }}" {{ block.shopify_attributes }}><span class="slot"><b>Photo</b><small>사진을 골라주세요</small></span></a>
+{%- endif -%}
+{%- endfor -%}
+</div></div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Gallery","tag":"div","class":"khome","max_blocks":16,"settings":[
+{"type":"text","id":"h1","label":"제목 1줄","default":"You had to"},
+{"type":"text","id":"h2","label":"제목 2줄","default":"be there."},
+{"type":"text","id":"hand","label":"손글씨","default":"tap a photo, find us on Instagram →"},
+{"type":"text","id":"link","label":"사진 클릭 시 이동 주소","default":"https://instagram.com/kollab_la"}
+],"blocks":[{"type":"photo","name":"사진","settings":[
+{"type":"image_picker","id":"image","label":"사진"},
+{"type":"text","id":"alt","label":"사진 설명 (접근성)"}
+]}],"presets":[{"name":"KOLLAB Home · Gallery","blocks":[{"type":"photo"},{"type":"photo"},{"type":"photo"},{"type":"photo"},{"type":"photo"}]}]}
+{% endschema %}

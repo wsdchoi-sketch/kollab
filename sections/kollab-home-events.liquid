@@ -1,0 +1,67 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+<section class="sec events" id="events">
+<div class="wrap">
+<div class="ev-head rv">
+<div>
+<div class="kicker"><svg><use href="#kh-star" fill="#E3001B"/></svg>Kollab Events · Powered by Luma</div>
+<h2 class="h2"><span class="ln">{{ s.h1 | escape }}</span><span class="ln i">{{ s.h2 | escape }}</span></h2>
+<p class="lead"><span class="s">{{ s.lead1 | escape }}</span><span class="s">{{ s.lead2 | escape }}</span></p>
+</div>
+{%- if s.patch -%}<span class="spinbox"><img src="{{ s.patch | image_url: width: 300 }}" alt="" loading="lazy"></span>{%- endif -%}
+</div>
+<div class="ev-grid">
+{%- for block in section.blocks -%}
+{%- assign b = block.settings -%}
+{%- assign src = b.image_url -%}
+{%- if b.image -%}{%- assign src = b.image | image_url: width: 800 -%}{%- endif -%}
+<a class="pass rv d{{ forloop.index }}" href="{{ b.url }}" target="_blank" rel="noopener" {{ block.shopify_attributes }}>
+{%- if b.note != blank -%}<span class="hand float note-atl">{{ b.note | escape }}</span>{%- endif -%}
+<div class="top {{ b.bar }}"><span>KOLLAB Boarding Pass</span><span>{{ b.date | escape }}</span></div>
+<div class="route"><div><small>From</small>{{ b.from | escape }}</div><div class="pl">✈</div><div style="text-align:right"><small>To</small>{{ b.to | escape }}</div></div>
+<div class="poster{% if src == blank %} noimg{% endif %}">{% if src != blank %}<img src="{{ src }}" alt="" loading="lazy" onerror="this.parentNode.classList.add('noimg')">{% endif %}<div class="ph">{{ b.short | escape }}</div>{% if b.stamp != blank %}<div class="stamp2"><span><b>{{ b.stamp | escape }}</b>boarded</span></div>{% endif %}</div>
+<h3>{{ b.title | escape }}</h3>
+<div class="desc">{%- assign lines = b.desc | newline_to_br | split: '<br />' -%}{%- for d in lines -%}<span>{{ d | strip | escape }}</span>{%- endfor -%}</div>
+<div class="info"><div><small>Gate</small><b>{{ b.gate | escape }}</b></div><div><small>Time</small><b>{{ b.time | escape }}</b></div><div><small>Fare</small><b>{{ b.fare | escape }}</b></div></div>
+<div class="tear"></div>
+<div class="stub"><div class="bar"></div><span class="pill red">{{ b.btn | escape }}</span></div>
+</a>
+{%- endfor -%}
+</div>
+<div class="ev-foot rv">
+<p>{{ s.foot | escape }}</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<a class="pill ghost" href="{{ s.cal_url }}" target="_blank" rel="noopener">Full calendar on Luma</a>
+<a class="pill red" href="#with" data-with="brand">Host a pop-up</a>
+</div>
+</div>
+</div>
+</section>
+{% schema %}
+{"name":"KOLLAB Home · Events","tag":"div","class":"khome","max_blocks":3,"settings":[
+{"type":"text","id":"h1","label":"제목 1줄","default":"Your boarding pass"},
+{"type":"text","id":"h2","label":"제목 2줄","default":"to the next pop-up."},
+{"type":"text","id":"lead1","label":"설명 1","default":"Seats and tickets live on our Luma calendar."},
+{"type":"text","id":"lead2","label":"설명 2","default":"Tap a pass to RSVP."},
+{"type":"text","id":"foot","label":"아래 문구","default":"Hosting with us? Bring your brand to the next city."},
+{"type":"text","id":"cal_url","label":"Luma 캘린더 주소","default":"https://luma.com/calendar/cal-xVZvsoSO9NSiT44"},
+{"type":"image_picker","id":"patch","label":"돌아가는 패치 스티커"}
+],"blocks":[{"type":"event","name":"이벤트 (탑승권)","settings":[
+{"type":"text","id":"title","label":"이벤트 이름","default":"Event name"},
+{"type":"text","id":"short","label":"짧은 이름 (사진 없을 때)","default":"KOLLAB"},
+{"type":"text","id":"date","label":"날짜","default":"Oct 13–17"},
+{"type":"text","id":"from","label":"From","default":"SEL"},
+{"type":"text","id":"to","label":"To","default":"LAX"},
+{"type":"textarea","id":"desc","label":"설명 (한 줄에 한 문장)"},
+{"type":"text","id":"gate","label":"Gate (장소)","default":"KCCLA"},
+{"type":"text","id":"time","label":"Time","default":"1–8 PM"},
+{"type":"text","id":"fare","label":"Fare","default":"Free"},
+{"type":"text","id":"btn","label":"버튼 글자","default":"Book a seat"},
+{"type":"text","id":"url","label":"Luma 이벤트 주소"},
+{"type":"image_picker","id":"image","label":"포스터 사진"},
+{"type":"text","id":"image_url","label":"또는 사진 주소 (Luma 이미지 링크)"},
+{"type":"select","id":"bar","label":"윗 띠 색","options":[{"value":"red","label":"빨강"},{"value":"black","label":"검정"}],"default":"red"},
+{"type":"text","id":"stamp","label":"도장 글자 (예: ATL)"},
+{"type":"text","id":"note","label":"손글씨 메모 (카드 위)"}
+]}],"presets":[{"name":"KOLLAB Home · Events","blocks":[{"type":"event"},{"type":"event"},{"type":"event"}]}]}
+{% endschema %}

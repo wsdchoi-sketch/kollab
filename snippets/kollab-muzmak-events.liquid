@@ -1,0 +1,26 @@
+<section class="ev" id="km-events">
+<div class="wrap">
+<div class="head">
+<div>
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#km-star" fill="#E3001B"/></svg>Upcoming events</div>
+<h2 class="big serif">See it in person. <span class="i">Meet us at a pop-up.</span><svg class="flo" viewBox="0 0 220 220" aria-hidden="true"><g transform="translate(110 110)"><g fill="#E3001B" stroke="#0A0A0A" stroke-width="6" stroke-linejoin="round"><circle cx="0" cy="-58" r="42"/><circle cx="55" cy="-18" r="42"/><circle cx="34" cy="47" r="42"/><circle cx="-34" cy="47" r="42"/><circle cx="-55" cy="-18" r="42"/></g><circle r="44" fill="#F2D200" stroke="#0A0A0A" stroke-width="6"/><circle cx="-14" cy="-8" r="5" fill="#0A0A0A"/><circle cx="14" cy="-8" r="5" fill="#0A0A0A"/><path d="M-18 10q18 20 36 0" fill="none" stroke="#0A0A0A" stroke-width="6" stroke-linecap="round"/></g></svg></h2>
+</div>
+<div class="hr">{%- if events_url != blank -%}<a class="all" href="{{ events_url }}">All events <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>{%- endif -%}</div>
+</div>
+<div class="tix">
+{%- for block in blocks -%}{%- if block.type == 'event' -%}{%- assign b = block.settings -%}
+<div class="tk{% if b.style == 'red' %} atl{% endif %}" {{ block.shopify_attributes }}>
+<div class="top"><span>{{ b.date_label }}</span></div>
+<div class="l">
+<div class="route"><div><small>From</small><b>{{ b.from_code }}</b></div><span class="pl">✈</span><div><small>To</small><b>{{ b.to_code }}</b></div></div>
+<div class="poster">{%- if b.poster != blank -%}<img src="{{ b.poster | image_url: width: 800 }}" alt="" loading="lazy">{%- elsif b.poster_url != blank -%}<img src="{{ b.poster_url }}" alt="" loading="lazy">{%- endif -%}<span>Event poster</span></div>
+<div><h4>{{ b.title | newline_to_br }}</h4></div>
+<p>{{ b.description }}</p>
+<div class="inf"><div><small>{{ b.info_1_label }}</small><span>{{ b.info_1_value }}</span></div><div><small>{{ b.info_2_label }}</small><span>{{ b.info_2_value }}</span></div><div><small>{{ b.info_3_label }}</small><span>{{ b.info_3_value }}</span></div></div>
+</div>
+<div class="stub"><div class="bc"></div>{%- if b.link != blank -%}<a class="go" href="{{ b.link }}">{{ b.button_label }} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>{%- endif -%}</div>
+</div>
+{%- endif -%}{%- endfor -%}
+</div>
+</div>
+</section>

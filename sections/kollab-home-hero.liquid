@@ -1,0 +1,39 @@
+{%- render 'kollab-home-head' -%}
+{%- assign s = section.settings -%}
+<section class="hero" id="kh-top">
+<div class="bg"><div class="grid px" data-depth="-0.08"></div></div>
+<div class="wrap">
+<div class="hero-top">
+<div class="hero-copy">
+<div class="kicker" style="color:#fff"><svg><use href="#kh-star" fill="url(#kh-ch)"/></svg>{{ s.kicker | escape }}</div>
+<h1>
+<span class="w"><span>{{ s.l1 | escape }}</span></span>
+<span class="w"><span>{{ s.l2 | escape }}</span></span>
+<span class="w"><span>{{ s.l3 | escape }}</span></span>
+<span class="uline"><span class="w"><span class="i red-i">{{ s.l4 | escape }}</span></span><svg viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5.5 L298 2.5"/><path d="M16 12.5 L288 10"/></svg></span>
+</h1>
+</div>
+<div class="stage" aria-hidden="true">
+<div class="art">
+{%- if s.img_a -%}<div class="fl a px" data-depth="0.14" data-mouse="14" data-max="16"><img src="{{ s.img_a | image_url: width: 500 }}" alt=""></div>{%- endif -%}
+{%- if s.img_b -%}<div class="fl b px" data-depth="0.09" data-mouse="10" data-max="12"><img src="{{ s.img_b | image_url: width: 500 }}" alt=""></div>{%- endif -%}
+{%- if s.img_c -%}<div class="fl c px" data-depth="0.06" data-mouse="8" data-max="10"><img src="{{ s.img_c | image_url: width: 500 }}" alt=""></div>{%- endif -%}
+{%- if s.patch -%}<span class="spinbox"><img src="{{ s.patch | image_url: width: 300 }}" alt=""></span>{%- endif -%}
+</div>
+{%- if s.note != blank -%}<div class="hand note">{{ s.note | escape }}</div>{%- endif -%}
+</div>
+</div>
+<div class="sub">
+<p><span>{{ s.sub1 | escape }}</span><span>{{ s.sub2 | escape }}</span></p>
+<div class="ctas">
+<a class="pill red burst-on" href="#shop">{{ s.btn1 | escape }}</a>
+<a class="pill ghost" href="#events">{{ s.btn2 | escape }}</a>
+</div>
+</div>
+<div class="meta">
+{%- assign metas = s.meta | newline_to_br | split: '<br />' -%}
+{%- for m in metas -%}{%- assign p = m | strip | split: '|' -%}{%- if p[0] != blank -%}<span><b>{{ p[0] | strip | escape }}</b>{% if p[1] %} {{ p[1] | strip | escape }}{% endif %}</span>{%- endif -%}{%- endfor -%}
+</div>
+</div>
+</section>
+{% schema %}{"name": "KOLLAB Home · Hero", "tag": "div", "class": "khome", "settings": [{"type": "text", "id": "kicker", "label": "작은 윗줄", "default": "Downtown Los Angeles · K-Beauty & K-Brands"}, {"type": "text", "id": "l1", "label": "제목 1줄", "default": "Welcome"}, {"type": "text", "id": "l2", "label": "제목 2줄", "default": "to the"}, {"type": "text", "id": "l3", "label": "제목 3줄", "default": "KOLLAB"}, {"type": "text", "id": "l4", "label": "제목 4줄 (빨강 + 밑줄)", "default": "experience."}, {"type": "text", "id": "sub1", "label": "설명 1", "default": "A retail and activation platform in the heart of DTLA."}, {"type": "text", "id": "sub2", "label": "설명 2", "default": "Shop the brands, meet the creators, come to the pop-ups."}, {"type": "text", "id": "btn1", "label": "버튼 1", "default": "Shop now"}, {"type": "text", "id": "btn2", "label": "버튼 2", "default": "See what's on"}, {"type": "textarea", "id": "meta", "label": "아랫줄 정보", "default": "Downtown LA\n50+ | K-brands in store\nPop-ups | LA · Atlanta · Dallas\n#letskollab", "info": "한 줄에 하나, 형식: 굵은 글씨 | 나머지"}, {"type": "text", "id": "note", "label": "손글씨 메모", "default": "come say hi ↓"}, {"type": "image_picker", "id": "img_a", "label": "크롬 그래픽 1 (오른쪽 위)"}, {"type": "image_picker", "id": "img_b", "label": "크롬 그래픽 2 (왼쪽 위)"}, {"type": "image_picker", "id": "img_c", "label": "크롬 그래픽 3 (왼쪽 아래)"}, {"type": "image_picker", "id": "patch", "label": "돌아가는 패치 스티커"}], "presets": [{"name": "KOLLAB Home · Hero"}]}{% endschema %}

@@ -1,0 +1,18 @@
+<div class="wrap">
+<section class="sec" id="km-picks" style="padding-top:0">
+  <div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#km-star" fill="#E3001B"/></svg>{{ picks_kicker }}</div>
+  <h2 class="big serif">{{ picks_title }} <span class="i">{{ picks_title_i }}</span></h2>
+  <p class="lead"><span class="sent">{{ picks_lead }}</span></p>
+  <div class="modes" id="km-modes"><button type="button" class="on" data-m="shape">Same shape as my pick</button><button type="button" data-m="look">Similar look, any shape</button></div>
+  <p class="why" id="km-why"></p>
+  <div class="pgrid" id="km-pgrid"></div>
+  <div class="gift" id="km-bundle">
+    {%- if bow_image != blank -%}<img class="ribbon" src="{{ bow_image | image_url: width: 700 }}" alt="">{%- endif -%}
+    <div class="lid"><span>MUZMAK × KOLLAB</span><span>{{ gift_lid }} <span class="free">{{ gift_lid_pill }}</span></span></div>
+    <div class="box">
+      <div class="gl"><b><span>{{ gift_title_1 }}</span><span>{{ gift_title_2 }}</span></b><span class="sub2">{{ gift_sub }} {%- if gift_save != blank %} <em class="save">{{ gift_save }}</em>{%- endif -%}</span></div>
+      <a class="cta lnk" href="{{ collection_url }}"><span>{{ gift_button }}</span><b>{%- if gift_was != blank -%}<s>{{ gift_was }}</s> {% endif -%}{{ gift_now }}</b></a>
+    </div>
+  </div>
+</section>
+</div>
