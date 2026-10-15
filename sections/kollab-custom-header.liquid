@@ -311,7 +311,9 @@
 	/* Shop mega menu — KOLLAB site style (compact card, red offset shadow) */
 	.kollab-header__mega {
 		left: -14px;
-		width: min(520px, calc(100vw - 48px));
+		width: max-content;
+		min-width: 440px;
+		max-width: calc(100vw - 48px);
 		margin-top: 0;
 		padding: 26px 30px 22px;
 		background: #fff;
@@ -321,8 +323,8 @@
 	}
 
 	.kollab-header__mega-inner {
-		grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-		gap: 34px;
+		grid-template-columns: auto auto;
+		gap: 28px 44px;
 	}
 
 	.kollab-header__mega-title {
@@ -354,7 +356,7 @@
 	}
 
 	.kollab-header__mega-inner > div:first-child .kollab-header__mega-list {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-template-columns: repeat(2, max-content);
 	}
 
 	.kollab-header__mega-link {
@@ -364,6 +366,7 @@
 		font-size: 14.5px;
 		font-weight: 500;
 		line-height: 1.25;
+		white-space: nowrap;
 		letter-spacing: 0;
 		transition: color 160ms ease, transform 160ms ease;
 	}
