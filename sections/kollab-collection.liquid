@@ -1,0 +1,179 @@
+{%- render 'kollab-home-head' -%}
+{{ 'kollab-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'kollab-collection.js' | asset_url }}" defer="defer"></script>
+{%- liquid
+  assign s = section.settings
+  assign words = collection.title | split: ' '
+  assign last_word = words | last
+  assign head_words = collection.title | remove_last: last_word | strip
+  assign desc = collection.description | strip_html | strip | truncatewords: 38
+  if desc == blank
+    assign desc = s.fallback_desc
+  endif
+  assign sort_current = collection.sort_by | default: collection.default_sort_by
+  assign active_count = 0
+  for f in collection.filters
+    assign active_count = active_count | plus: f.active_values.size
+  endfor
+-%}
+<section class="kc-hero">
+<div class="bg"><div class="grid px" data-depth="-0.06"></div></div>
+<div class="wrap">
+<div class="kc-top">
+<div class="kc-copy">
+<div class="kicker"><svg><use href="#kh-star" fill="url(#kh-ch)"/></svg><a href="{{ routes.root_url }}">Home</a><span class="sl">/</span><a href="{{ routes.collections_url }}">Shop</a><span class="sl">/</span><span>{{ collection.title | escape }}</span></div>
+<h1>
+{%- if head_words != blank -%}<span class="w"><span>{{ head_words | escape }}</span></span> {% endif -%}
+<span class="uline"><span class="w"><span class="i red-i">{{ last_word | escape }}</span></span><svg viewBox="0 0 300 16" preserveAspectRatio="none" aria-hidden="true"><path d="M2 5.5 L298 2.5"/><path d="M16 12.5 L288 10"/></svg></span>
+</h1>
+</div>
+{%- if s.show_image and collection.image -%}
+<div class="kc-art" aria-hidden="true">
+<div class="kc-frame px" data-depth="0.08" data-max="12"><span class="washi tc"></span><img src="{{ collection.image | image_url: width: 700 }}" alt="" width="700" height="700"></div>
+{%- if s.note != blank -%}<div class="hand note">{{ s.note | escape }}</div>{%- endif -%}
+</div>
+{%- elsif s.note != blank -%}
+<div class="kc-art kc-art--note" aria-hidden="true"><div class="hand note">{{ s.note | escape }}</div></div>
+{%- endif -%}
+</div>
+<div class="sub">
+{%- if desc != blank -%}<p>{{ desc | escape }}</p>{%- endif -%}
+<div class="meta">
+<span><b>{{ collection.products_count }}</b> {% if collection.products_count == 1 %}product{% else %}products{% endif %}</span>
+<span><b>{{ collection.all_vendors.size }}</b> {% if collection.all_vendors.size == 1 %}brand{% else %}brands{% endif %}</span>
+{%- if s.meta_extra != blank -%}{%- assign p = s.meta_extra | split: '|' -%}<span><b>{{ p[0] | strip | escape }}</b>{% if p[1] %} {{ p[1] | strip | escape }}{% endif %}</span>{%- endif -%}
+</div>
+</div>
+</div>
+</section>
+
+{%- if s.cats_menu != blank -%}
+<div class="cats" aria-label="Shop by category"><div class="row" data-dup>
+{%- for l in s.cats_menu.links -%}<a class="cat foil{% if l.active %} on{% endif %}" href="{{ l.url }}"><svg viewBox="0 0 24 24"><use href="#kh-star" fill="#E3001B"/></svg>{{ l.title | escape }}</a>{%- endfor -%}
+</div></div>
+{%- endif -%}
+
+<section class="sec kc-body" id="kc-grid">
+<div class="wrap">
+{%- paginate collection.products by s.per_page -%}
+<div class="kc-bar rv">
+<div class="kc-filters">
+{%- assign shown_filter = false -%}
+{%- for f in collection.filters -%}
+  {%- if f.type == 'list' -%}
+    {%- if f.param_name == 'filter.v.availability' -%}
+      {%- for v in f.values -%}{%- if v.value == '1' -%}
+      <a class="chip{% if v.active %} on{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}#kc-grid" rel="nofollow">In stock only</a>
+      {%- assign shown_filter = true -%}
+      {%- endif -%}{%- endfor -%}
+    {%- elsif f.values.size > 1 -%}
+      {%- assign shown_filter = true -%}
+      <div class="kc-group" role="group" aria-label="{{ f.label | escape }}">
+      <span class="lbl">{{ f.label | escape }}</span>
+      <div class="kc-chips">
+      {%- for v in f.values limit: 24 -%}
+        {%- if v.count > 0 or v.active -%}
+        <a class="chip{% if v.active %} on{% endif %}" href="{% if v.active %}{{ v.url_to_remove }}{% else %}{{ v.url_to_add }}{% endif %}#kc-grid" rel="nofollow">{{ v.label | escape }}<small>{{ v.count }}</small></a>
+        {%- endif -%}
+      {%- endfor -%}
+      </div></div>
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- unless shown_filter -%}
+  {%- if collection.all_vendors.size > 1 -%}
+  <div class="kc-group" role="group" aria-label="Brands">
+  <span class="lbl">Brands</span>
+  <div class="kc-chips">{%- for v in collection.all_vendors limit: 24 -%}<a class="chip" href="{{ v | url_for_vendor }}">{{ v | escape }}</a>{%- endfor -%}</div>
+  </div>
+  {%- endif -%}
+{%- endunless -%}
+</div>
+<div class="kc-sort">
+{%- if active_count > 0 -%}<a class="kc-clear" href="{{ collection.url }}?sort_by={{ sort_current }}#kc-grid">Clear filters ({{ active_count }})</a>{%- endif -%}
+<label class="lbl" for="kc-sort-{{ section.id }}">Sort</label>
+<div class="kc-select"><select id="kc-sort-{{ section.id }}" data-kc-sort>
+{%- for o in collection.sort_options -%}<option value="{{ o.value | escape }}"{% if o.value == sort_current %} selected{% endif %}>{{ o.name | escape }}</option>{%- endfor -%}
+</select></div>
+</div>
+</div>
+
+{%- if collection.products.size > 0 -%}
+<p class="kc-count">Showing {{ paginate.current_offset | plus: 1 }}–{{ paginate.current_offset | plus: collection.products.size }} of {{ paginate.items }}</p>
+<div class="grid4 kc-grid">
+{%- for product in collection.products -%}
+  {%- liquid
+    assign tab = ''
+    if s.new_tag != blank and product.tags contains s.new_tag
+      assign tab = 'new'
+    endif
+    assign sticker = ''
+    if forloop.first and paginate.current_page == 1 and active_count == 0
+      assign sticker = s.sticker
+    endif
+  -%}
+  {%- render 'kollab-home-card', product: product, tab: tab, sticker: sticker -%}
+  {%- if s.tile_on and paginate.current_page == 1 and forloop.index == s.tile_pos and forloop.length > s.tile_pos -%}
+  <a class="kc-tile {{ s.tile_style }}" href="{{ s.tile_url | default: '/#contact' }}">
+  <span class="washi tr foil"></span>
+  <div class="kicker"><svg><use href="#kh-star" fill="currentColor"/></svg>{{ s.tile_kicker | escape }}</div>
+  <div class="t"><span>{{ s.tile_t1 | escape }}</span><span class="i">{{ s.tile_t2 | escape }}</span></div>
+  {%- if s.tile_p != blank -%}<p>{{ s.tile_p | escape }}</p>{%- endif -%}
+  {%- if s.tile_btn != blank -%}<span class="pill {% if s.tile_style == 'red' %}white{% else %}red{% endif %}">{{ s.tile_btn | escape }}</span>{%- endif -%}
+  </a>
+  {%- endif -%}
+{%- endfor -%}
+</div>
+
+{%- if paginate.pages > 1 -%}
+<nav class="kc-pages" aria-label="Pagination">
+{%- if paginate.previous -%}<a class="pill ghost" href="{{ paginate.previous.url }}#kc-grid">← Prev</a>{%- endif -%}
+<div class="nums">
+{%- for part in paginate.parts -%}
+  {%- if part.is_link -%}<a href="{{ part.url }}#kc-grid">{{ part.title }}</a>
+  {%- elsif part.title == paginate.current_page -%}<span class="cur" aria-current="page">{{ part.title }}</span>
+  {%- else -%}<span class="gap">{{ part.title }}</span>{%- endif -%}
+{%- endfor -%}
+</div>
+{%- if paginate.next -%}<a class="pill black" href="{{ paginate.next.url }}#kc-grid">Next →</a>{%- endif -%}
+</nav>
+{%- endif -%}
+
+{%- else -%}
+<div class="kc-empty">
+<div class="t"><span>Nothing here</span><span class="i">(yet).</span></div>
+<p>{% if active_count > 0 %}Try removing a filter or two.{% else %}We're restocking this shelf. Check back soon.{% endif %}</p>
+<div class="ctas">
+{%- if active_count > 0 -%}<a class="pill red" href="{{ collection.url }}">Clear filters</a>{%- endif -%}
+<a class="pill ghost" href="{{ routes.all_products_collection_url }}">Shop everything</a>
+</div>
+</div>
+{%- endif -%}
+{%- endpaginate -%}
+</div>
+</section>
+
+{% schema %}
+{"name":"KOLLAB Collection","tag":"div","class":"khome kcol","settings":[
+{"type":"header","content":"Hero"},
+{"type":"checkbox","id":"show_image","label":"컬렉션 이미지 표시","default":true},
+{"type":"text","id":"note","label":"손글씨 메모","default":"all tested by our team first ✓"},
+{"type":"text","id":"fallback_desc","label":"설명 (컬렉션 설명 없을 때)","default":"Curated in Seoul. Loved in LA."},
+{"type":"text","id":"meta_extra","label":"아랫줄 추가 정보","default":"Free shipping | over $60","info":"형식: 굵은 글씨 | 나머지. 비우면 숨김"},
+{"type":"link_list","id":"cats_menu","label":"카테고리 띠 메뉴 (선택)"},
+{"type":"header","content":"Grid"},
+{"type":"range","id":"per_page","label":"페이지당 상품 수","min":8,"max":48,"step":4,"default":24},
+{"type":"text","id":"sticker","label":"첫 상품 스티커","default":"staff pick ✓"},
+{"type":"text","id":"new_tag","label":"New 배지 태그","default":"new","info":"이 태그가 달린 상품에 New 배지"},
+{"type":"header","content":"Interrupt tile"},
+{"type":"checkbox","id":"tile_on","label":"타일 표시","default":true},
+{"type":"range","id":"tile_pos","label":"몇 번째 상품 뒤","min":2,"max":16,"step":1,"default":6},
+{"type":"select","id":"tile_style","label":"스타일","options":[{"value":"black","label":"Black"},{"value":"red","label":"Red"},{"value":"foil","label":"Foil"}],"default":"red"},
+{"type":"text","id":"tile_kicker","label":"작은 윗줄","default":"In person"},
+{"type":"text","id":"tile_t1","label":"제목 1줄","default":"Rather see it"},
+{"type":"text","id":"tile_t2","label":"제목 2줄 (이탤릭)","default":"in person?"},
+{"type":"text","id":"tile_p","label":"설명","default":"Come by the shop. 731 S Broadway, Downtown LA."},
+{"type":"text","id":"tile_btn","label":"버튼","default":"Say hi"},
+{"type":"url","id":"tile_url","label":"링크"}
+],"presets":[{"name":"KOLLAB Collection"}]}
+{% endschema %}
