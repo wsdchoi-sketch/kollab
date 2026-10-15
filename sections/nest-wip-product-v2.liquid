@@ -275,7 +275,7 @@
     </div>
     {%- if current_variant.available -%}
       <button type="button" class="nwip-atc nwip-sticky-btn" id="nwipStickyBtn" onclick="nwipStickyAdd()">
-        Add to Cart &middot; <span id="nwipStickyAtcPrice">{{ current_variant.price | money }}</span>
+        Add to bag &middot; <span id="nwipStickyAtcPrice">{{ current_variant.price | money }}</span>
       </button>
     {%- else -%}
       <button type="button" class="nwip-atc nwip-sticky-btn" disabled>Sold out</button>
