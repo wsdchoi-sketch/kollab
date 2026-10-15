@@ -195,7 +195,9 @@
           </div>
         </details>
 
-        <details>
+        {%- assign how_vid_open = product.metafields.kollab.vimeo_id.value | default: product.metafields.kollab.vimeo_id -%}
+        {%- if how_vid_open == blank and mf.how_to_video.value != blank -%}{%- assign how_vid_open = true -%}{%- endif -%}
+        <details{% if how_vid_open != blank %} open{% endif %}>
           <summary><span class="t">How to use</span><span class="ic"></span></summary>
           <div class="bd">
             {%- assign how_vimeo = product.metafields.kollab.vimeo_id.value | default: product.metafields.kollab.vimeo_id -%}
