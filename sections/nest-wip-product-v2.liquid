@@ -33,6 +33,7 @@
 {%- assign mf = product.metafields.custom -%}
 
 {{ 'nest-wip-product.css' | asset_url | stylesheet_tag }}
+<style>.nwip-howvid{position:relative;aspect-ratio:1/1;width:100%;max-width:420px;margin:0 0 16px;border:1.5px solid #0a0a0a;background:#f7f7f6;overflow:hidden}.nwip-howvid iframe,.nwip-howvid video{position:absolute;inset:0;width:100%;height:100%;border:0;object-fit:cover}</style>
 
 <div class="nwip">
   {%- if section.settings.show_top_banner -%}
@@ -195,6 +196,12 @@
         <details>
           <summary><span class="t">How to use</span><span class="ic"></span></summary>
           <div class="bd">
+            {%- assign how_vimeo = product.metafields.kollab.vimeo_id.value | default: product.metafields.kollab.vimeo_id -%}
+            {%- if how_vimeo != blank -%}
+              <div class="nwip-howvid"><iframe src="https://player.vimeo.com/video/{{ how_vimeo }}?background=1&autoplay=1&loop=1&muted=1" loading="lazy" allow="autoplay; fullscreen" title="{{ clean_title | escape }} how to apply"></iframe></div>
+            {%- elsif mf.how_to_video.value != blank -%}
+              <div class="nwip-howvid">{{ mf.how_to_video.value | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, image_size: '600x' }}</div>
+            {%- endif -%}
             {%- if mf.how_to_use != blank -%}
               <div>{{ mf.how_to_use | newline_to_br }}</div>
               {%- if mf.am_pm != blank -%}<h4>When</h4><div>{{ mf.am_pm }}</div>{%- endif -%}
