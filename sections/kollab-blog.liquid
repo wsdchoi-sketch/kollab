@@ -1,0 +1,81 @@
+{%- render 'kollab-home-head' -%}
+{{ 'kollab-blog.css' | asset_url | stylesheet_tag }}
+{%- liquid
+  assign s = section.settings
+  assign cur_tag = current_tags | first
+-%}
+<section class="kb-hero">
+<div class="bg"><div class="grid px" data-depth="-0.06"></div></div>
+<div class="wrap">
+<div class="kicker"><svg><use href="#kh-star" fill="url(#kh-ch)"/></svg><a href="{{ routes.root_url }}">Home</a><span class="sl">/</span><span>{{ s.kicker | default: blog.title | escape }}</span></div>
+<h1><span class="w"><span>{{ s.h1 | escape }}</span></span> <span class="uline"><span class="w"><span class="i red-i">{{ s.h2 | escape }}</span></span></span></h1>
+{%- if s.sub != blank -%}<p class="kb-sub">{{ s.sub | escape }}</p>{%- endif -%}
+</div>
+</section>
+
+<div class="wrap kb-body" id="kb-grid">
+{%- if blog.all_tags.size > 0 -%}
+<div class="kb-tags" role="navigation" aria-label="Filter by topic">
+<a class="chip{% unless cur_tag %} on{% endunless %}" href="{{ blog.url }}">All</a>
+{%- for tag in blog.all_tags -%}
+<a class="chip{% if cur_tag == tag %} on{% endif %}" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag | escape }}</a>
+{%- endfor -%}
+</div>
+{%- endif -%}
+
+{%- paginate blog.articles by s.per_page -%}
+{%- if blog.articles.size > 0 -%}
+<div class="kb-grid">
+{%- for article in blog.articles -%}
+  {%- assign feat = false -%}
+  {%- if forloop.first and paginate.current_page == 1 and s.feature and cur_tag == blank and article.image -%}{%- assign feat = true -%}{%- endif -%}
+  <a class="kb-card{% if feat %} feat{% endif %}" href="{{ article.url }}">
+    <div class="ph">
+      {%- if article.image -%}
+        <img src="{{ article.image | image_url: width: 900 }}" alt="{{ article.image.alt | default: article.title | escape }}" width="900" height="{{ 900 | divided_by: article.image.aspect_ratio | round }}" loading="{% if forloop.index > 3 %}lazy{% else %}eager{% endif %}">
+      {%- else -%}
+        <div class="no-img"><span>KOLLAB</span></div>
+      {%- endif -%}
+    </div>
+    <div class="tx">
+      <div class="meta">
+        {%- if article.tags.size > 0 -%}<span class="tag">{{ article.tags.first | escape }}</span>{%- endif -%}
+        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %-d, %Y' }}</time>
+      </div>
+      <h3>{{ article.title | escape }}</h3>
+      <p>{{ article.excerpt_or_content | strip_html | strip | truncate: 150 }}</p>
+      <span class="more">Read more <i aria-hidden="true">→</i></span>
+    </div>
+  </a>
+{%- endfor -%}
+</div>
+
+{%- if paginate.pages > 1 -%}
+<nav class="kb-pages" aria-label="Pagination">
+{%- if paginate.previous -%}<a class="pill ghost" href="{{ paginate.previous.url }}#kb-grid">← Prev</a>{%- endif -%}
+<div class="nums">
+{%- for part in paginate.parts -%}
+  {%- if part.is_link -%}<a href="{{ part.url }}#kb-grid">{{ part.title }}</a>
+  {%- elsif part.title == paginate.current_page -%}<span class="cur" aria-current="page">{{ part.title }}</span>
+  {%- else -%}<span class="gap">{{ part.title }}</span>{%- endif -%}
+{%- endfor -%}
+</div>
+{%- if paginate.next -%}<a class="pill black" href="{{ paginate.next.url }}#kb-grid">Next →</a>{%- endif -%}
+</nav>
+{%- endif -%}
+{%- else -%}
+<div class="kb-empty"><p>No posts yet.</p><a class="pill black" href="{{ blog.url }}">See all posts</a></div>
+{%- endif -%}
+{%- endpaginate -%}
+</div>
+
+{% schema %}
+{"name":"KOLLAB Blog","tag":"div","class":"khome kblog","settings":[
+{"type":"text","id":"kicker","label":"Breadcrumb 이름","default":"Journal"},
+{"type":"text","id":"h1","label":"제목 1줄","default":"Notes from"},
+{"type":"text","id":"h2","label":"제목 2줄 (이탤릭)","default":"the shop floor."},
+{"type":"text","id":"sub","label":"설명","default":"Pop-ups, workshops and the people behind KOLLAB."},
+{"type":"checkbox","id":"feature","label":"첫 글 크게 표시","default":true},
+{"type":"range","id":"per_page","label":"페이지당 글 수","min":6,"max":24,"step":3,"default":9}
+],"presets":[{"name":"KOLLAB Blog"}]}
+{% endschema %}
