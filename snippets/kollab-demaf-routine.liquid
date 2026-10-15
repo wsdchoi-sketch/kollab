@@ -1,0 +1,78 @@
+{%- comment -%}De:maf PDP: 3-step routine, envelope bundle, more from De:maf{%- endcomment -%}
+{%- liquid
+assign r1 = all_products[s.routine_1]
+assign r2 = all_products[s.routine_2]
+if r2.id == blank or r2.available == false
+  assign r2 = all_products[s.routine_2_fallback]
+endif
+assign r3 = all_products[s.routine_3]
+assign v1 = r1.selected_or_first_available_variant
+for v in r1.variants
+  if v.title contains s.routine_1_variant and v.available
+    assign v1 = v
+  endif
+endfor
+assign v2 = r2.selected_or_first_available_variant
+for v in r2.variants
+  if v.title contains '30%' and v.available
+    assign v2 = v
+  endif
+endfor
+assign v3 = r3.selected_or_first_available_variant
+assign ok = true
+unless v1.available
+  assign ok = false
+endunless
+unless v2.available
+  assign ok = false
+endunless
+unless v3.available
+  assign ok = false
+endunless
+assign c1 = v1.compare_at_price | default: v1.price
+assign c2 = v2.compare_at_price | default: v2.price
+assign c3 = v3.compare_at_price | default: v3.price
+assign b_now = v1.price | plus: v2.price | plus: v3.price
+assign b_was = c1 | plus: c2 | plus: c3
+assign b_save = b_was | minus: b_now
+-%}
+{%- if r1.id != blank and r2.id != blank and r3.id != blank -%}
+<div class="wrap"><section class="sec" id="kd-ritual">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kd-star" fill="#E3001B"/></svg>The De:maf routine</div>
+<h2 class="big serif">Three steps. <span class="i">That's the whole routine.</span></h2>
+<p class="lead"><span class="sent">Serum to hydrate, ampoule to treat, cream to lock it in.</span><span class="sent">Each one is made to layer with the next.</span></p>
+<div style="height:40px"></div>
+<div class="r3">
+<div class="s{% if p.id == r1.id %} me{% endif %}"><div class="n">STEP 1 · HYDRATE</div><a class="img" href="{{ r1.url }}"><img src="{{ r1.featured_image | image_url: width: 600 }}" alt="De:maf Here-Oh My First Serum" loading="lazy"></a><h4>Here-Oh My First Serum</h4><p>A bubble serum you press on in thin layers, right after cleansing.</p>
+<div class="layer"><button type="button" id="kd-lminus" aria-label="Remove a layer">−</button><div class="dots" id="kd-ldots"></div><button type="button" id="kd-lplus" aria-label="Add a layer">+</button><span class="lt" id="kd-ltxt">Tap + to layer</span></div>
+<div class="pr">{% if c1 > v1.price %}<s>{{ c1 | money_without_trailing_zeros }}</s>{% endif %}{{ v1.price | money_without_trailing_zeros }} · {{ v1.title | remove: 'ORIGINAL ' | remove: '(' | remove: ')' }}</div></div>
+<div class="s{% if p.id == r2.id or is_pan %} me{% endif %}"><div class="n">STEP 2 · TREAT</div><a class="img" href="{{ r2.url }}"><img src="{{ r2.featured_image | image_url: width: 600 }}" alt="De:maf Panthenol ampoule" loading="lazy"></a><h4>Panthenol Ampoule</h4><p>Spread it gently over the serum. Do not rub.</p><div class="pr">{% if c2 > v2.price %}<s>{{ c2 | money_without_trailing_zeros }}</s>{% endif %}{{ v2.price | money_without_trailing_zeros }} · 30%</div></div>
+<div class="s{% if p.id == r3.id %} me{% endif %}"><div class="n">STEP 3 · LOCK IN</div><a class="img" href="{{ r3.url }}"><img src="{{ r3.featured_image | image_url: width: 600 }}" alt="De:maf Creams Come True cream" loading="lazy"></a><h4>Creams Come True</h4><p>Squalane barrier cream. One thin layer, two or three for dry skin.</p><div class="pr">{% if c3 > v3.price %}<s>{{ c3 | money_without_trailing_zeros }}</s>{% endif %}{{ v3.price | money_without_trailing_zeros }} · 50 ml</div></div>
+</div>
+{%- if ok -%}
+<div class="env" id="kd-bundle" data-ids="{{ v1.id }},{{ v2.id }},{{ v3.id }}"><div class="back">
+<div class="flap"><svg viewBox="0 0 1000 120" preserveAspectRatio="none"><path d="M0 0H1000L540 108Q500 124 460 108Z" fill="#fff" stroke="#0A0A0A" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
+<div class="seal"><svg viewBox="0 0 48 48" aria-hidden="true"><use href="#kd-star" fill="url(#kd-ch)"/></svg></div>
+<div class="gl"><span class="to2">To: your barrier</span><b>The De:maf three-step, sealed</b><span class="sub2">First Serum, Panthenol 30% and Creams Come True.{% if b_save > 0 %} <em class="save">You save {{ b_save | money_without_trailing_zeros }}</em>{% endif %}</span></div>
+<button type="button" class="cta" id="kd-bundle-add"><span>Add all three</span><b>{% if b_save > 0 %}<s>{{ b_was | money_without_trailing_zeros }}</s> {% endif %}{{ b_now | money_without_trailing_zeros }}</b></button>
+</div></div>
+{%- endif -%}
+</section></div>
+{%- endif -%}
+{%- liquid
+assign coll = nil
+for c in p.collections
+  if c.handle == s.collection_handle
+    assign coll = c
+  endif
+endfor
+unless coll.products.size > 1
+  assign hl = 'demaf-rice-gel-cleanser-150ml,de-maf-all-day-glow-creamy-milk-cleanser-300ml,de-maf-all-day-glow-im-so-jelly-olive-oil-cleanser,de-maf-here-oh-my-first-serum,de-maf-panthenol-30-wonder-drops-ampoule-55ml,de-maf-green-cica-pore-ampoule-50ml,de-maf-egf-peptide-ampoule-for-cell-repair-55ml,de-maf-creams-come-true-squalane-barrier-repair-50ml,de-maf-my-glow-oil-20ml,de-maf-i-glow-jojoba-oil-multi-balm-1,de-maf-forest-for-rest-bubble-body-wash' | split: ','
+endunless
+-%}
+{%- if coll.products.size > 1 or hl.size > 1 -%}
+<div class="wrap"><section class="sec" id="kd-more" style="padding-top:0">
+<div class="morehead"><div><div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kd-star" fill="#E3001B"/></svg>More from De:maf</div><h2 class="big serif">Same barrier-first idea. <span class="i">Every step covered.</span></h2></div><div class="mnav"><button type="button" aria-label="Previous" data-d="-1">←</button><button type="button" aria-label="Next" data-d="1">→</button></div></div>
+<div class="rail" id="kd-rail">{%- if coll.products.size > 1 -%}{%- assign items = coll.products -%}{%- else -%}{%- assign items = hl -%}{%- endif -%}{%- for x in items limit: 24 -%}{%- if hl -%}{%- assign it = all_products[x] -%}{%- else -%}{%- assign it = x -%}{%- endif -%}{%- if it.id != blank and it.id != p.id and it.available -%}{%- assign t = it.title -%}{%- if t contains ']' -%}{%- assign t = t | split: ']' | last | strip -%}{%- endif -%}{%- assign t = t | remove_first: 'NEW ' -%}{%- assign iv = it.selected_or_first_available_variant -%}<a class="pc2" href="{{ it.url }}"><div class="im">{%- if it.featured_image -%}<img src="{{ it.featured_image | image_url: width: 500 }}" alt="{{ t | escape }}" loading="lazy">{%- endif -%}<span class="ty">{{ it.metafields.custom.descriptor.value | default: 'De:maf' }}</span></div><div class="t"><h4>{{ t }}</h4><p>{{ it.metafields.custom.hero_line.value }}</p><div class="pr">{{ iv.price | money_without_trailing_zeros }}{% if iv.compare_at_price > iv.price %}<s>{{ iv.compare_at_price | money_without_trailing_zeros }}</s>{% endif %}</div></div></a>{%- endif -%}{%- endfor -%}</div>
+</section></div>
+{%- endif -%}

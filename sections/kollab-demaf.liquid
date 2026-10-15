@@ -1,0 +1,222 @@
+{%- liquid
+assign p = product
+assign cv = p.selected_or_first_available_variant
+assign mf = p.metafields.custom
+assign name = p.title
+if name contains ']'
+  assign name = name | split: ']' | last | strip
+endif
+assign name = name | remove_first: 'NEW ' | strip
+assign size_label = ''
+assign lw = name | split: ' ' | last
+assign fc = lw | slice: 0
+if '0123456789' contains fc
+  assign size_label = lw
+  assign cut = ' ' | append: lw
+  assign name = name | remove_last: cut | strip
+endif
+assign is_pan = false
+if p.handle contains 'panthenol'
+  assign is_pan = true
+endif
+assign has_str = false
+for v in p.variants
+  if v.title contains '%'
+    assign has_str = true
+  endif
+endfor
+assign pan_v = '30'
+if name contains '10%'
+  assign pan_v = '10'
+endif
+if has_str and cv.title contains '10%'
+  assign pan_v = '10'
+endif
+assign descriptor = mf.descriptor.value | default: 'De:maf'
+assign tagline = p.metafields.kollab.tagline.value
+if tagline == blank
+  assign tagline = descriptor | downcase | append: '.'
+endif
+assign tag_src = p.metafields.kollab.hashtags.value | default: '#demaf'
+assign tags = tag_src | newline_to_br | split: '<br />'
+assign desc_txt = p.description | split: '</p>' | first | strip_html | strip | truncatewords: 32
+assign hero_line = mf.hero_line.value | default: desc_txt
+assign benefits = mf.key_benefits.value
+assign ings = mf.hero_ingredients.value
+assign how = mf.how_to_use.value
+assign multi = false
+unless p.has_only_default_variant
+  assign multi = true
+endunless
+assign lbl = size_label
+if multi
+  assign lbl = cv.title
+endif
+assign off = 0
+if cv.compare_at_price > cv.price
+  assign off = cv.compare_at_price | minus: cv.price | times: 100.0 | divided_by: cv.compare_at_price | round
+endif
+assign rating = p.metafields.reviews.rating.value
+assign rating_count = p.metafields.reviews.rating_count.value
+-%}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@500;700&display=swap">
+{{ 'kollab-demaf.css' | asset_url | stylesheet_tag }}
+{{ 'kollab-demaf-2.css' | asset_url | stylesheet_tag }}
+<div class="kdm" id="kdm-{{ section.id }}" data-handle="{{ p.handle }}" data-pan="{{ pan_v }}" data-multi="{% if multi %}1{% else %}0{% endif %}">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<linearGradient id="kd-ch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#b9b9b9"/><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#8f8f8f"/></linearGradient>
+<linearGradient id="kd-lav" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9BBF0"/><stop offset="1" stop-color="#8E77D2"/></linearGradient>
+<linearGradient id="kd-lav30" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B7A3F0"/><stop offset="1" stop-color="#6E52C9"/></linearGradient>
+<linearGradient id="kd-lav10" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1ECFF"/><stop offset="1" stop-color="#C7B9F2"/></linearGradient>
+<symbol id="kd-star" viewBox="0 0 48 48"><path d="M24 2 28 20 46 24 28 28 24 46 20 28 2 24 20 20Z"/></symbol>
+</defs></svg>
+<script type="application/json" id="kd-vars">[{%- for v in p.variants -%}{"id":{{ v.id }},"t":{{ v.title | json }},"p":{{ v.price }},"c":{{ v.compare_at_price | default: 0 }},"a":{{ v.available }},"m":{{ v.featured_media.id | default: 0 }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]</script>
+
+<div class="wrap">
+<section class="hero">
+<div class="gallery">
+<div class="gal-top"><svg width="30" height="30" aria-hidden="true"><use href="#kd-star" fill="url(#kd-ch)" stroke="#777" stroke-width=".6"/></svg></div>
+<div class="main-img" id="kd-main">
+{%- for m in p.media limit: 10 -%}{%- if m.media_type == 'image' -%}
+<img{% if forloop.first %} class="on"{% endif %} data-mid="{{ m.id }}" src="{{ m | image_url: width: 1200 }}" alt="{{ m.alt | default: name | escape }}"{% unless forloop.first %} loading="lazy"{% endunless %}>
+{%- endif -%}{%- endfor -%}
+</div>
+<div class="thumbs" id="kd-thumbs">
+{%- for m in p.media limit: 10 -%}{%- if m.media_type == 'image' -%}
+<button type="button"{% if forloop.first %} class="on"{% endif %} aria-label="Image {{ forloop.index }}"><img src="{{ m | image_url: width: 300 }}" alt="" loading="lazy"></button>
+{%- endif -%}{%- endfor -%}
+</div>
+</div>
+
+<div class="info">
+<a class="brand" href="{{ p.vendor | url_for_vendor }}"><svg class="kstar" aria-hidden="true"><use href="#kd-star" fill="#fff"/></svg>De:maf</a>
+<h1 class="title serif">{{ name }}<br><span class="i">{{ tagline }}</span></h1>
+<p class="sub">{%- if hero_line != blank -%}<span class="sent">{{ hero_line }}</span>{%- endif -%}{%- if has_str -%}<span class="sent">Pick 30% for dry, reactive skin or 10% for oily, sensitive skin.</span>{%- endif -%}</p>
+{%- if rating != blank and rating_count != blank and rating_count > 0 -%}
+<div class="rating"><span class="s">★★★★★</span> {{ rating.rating | round: 1 }} <span>·</span> <a href="#judgeme_product_reviews">{{ rating_count }} review{% if rating_count != 1 %}s{% endif %}</a></div>
+{%- endif -%}
+{%- if has_str -%}
+<div class="strlab"><span>Choose your strength</span><a href="#kd-wall">Not sure? Try the wall</a></div>
+<div class="str" id="kd-str">
+{%- for v in p.variants -%}{%- if v.title contains '30%' -%}<button type="button" data-id="{{ v.id }}"{% if v.id == cv.id %} class="on"{% endif %}><svg class="dr" viewBox="0 0 30 36" aria-hidden="true"><path d="M15 2c8 11 12 17 12 22a12 12 0 0 1-24 0c0-5 4-11 12-22z" fill="url(#kd-lav30)" stroke="#0A0A0A" stroke-width="1.5"/></svg><b>30%</b><span>Rich · syrup-like</span><small>Dry, dehydrated, reactive</small></button>{%- endif -%}{%- endfor -%}
+{%- for v in p.variants -%}{%- if v.title contains '10%' -%}<button type="button" data-id="{{ v.id }}"{% if v.id == cv.id %} class="on"{% endif %}><svg class="dr sm" viewBox="0 0 30 36" aria-hidden="true"><path d="M15 2c8 11 12 17 12 22a12 12 0 0 1-24 0c0-5 4-11 12-22z" fill="url(#kd-lav10)" stroke="#0A0A0A" stroke-width="1.5"/></svg><b>10%</b><span>Light · non-sticky</span><small>Oily, sensitive, warm days</small></button>{%- endif -%}{%- endfor -%}
+</div>
+{%- elsif multi -%}
+<div class="strlab"><span>{{ p.options.first | default: 'Option' }}</span></div>
+<div class="vpick" id="kd-vpick">{%- for v in p.variants -%}<button type="button" data-id="{{ v.id }}" class="{% if v.id == cv.id %}on{% endif %}{% unless v.available %} na{% endunless %}">{{ v.title }}</button>{%- endfor -%}</div>
+{%- endif -%}
+<div class="price"><span class="p" id="kd-now">{{ cv.price | money_without_trailing_zeros }}</span><s id="kd-was"{% if off == 0 %} hidden{% endif %}>{{ cv.compare_at_price | money_without_trailing_zeros }}</s><em id="kd-off"{% if off == 0 %} hidden{% endif %}>-{{ off }}%</em>{%- if lbl != blank -%}<small id="kd-lbl">{{ lbl }}</small>{%- endif -%}</div>
+
+<product-form class="buy-wrap" data-hide-errors="false">
+{%- form 'product', p, id: 'kd-form', class: 'buy' -%}
+<input type="hidden" name="id" value="{{ cv.id }}">
+<div class="qty">
+<button type="button" class="up" id="kd-up" aria-label="Increase quantity"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#E3001B"/><path d="M24 12 11.5 24.5l4 4L21 23v13h6V23l5.5 5.5 4-4z" fill="#fff"/></svg></button>
+<input class="q" type="number" name="quantity" id="kd-q" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+<button type="button" id="kd-down" aria-label="Decrease quantity"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0A0A0A"/><path d="M24 36 36.5 23.5l-4-4L27 25V12h-6v13l-5.5-5.5-4 4z" fill="#fff"/></svg></button>
+</div>
+<button type="submit" name="add" class="cta" id="kd-atc"{% unless cv.available %} disabled{% endunless %}><span class="l">{% if cv.available %}Add to bag{% else %}Sold out{% endif %}</span><span class="dot">·</span><span id="kd-atcp">{{ cv.price | money_without_trailing_zeros }}</span></button>
+<button type="button" class="cta2" id="kd-buy" data-variant="{{ cv.id }}"{% unless cv.available %} disabled{% endunless %}>Buy it now</button>
+<div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+{%- endform -%}
+</product-form>
+
+<div class="chips">{%- for t in tags -%}{%- assign t2 = t | strip -%}{%- if t2 != blank -%}<span class="chip">{{ t2 }}</span>{%- endif -%}{%- endfor -%}</div>
+{%- if is_pan -%}
+<div class="proof"><div><b id="kd-pf">{{ pan_v }}%</b><span>Panthenol</span></div><div><b>10</b><span>Key ingredients</span></div><div><b>0</b><span>Artificial fragrance</span></div><div><b>3</b><span>Step routine</span></div></div>
+{%- elsif benefits != blank -%}
+<div class="bens">{%- for b in benefits limit: 3 -%}<div><b>0{{ forloop.index }}</b><span>{{ b }}</span></div>{%- endfor -%}</div>
+{%- endif -%}
+
+{%- if is_pan -%}
+<details open><summary>What it does</summary><p>De:maf builds this ampoule around one job: helping a stressed skin barrier recover.</p><ul><li>Panthenol acts as a moisture magnet and supports barrier recovery</li><li>Comforts sensitive skin and soothes visible irritation</li><li>Rice starch cuts the stickiness, so it layers well and sits nicely under makeup</li><li>No artificial colorants, no artificial fragrance</li></ul></details>
+<details><summary>How to use</summary><ol><li>Cleanse, then apply De:maf First Serum.</li><li>Drop the ampoule onto your palm and spread it gently. Do not rub.</li><li>Finish with a cream to lock it in.</li><li>Night tip from De:maf: apply generous layers and leave it on like an overnight mask.</li></ol></details>
+<details><summary>Key ingredients</summary><p>Panthenol, ceramide NP, allantoin, betaine, asiaticoside and madecassoside, evening primrose flower extract, centella asiatica extract, rosemary leaf extract, sodium acetylated hyaluronate and hydrolyzed hyaluronic acid.</p></details>
+<details><summary>Which strength is mine?</summary><p>30% is for dry and dehydrated skin, sensitive and reactive skin, skin after a procedure, and rough texture that makes makeup sit badly. De:maf does not recommend it for very oily skin. 10% is lighter and absorbs fast, made for oily and sensitive skin, warm weather, or a first try with panthenol.</p></details>
+{%- else -%}
+<details open><summary>What it does</summary>{%- if hero_line != blank -%}<p>{{ hero_line }}</p>{%- endif -%}{%- if benefits != blank -%}<ul>{%- for b in benefits -%}<li>{{ b }}</li>{%- endfor -%}</ul>{%- endif -%}</details>
+{%- if how != blank -%}<details><summary>How to use</summary><p>{{ how | newline_to_br }}</p></details>{%- endif -%}
+{%- if ings != blank -%}<details><summary>Key ingredients</summary><p>{{ ings }}</p></details>{%- endif -%}
+{%- endif -%}
+{%- if p.description != blank -%}<details><summary>From De:maf</summary><div class="full">{{ p.description }}</div></details>{%- endif -%}
+<details><summary>Shipping and returns</summary><p>Free shipping on orders over $60.{%- if shop.shipping_policy.url != blank %} See our <a href="{{ shop.shipping_policy.url }}">shipping</a>{%- endif -%}{%- if shop.refund_policy.url != blank %} and <a href="{{ shop.refund_policy.url }}">refund</a> policies.{%- endif -%}</p></details>
+</div>
+</section>
+</div>
+
+{%- render 'kollab-demaf-story', p: p, s: section.settings, is_pan: is_pan, pan_v: pan_v, ings: ings, descriptor: descriptor -%}
+{%- render 'kollab-demaf-workshop', s: section.settings, blocks: section.blocks -%}
+
+{%- assign has_app = false -%}
+{%- for block in section.blocks -%}{%- if block.type == '@app' -%}{%- assign has_app = true -%}{%- endif -%}{%- endfor -%}
+{%- if has_app -%}
+<div class="wrap"><section class="sec" id="kd-video">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kd-star" fill="#E3001B"/></svg>Shop the video</div>
+<h2 class="big serif">See it on skin. <span class="i">Then shop the look.</span></h2>
+<div style="height:32px"></div>
+{%- for block in section.blocks -%}{%- if block.type == '@app' -%}<div {{ block.shopify_attributes }}>{% render block %}</div>{%- endif -%}{%- endfor -%}
+</section></div>
+{%- endif -%}
+
+{%- render 'kollab-demaf-routine', p: p, s: section.settings, is_pan: is_pan -%}
+{%- render 'kollab-demaf-events', blocks: section.blocks, s: section.settings -%}
+
+<div class="sticky"><span class="p" id="kd-stp">{{ cv.price | money_without_trailing_zeros }}</span><button type="button" class="cta" id="kd-sticky"{% unless cv.available %} disabled{% endunless %}><span>{% if cv.available %}Add to bag{% else %}Sold out{% endif %}</span></button></div>
+</div>
+<script src="{{ 'kollab-demaf.js' | asset_url }}" defer></script>
+
+{% schema %}
+{"name":"KOLLAB De:maf PDP","tag":"section","class":"kollab-demaf-section",
+"settings":[
+{"type":"text","id":"collection_handle","label":"De:maf collection handle","default":"de-maf"},
+{"type":"image_picker","id":"sticker_patch","label":"KOLLAB patch sticker"},
+{"type":"header","content":"Brand letter"},
+{"type":"image_picker","id":"pola_1","label":"Polaroid 1"},
+{"type":"text","id":"pola_1_cap","label":"Polaroid 1 caption","default":"KOLLAB × De:maf"},
+{"type":"image_picker","id":"pola_2","label":"Polaroid 2"},
+{"type":"text","id":"pola_2_cap","label":"Polaroid 2 caption","default":"Hands-on at KOLLAB"},
+{"type":"header","content":"Workshop photos"},
+{"type":"image_picker","id":"photo_1","label":"Photo 1 (big)"},{"type":"text","id":"cap_1","label":"Caption 1"},
+{"type":"image_picker","id":"photo_2","label":"Photo 2"},{"type":"text","id":"cap_2","label":"Caption 2"},
+{"type":"image_picker","id":"photo_3","label":"Photo 3"},{"type":"text","id":"cap_3","label":"Caption 3"},
+{"type":"image_picker","id":"photo_4","label":"Photo 4"},{"type":"text","id":"cap_4","label":"Caption 4"},
+{"type":"image_picker","id":"photo_5","label":"Photo 5"},{"type":"text","id":"cap_5","label":"Caption 5"},
+{"type":"image_picker","id":"photo_6","label":"Photo 6"},{"type":"text","id":"cap_6","label":"Caption 6"},
+{"type":"header","content":"Workshop recap video"},
+{"type":"text","id":"recap_video","label":"Recap video (mp4 URL)"},
+{"type":"text","id":"recap_poster","label":"Recap cover image link"},
+{"type":"text","id":"recap_link","label":"Instagram link","default":"https://www.instagram.com/kollab_la/"},
+{"type":"text","id":"host_url","label":"Host a workshop link","default":"/pages/contact"},
+{"type":"header","content":"Routine (product handles)"},
+{"type":"text","id":"routine_1","label":"Step 1 product","default":"de-maf-here-oh-my-first-serum"},
+{"type":"text","id":"routine_1_variant","label":"Step 1 variant contains","default":"ORIGINAL"},
+{"type":"text","id":"routine_2","label":"Step 2 product","default":"demaf-panthenol-10-wonder-drops-ampoule-55ml-copy"},
+{"type":"text","id":"routine_2_fallback","label":"Step 2 backup product","default":"de-maf-panthenol-30-wonder-drops-ampoule-55ml"},
+{"type":"text","id":"routine_3","label":"Step 3 product","default":"de-maf-creams-come-true-squalane-barrier-repair-50ml"},
+{"type":"header","content":"Events"},
+{"type":"text","id":"events_url","label":"All events link","default":"https://luma.com/calendar/cal-xVZvsoSO9NSiT44"}
+],
+"blocks":[
+{"type":"@app"},
+{"type":"creator","name":"Creator video","settings":[{"type":"text","id":"name","label":"Creator name"},{"type":"text","id":"video","label":"Video link (mp4)"},{"type":"text","id":"poster","label":"Cover image link"}]},
+{"type":"event","name":"Event ticket","settings":[
+{"type":"text","id":"date_label","label":"Date (top bar)","default":"Oct 13–17 · 2026"},
+{"type":"text","id":"from_code","label":"From","default":"LA"},
+{"type":"text","id":"to_code","label":"To","default":"KCCLA"},
+{"type":"textarea","id":"title","label":"Title (new line = break)"},
+{"type":"textarea","id":"description","label":"Description"},
+{"type":"image_picker","id":"poster","label":"Poster image"},
+{"type":"text","id":"poster_url","label":"Poster URL (if no upload)"},
+{"type":"text","id":"info_1_label","label":"Info 1 label","default":"Gate"},
+{"type":"text","id":"info_1_value","label":"Info 1 value"},
+{"type":"text","id":"info_2_label","label":"Info 2 label","default":"Time"},
+{"type":"text","id":"info_2_value","label":"Info 2 value"},
+{"type":"text","id":"info_3_label","label":"Info 3 label","default":"Fare"},
+{"type":"text","id":"info_3_value","label":"Info 3 value"},
+{"type":"text","id":"button_label","label":"Button text","default":"Let's go"},
+{"type":"text","id":"link","label":"Button link (blank=none)"},
+{"type":"select","id":"style","label":"Top bar color","options":[{"value":"black","label":"Black"},{"value":"red","label":"Red"}],"default":"black"}
+]}
+],
+"presets":[{"name":"KOLLAB De:maf PDP"}]}
+{% endschema %}

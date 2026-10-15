@@ -1,0 +1,45 @@
+{%- comment -%}De:maf PDP: KOLLAB x De:maf workshop (+ theme override guards){%- endcomment -%}
+<style>
+.kdm span{font-family:inherit!important}
+.kdm b,.kdm strong,.kdm small,.kdm em{font-family:inherit}
+.kdm .ben2 h4{font-family:var(--sans)!important;text-transform:none!important;letter-spacing:normal!important;font-weight:700!important;color:#fff!important}
+.kdm h2.big .i,.kdm .vtitle h3 .i{display:inline-block}
+.kdm .r3 .img{display:block}
+.kdm #kd-video{height:0;overflow:hidden;padding:0}
+.kdm #kd-video.on{height:auto;overflow:visible;padding:96px 0}
+.kdm .rlist li{grid-template-columns:32px 1fr;gap:10px;padding:7px 0}
+.kdm .rlist b{font-size:18px;line-height:1.2}
+.kdm .rlist strong{font-size:14px;line-height:1.3}
+.kdm .rlist span{font-size:13px;line-height:1.35;margin-top:1px}
+.kdm .rtx .rlead{margin:0 0 16px;font-size:15px;line-height:1.45}
+.kdm .rtx h3{margin:0 0 10px}
+</style>
+<script>
+(function(){function go(){var s=document.getElementById('kd-video');if(!s)return;var w=s.lastElementChild;if(!w)return;function chk(){if(w.offsetHeight>80)s.classList.add('on')}chk();if(window.ResizeObserver){new ResizeObserver(chk).observe(w)}else{setTimeout(chk,3000);setTimeout(chk,7000)}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',go);else go()})();
+</script>
+<section class="ws" id="kd-workshop">{%- if s.sticker_patch != blank -%}<div class="stkw"><img src="{{ s.sticker_patch | image_url: width: 300 }}" alt="" loading="lazy"></div>{%- endif -%}<div class="wrap">
+<div class="whead"><div>
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kd-star" fill="url(#kd-ch)"/></svg>KOLLAB × De:maf workshop</div>
+<h2 class="big serif">Korean Glass Skin Secrets. <span class="i">Live at KOLLAB DTLA.</span></h2>
+<p class="lead"><span class="sent">For De:maf brand week, our store became a glass skin class.</span><span class="sent">Guests cleansed, layered and asked every barrier question they had.</span><span class="sent">The next day, they met founder Regina in person.</span></p>
+</div>
+<div class="landed"><div class="top"><span>May 29 · 2026 · Workshop</span></div><div class="rt"><div><small>From</small><b>Seoul</b></div><span class="pl">✈</span><div><small>To</small><b>DTLA</b></div></div><div class="inf"><div><small>Gate</small><span>731 S Broadway</span></div><div><small>Sessions</small><span>12–2 · 3–5 PM</span></div><div><small>Day 2</small><span>Meet Regina</span></div></div><span class="ok">Landed</span></div>
+</div>
+<div class="collage">
+{%- for i in (1..6) -%}{%- assign pk = 'photo_' | append: i -%}{%- assign ck = 'cap_' | append: i -%}{%- assign ph = s[pk] -%}{%- if ph != blank -%}<div class="ph3 c{{ i }}"><img src="{{ ph | image_url: width: 1200 }}" alt="{{ ph.alt | default: s[ck] | default: 'KOLLAB x De:maf workshop' | escape }}" loading="lazy">{%- if s[ck] != blank -%}<span class="cv">{{ s[ck] }}</span>{%- endif -%}</div>{%- endif -%}{%- endfor -%}
+</div>
+<div class="recap">
+<a class="rv" href="{{ s.recap_link | default: 'https://www.instagram.com/kollab_la/' }}" target="_blank" rel="noopener" aria-label="Play the workshop recap">{%- if s.recap_video != blank -%}<video src="{{ s.recap_video }}" poster="{{ s.recap_poster }}" playsinline preload="none"></video>{%- elsif s.recap_poster != blank -%}<img src="{{ s.recap_poster }}" alt="" loading="lazy">{%- endif -%}<span class="rpl"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span><span class="rtag">Recap · Reel</span><span class="rbot">KOLLAB × De:maf<b>Korean Glass Skin Secrets</b></span></a>
+<div class="rtx">
+<div class="rk">Workshop recap · May 29, 2026</div>
+<h3>The whole day, <span class="i">in one reel.</span></h3>
+<p class="rlead"><span class="sent">Two sessions of Korean Glass Skin Secrets at KOLLAB DTLA, cut into one reel.</span><span class="sent">Here's what you'll see.</span></p>
+<ol class="rlist"><li><b>01</b><div><strong>Welcome to the long table</strong><span>A De:maf pouch waiting at every seat.</span></div></li><li><b>02</b><div><strong>Cleanse first</strong><span>A live demo with De:maf's milk cleanser.</span></div></li><li><b>03</b><div><strong>Layer, don't rub</strong><span>The routine step by step, patted in layer by layer.</span></div></li><li><b>04</b><div><strong>Every question answered</strong><span>Guests brought their own skin concerns to the host.</span></div></li><li><b>05</b><div><strong>Packed to go</strong><span>A routine guide and a De:maf tote to take home.</span></div></li></ol>
+<div class="rfacts"><div><small>When</small><span>May 29 · 2026</span></div><div><small>Sessions</small><span>12–2 &amp; 3–5 PM</span></div><div><small>Where</small><span>731 S Broadway</span></div><div><small>Day 2</small><span>Meet founder Regina</span></div></div>
+<div class="rbtns"><a class="rbtn w" href="{{ s.recap_link | default: 'https://www.instagram.com/kollab_la/' }}" target="_blank" rel="noopener">Follow on Instagram <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="rbtn" href="#kd-ritual">Shop the routine <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+</div>
+</div>
+{%- assign nv = 0 -%}{%- for b in blocks -%}{%- if b.type == 'creator' and b.settings.video != blank -%}{%- assign nv = nv | plus: 1 -%}{%- endif -%}{%- endfor -%}
+<div class="vtitle"><h3>{% if nv > 0 %}Creators who came. <span class="i">In their own words.</span>{% else %}Bring this to your brand. <span class="i">We host the room.</span>{% endif %}</h3><a class="req" href="{{ s.host_url | default: '/pages/contact' }}">Host a workshop with KOLLAB <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+{%- if nv > 0 -%}<div class="vids">{%- for b in blocks -%}{%- if b.type == 'creator' and b.settings.video != blank -%}<div class="vd" {{ b.shopify_attributes }}><video src="{{ b.settings.video }}"{% if b.settings.poster != blank %} poster="{{ b.settings.poster }}"{% endif %} playsinline preload="metadata"></video><span class="st"></span><span class="pl">▶</span><div class="nm2">{{ b.settings.name }}<small>Video from the workshop</small></div></div>{%- endif -%}{%- endfor -%}</div>{%- endif -%}
+</div></section>
