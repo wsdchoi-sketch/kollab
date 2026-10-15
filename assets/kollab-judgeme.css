@@ -1,0 +1,25 @@
+/* KOLLAB — Judge.me product reviews, restyled to match the site (loaded on product pages via layout/theme.liquid) */
+#judgeme_product_reviews{--jm-k-red:#E3001B;--jm-k-black:#0A0A0A;--jm-k-line:#E4E4E2;--jm-k-paper:#F7F7F6;--jm-k-serif:'Instrument Serif',Georgia,'Times New Roman',serif;--jm-review-widget-star-and-histogram-color:#E3001B;--jm-review-widget-button-text-color:#fff;--jm-review-widget-form-button-text-color:#fff;max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,56px) clamp(16px,4vw,48px) clamp(36px,5vw,64px);color:var(--jm-k-black);font-family:'Enkel','Helvetica Neue',Arial,sans-serif}
+#judgeme_product_reviews::before{content:'Reviews';display:block;font-family:var(--jm-k-serif);font-size:clamp(36px,4.4vw,56px);line-height:1;letter-spacing:-.02em;margin-bottom:18px;padding-top:clamp(20px,3vw,32px);border-top:1.5px solid var(--jm-k-black)}
+#judgeme_product_reviews .jm-review-widget{gap:18px}
+#judgeme_product_reviews .jm-review-widget__header{padding:0 0 18px;border-bottom:1px solid var(--jm-k-line)}
+#judgeme_product_reviews .jm-text,#judgeme_product_reviews .jm-button,#judgeme_product_reviews select{font-family:'Enkel','Helvetica Neue',Arial,sans-serif}
+#judgeme_product_reviews .jm-average-rating-display .jm-text:first-of-type{font-family:var(--jm-k-serif);font-size:44px;line-height:1;font-weight:400;letter-spacing:-.01em}
+#judgeme_product_reviews .jm-average-rating-display .jm-text{color:var(--jm-k-black)}
+#judgeme_product_reviews .jm-star-rating__font-icon{color:var(--jm-k-red)}
+#judgeme_product_reviews .jm-verified-badge{border:1.5px solid var(--jm-k-black);border-radius:999px;padding:3px 10px;background:#fff;color:var(--jm-k-black)}
+#judgeme_product_reviews .jm-verified-badge .jm-text{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+#judgeme_product_reviews .jm-verified-badge__icon svg{color:var(--jm-k-red);fill:var(--jm-k-red)}
+#judgeme_product_reviews .jm-button--primary{background:var(--jm-k-black);color:#fff;border:1.5px solid var(--jm-k-black);border-radius:0;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:12px 22px;transition:background .2s,border-color .2s}
+#judgeme_product_reviews .jm-button--primary:hover{background:var(--jm-k-red);border-color:var(--jm-k-red);color:#fff}
+#judgeme_product_reviews .jm-filters .jm-button:not(.jm-button--primary),#judgeme_product_reviews .jm-sort-filter__select{border:1.5px solid var(--jm-k-black);border-radius:999px;background:#fff;color:var(--jm-k-black)}
+#judgeme_product_reviews .jm-filters .jm-button:not(.jm-button--primary):hover{box-shadow:3px 3px 0 var(--jm-k-red)}
+#judgeme_product_reviews .jm-review-item{background:#fff;border:1.5px solid var(--jm-k-black);border-radius:0;box-shadow:none;padding:clamp(16px,2vw,24px)}
+#judgeme_product_reviews .jm-reviewer-info__name{font-weight:700;color:var(--jm-k-black)}
+#judgeme_product_reviews .jm-verified-buyer-badge{border:1px solid var(--jm-k-black);border-radius:999px;background:transparent;color:var(--jm-k-black)}
+#judgeme_product_reviews .jm-verified-buyer-badge__text{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+#judgeme_product_reviews .jm-review-content,#judgeme_product_reviews .jm-review-body-wrapper{font-size:15px;line-height:1.6;color:#222}
+#judgeme_product_reviews .jm-review-title,#judgeme_product_reviews [class*="review-title"]{font-family:var(--jm-k-serif);font-weight:400;font-size:24px;line-height:1.1;letter-spacing:-.01em}
+#judgeme_product_reviews .jm-carousel__button,#judgeme_product_reviews [class*="carousel__nav"]{border:1.5px solid var(--jm-k-black);border-radius:50%;background:#fff;color:var(--jm-k-black)}
+/* Judge.me modal/form accents */
+.jm-modal .jm-button--primary,.jdgm-form__submit-btn{background:#0A0A0A!important;border-radius:0!important;text-transform:uppercase;letter-spacing:.12em}
