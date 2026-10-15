@@ -1,0 +1,220 @@
+{%- liquid
+assign cv = product.selected_or_first_available_variant
+assign clean_title = product.title
+if clean_title contains ']'
+  assign clean_title = clean_title | split: ']' | last | strip
+endif
+assign mf = product.metafields.custom
+assign kf = product.metafields.kollab
+assign tagline = kf.tagline
+assign sub_1 = mf.hero_line
+assign sub_2 = mf.short_description
+if sub_2 == sub_1
+  assign sub_2 = blank
+endif
+assign size_label = kf.size_label
+if size_label == blank
+  assign size_label = section.settings.size_label
+endif
+assign has_compare = false
+if cv.compare_at_price > cv.price
+  assign has_compare = true
+endif
+assign rating = product.metafields.reviews.rating.value
+assign rating_count = product.metafields.reviews.rating_count.value
+assign tags_list = kf.hashtags | newline_to_br | split: '<br />'
+assign stats_list = kf.stats | newline_to_br | split: '<br />'
+assign steps_list = kf.steps | newline_to_br | split: '<br />'
+assign ing_list = kf.ingredients | newline_to_br | split: '<br />'
+assign vimeo_id = kf.vimeo_id
+if vimeo_id == blank
+  assign vimeo_id = section.settings.vimeo_id
+endif
+assign benefits_text = mf.benefits
+assign key_benefits = mf.key_benefits.value
+assign targets = mf.targets
+assign faq_html = mf.faq | metafield_tag
+assign faq_parts = faq_html | split: '</p>'
+assign trivia_html = mf.trivia_text | metafield_tag
+assign routine_html = mf.how_to_use_in_your_routine | metafield_tag
+assign ing_count = ing_list | size
+assign ing_words = 'Six,One,Two,Three,Four,Five,Six,Seven,Eight' | split: ','
+assign ing_word = ing_words[ing_count] | default: 'The'
+-%}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap">
+{{ 'kollab-pdp.css' | asset_url | stylesheet_tag }}
+{{ 'kollab-ciel.css' | asset_url | stylesheet_tag }}
+<div class="kpdp kciel" id="kpdp-{{ section.id }}">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="kp-ch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".45" stop-color="#b9b9b9"/><stop offset=".55" stop-color="#fff"/><stop offset="1" stop-color="#8f8f8f"/></linearGradient><symbol id="kp-star" viewBox="0 0 48 48"><path d="M24 2 28 20 46 24 28 28 24 46 20 28 2 24 20 20Z"/></symbol></defs></svg>
+
+<div class="wrap">
+<section class="hero">
+<div class="gallery">
+<div class="gal-top"><svg width="30" height="30" aria-hidden="true"><use href="#kp-star" fill="url(#kp-ch)" stroke="#777" stroke-width=".6"/></svg></div>
+<div style="position:relative">
+{%- if section.settings.sticker_patch != blank -%}<div class="stk stk-k"><img src="{{ section.settings.sticker_patch | image_url: width: 400 }}" alt="" loading="lazy"></div>{%- endif -%}
+<div class="main-img" id="kp-main">
+{%- for image in product.images limit: 5 -%}
+<img class="slide{% if forloop.first %} on{% endif %}" src="{{ image | image_url: width: 1200 }}" alt="{{ image.alt | default: clean_title | escape }}"{% unless forloop.first %} loading="lazy"{% endunless %}>
+{%- endfor -%}
+</div>
+</div>
+<div class="thumbs" id="kp-thumbs">
+{%- for image in product.images limit: 5 -%}
+<button type="button" class="{% if forloop.first %}on{% endif %}" aria-label="Image {{ forloop.index }}"><img src="{{ image | image_url: width: 300 }}" alt="" loading="lazy"></button>
+{%- endfor -%}
+</div>
+</div>
+
+<div class="info">
+<a class="brand" href="{{ product.vendor | url_for_vendor }}"><svg class="kstar" aria-hidden="true"><use href="#kp-star" fill="#fff"/></svg>{{ product.vendor }}</a>
+<h1 class="title serif">{{ clean_title }}{%- if tagline != blank -%}<br><span class="i">{{ tagline }}</span>{%- endif -%}</h1>
+<p class="sub">{%- if sub_1 != blank -%}<span class="sent">{{ sub_1 }}</span>{%- endif -%}{%- if sub_2 != blank -%}<span class="sent">{{ sub_2 }}</span>{%- endif -%}</p>
+{%- if rating != blank and rating_count != blank -%}
+<div class="rating"><span class="s">★★★★★</span> {{ rating.rating | round: 1 }} <span>·</span> <a href="#judgeme_product_reviews">{{ rating_count }} review{% if rating_count != 1 %}s{% endif %}</a></div>
+{%- endif -%}
+<div class="price"><span class="p">{{ cv.price | money_without_trailing_zeros }}</span>{%- if has_compare -%}<s class="was">{{ cv.compare_at_price | money_without_trailing_zeros }}</s>{%- endif -%}{%- if size_label != blank -%}<small>{{ size_label }}</small>{%- endif -%}</div>
+
+<product-form class="buy-wrap" data-hide-errors="false">
+{%- form 'product', product, id: 'kp-form', class: 'buy' -%}
+<input type="hidden" name="id" value="{{ cv.id }}">
+<div class="qty">
+<button type="button" class="up" id="kp-up" aria-label="Increase quantity"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#E3001B"/><path d="M24 12 11.5 24.5l4 4L21 23v13h6V23l5.5 5.5 4-4z" fill="#fff"/></svg></button>
+<input class="q" type="number" name="quantity" id="kp-q" value="1" min="1" inputmode="numeric" aria-label="Quantity">
+<button type="button" id="kp-down" aria-label="Decrease quantity"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0A0A0A"/><path d="M24 36 36.5 23.5l-4-4L27 25V12h-6v13l-5.5-5.5-4 4z" fill="#fff"/></svg></button>
+</div>
+{%- if cv.available -%}
+<button type="submit" name="add" class="cta" id="kp-atc"><span>Add to bag</span><span class="dot">·</span><span>{{ cv.price | money_without_trailing_zeros }}</span></button>
+<button type="button" class="cta2" id="kp-buy" data-variant="{{ cv.id }}">Buy it now</button>
+{%- else -%}
+<button type="submit" class="cta" disabled><span>Sold out</span></button>
+<button type="button" class="cta2" disabled>Buy it now</button>
+{%- endif -%}
+<div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+{%- endform -%}
+</product-form>
+
+{%- if kf.hashtags != blank -%}
+<div class="chips">{%- for t in tags_list -%}{%- assign t2 = t | strip -%}{%- if t2 != blank -%}<span class="chip">{{ t2 }}</span>{%- endif -%}{%- endfor -%}</div>
+{%- endif -%}
+{%- if kf.stats != blank -%}
+<div class="proof">{%- for s in stats_list -%}{%- assign sp = s | split: '|' -%}{%- if sp.size > 1 -%}<div><b>{{ sp[0] | strip }}</b><span>{{ sp[1] | strip }}</span></div>{%- endif -%}{%- endfor -%}</div>
+{%- endif -%}
+
+<details open><summary>What it does</summary>
+{%- if benefits_text != blank -%}<p>{{ benefits_text }}</p>{%- elsif mf.short_description != blank -%}<p>{{ mf.short_description }}</p>{%- endif -%}
+{%- if key_benefits != blank -%}<ul>{%- for b in key_benefits -%}<li>{{ b }}</li>{%- endfor -%}</ul>{%- endif -%}
+</details>
+{%- if mf.how_to_use != blank -%}<details><summary>How to use</summary><p>{{ mf.how_to_use | newline_to_br }}</p></details>{%- endif -%}
+{%- if mf.hero_ingredients != blank -%}<details><summary>Key ingredients</summary><p>{{ mf.hero_ingredients | newline_to_br }}</p></details>{%- endif -%}
+{%- if targets != blank -%}<details><summary>Who it's for</summary><p>{{ targets }}</p></details>{%- endif -%}
+<details><summary>Shipping and returns</summary><p>Free shipping on orders over $60.{%- if shop.shipping_policy.url != blank %} See our <a href="{{ shop.shipping_policy.url }}" style="text-decoration:underline">shipping</a>{%- endif -%}{%- if shop.refund_policy.url != blank %} and <a href="{{ shop.refund_policy.url }}" style="text-decoration:underline">return</a> policies.{%- endif -%}</p></details>
+</div>
+</section>
+</div>
+
+<section class="banner">
+<div class="sky"></div>
+{%- if section.settings.banner_image != blank -%}<img src="{{ section.settings.banner_image | image_url: width: 2000 }}" alt="" loading="lazy">{%- endif -%}
+<div class="grad"></div>
+<div class="wrap in">
+<svg class="bst" aria-hidden="true"><use href="#kp-star" fill="url(#kp-ch)" stroke="#555" stroke-width=".5"/></svg>
+<h2><span class="shine">A soft starlight glow,</span><br><span class="i shine">on your skin.</span></h2>
+<p>Ciel étoilé is the signature aesthetic line from Skinstar, built on nineteen years of professional skin care and trusted by Korea's top celebrities.</p>
+<span class="by">Ciel étoilé by Skinstar · Seoul</span>
+</div>
+</section>
+
+{%- if vimeo_id != blank or kf.steps != blank -%}
+<div class="wrap">
+<section class="sec" id="demo">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kp-star" fill="#E3001B"/></svg>How to use</div>
+<h2 class="big serif">Press play. <span class="i">Follow along.</span></h2>
+{%- if routine_html != blank -%}<div class="lead kc-lead">{{ routine_html }}</div>{%- endif -%}
+<div class="rule"></div>
+<div class="demo">
+<div class="tank kc-tank" id="kc-tank">
+{%- if vimeo_id != blank -%}<iframe src="https://player.vimeo.com/video/{{ vimeo_id }}?background=1&autoplay=1&loop=1&muted=1" loading="lazy" allow="autoplay; fullscreen" title="{{ clean_title | escape }} video"></iframe>{%- endif -%}
+<div class="cap">Ciel étoilé · <i>{{ clean_title }}</i></div>
+</div>
+<div>
+<div class="steps" id="steps">
+{%- for s in steps_list -%}{%- assign sp = s | split: '|' -%}{%- if sp.size > 0 and s != blank -%}
+<div class="step"><div class="n">{{ forloop.index }}</div><div><h4>{{ sp[0] | strip }}</h4>{%- if sp.size > 1 -%}<p>{{ sp[1] | strip }}</p>{%- endif -%}</div></div>
+{%- endif -%}{%- endfor -%}
+</div>
+</div>
+</div>
+</section>
+</div>
+{%- endif -%}
+
+{%- if faq_parts.size > 1 or targets != blank -%}
+<section class="skin kc-faq" id="faq"><div class="wrap"><div class="grid">
+<div>
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kp-star" fill="url(#kp-ch)"/></svg>Who is it for</div>
+<h2 class="big serif">Is it for you?<br><span class="i">Straight answers.</span></h2>
+{%- if targets != blank -%}<p class="lead">{{ targets }}</p>{%- endif -%}
+<div class="kc-qs">
+{%- assign q = '' -%}
+{%- for part in faq_parts -%}
+{%- assign txt = part | strip_html | strip -%}
+{%- if txt != blank -%}
+{%- assign idx = forloop.index0 | modulo: 2 -%}
+{%- if idx == 0 -%}{%- assign q = txt -%}{%- else -%}
+<details{% if forloop.index0 == 1 %} open{% endif %}><summary>{{ q }}</summary><p>{{ txt }}</p></details>
+{%- endif -%}
+{%- endif -%}
+{%- endfor -%}
+</div>
+</div>
+<div class="card" style="position:relative">{%- if section.settings.sticker_bubble != blank -%}<div class="stk stk-b"><img src="{{ section.settings.sticker_bubble | image_url: width: 400 }}" alt=""></div>{%- endif -%}
+<div>
+<div class="lab">Did you know</div>
+<div class="kc-trivia">{{ trivia_html }}</div>
+{%- if key_benefits != blank -%}<div class="fit">{%- for b in key_benefits limit: 3 -%}<span>{{ b }}</span>{%- endfor -%}</div>{%- endif -%}
+</div>
+<div><div class="mt"><span>Ciel étoilé by Skinstar</span><span>Since 2007</span></div></div>
+</div>
+</div></div></section>
+{%- endif -%}
+
+<div class="wrap">
+{%- if kf.ingredients != blank -%}
+<section class="sec" id="ingredients">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kp-star" fill="#E3001B"/></svg>Inside the {% if product.title contains 'Cream' %}jar{% elsif product.title contains 'Capsule' %}capsule{% else %}bottle{% endif %}</div>
+<h2 class="big serif">{{ ing_word }} ingredients <span class="i">that earn their place.</span></h2>
+<p class="lead">Hover over any one to see what it actually does on your face.</p>
+<div style="height:40px"></div>
+<div class="ing">
+{%- for line in ing_list -%}{%- assign sp = line | split: '|' -%}{%- if sp.size > 1 -%}
+{%- assign nm = sp[0] | strip -%}
+<div class="ic{% if forloop.first %} star{% endif %}" tabindex="0"><div class="vis">{%- if forloop.first -%}<span class="hi">Hero ingredient</span>{%- endif -%}{%- render 'kollab-ciel-icon', name: nm, index: forloop.index0 -%}<div class="tex" style="background-image:var(--foil)"></div></div><div class="tx"><div class="nm">{{ nm }}</div><div class="role">{{ sp[1] | strip }}</div>{%- if sp.size > 2 -%}<div class="what">{{ sp[2] | strip }}</div>{%- endif -%}</div></div>
+{%- endif -%}{%- endfor -%}
+</div>
+</section>
+{%- endif -%}
+
+{%- assign has_app = false -%}
+{%- for block in section.blocks -%}{%- if block.type == '@app' -%}{%- assign has_app = true -%}{%- endif -%}{%- endfor -%}
+{%- if has_app -%}
+<section class="sec" id="video" style="padding-top:0;position:relative">
+<div class="kicker"><svg class="kstar" aria-hidden="true"><use href="#kp-star" fill="#E3001B"/></svg>Shop the video</div>
+<h2 class="big serif">Watch it work <span class="i">on real faces.</span>{%- if section.settings.sticker_patch != blank -%}<img class="stk-inl" src="{{ section.settings.sticker_patch | image_url: width: 300 }}" alt="">{%- endif -%}</h2>
+<div style="height:40px"></div>
+{%- for block in section.blocks -%}{%- if block.type == '@app' -%}<div {{ block.shopify_attributes }}>{% render block %}</div>{%- endif -%}{%- endfor -%}
+</section>
+{%- endif -%}
+
+{%- render 'kollab-ciel-ritual', product: product, bow_image: section.settings.bow_image -%}
+</div>
+
+{%- render 'kollab-ciel-events', blocks: section.blocks, events_url: section.settings.events_url -%}
+
+<div class="sticky"><span class="p">{{ cv.price | money_without_trailing_zeros }}</span><button type="button" class="cta" id="kp-sticky"{% unless cv.available %} disabled{% endunless %}><span>{% if cv.available %}Add to bag{% else %}Sold out{% endif %}</span></button></div>
+</div>
+<script src="{{ 'kollab-pdp.js' | asset_url }}" defer></script>
+
+{% schema %}
+{"name":"KOLLAB Ciel PDP","tag":"section","class":"kollab-ciel-section","blocks":[{"type":"@app"},{"type":"event","name":"Event ticket","settings":[{"type":"text","id":"date_label","label":"Date (top bar)","default":"Oct 13–17 · 2026"},{"type":"text","id":"from_code","label":"From","default":"LA"},{"type":"text","id":"to_code","label":"To","default":"KCCLA"},{"type":"textarea","id":"title","label":"Title (new line = break)"},{"type":"textarea","id":"description","label":"Description"},{"type":"image_picker","id":"poster","label":"Poster image"},{"type":"text","id":"poster_url","label":"Poster URL (if no upload)"},{"type":"text","id":"info_1_label","label":"Info 1 label","default":"Gate"},{"type":"text","id":"info_1_value","label":"Info 1 value"},{"type":"text","id":"info_2_label","label":"Info 2 label","default":"Time"},{"type":"text","id":"info_2_value","label":"Info 2 value"},{"type":"text","id":"info_3_label","label":"Info 3 label","default":"Fare"},{"type":"text","id":"info_3_value","label":"Info 3 value"},{"type":"text","id":"button_label","label":"Button text","default":"Let's go"},{"type":"url","id":"link","label":"Button link"},{"type":"select","id":"style","label":"Top bar color","default":"black","options":[{"value":"black","label":"Black"},{"value":"red","label":"Red"}]}]}],"max_blocks":16,"settings":[{"type":"paragraph","content":"Per-product text comes from product metafields: kollab.tagline, kollab.hashtags, kollab.vimeo_id, kollab.size_label, kollab.stats, kollab.steps, kollab.ingredients, plus custom.hero_line, short_description, benefits, key_benefits, how_to_use, hero_ingredients, targets, faq, trivia_text, how_to_use_in_your_routine."},{"type":"header","content":"Brand stickers"},{"type":"image_picker","id":"sticker_patch","label":"KOLLAB flower patch"},{"type":"image_picker","id":"sticker_bubble","label":"Speech bubble patch"},{"type":"image_picker","id":"bow_image","label":"Gift ribbon corner bow"},{"type":"header","content":"Fallbacks (if product metafield is empty)"},{"type":"text","id":"size_label","label":"Size label"},{"type":"text","id":"vimeo_id","label":"Vimeo video ID"},{"type":"header","content":"Brand banner"},{"type":"image_picker","id":"banner_image","label":"Banner image"},{"type":"header","content":"Events"},{"type":"url","id":"events_url","label":"All events link"}]}
+{% endschema %}

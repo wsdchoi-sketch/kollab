@@ -1,0 +1,17 @@
+/* KOLLAB Ciel PDP additions (scoped under .kciel; base styles come from kollab-pdp.css) */
+.kciel .kc-lead p{margin:0;font-size:17px;color:var(--ink2);max-width:560px;text-wrap:pretty}
+.kciel .kc-lead p+p{margin-top:8px}
+.kciel .kc-tank{aspect-ratio:1/1;background:#000}
+.kciel .kc-tank .cap{position:absolute;left:22px;top:20px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;z-index:3;font-weight:700;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.65)}
+.kciel .kc-tank .cap i{color:#fff;font-style:italic;font-family:var(--serif);font-size:15px;letter-spacing:0;text-transform:none;font-weight:400}
+.kciel .steps .step.dim{opacity:1}
+.kciel .kc-faq .lead{margin-bottom:8px}
+.kciel .kc-qs{border-top:1px solid rgba(255,255,255,.35);margin-top:36px}
+.kciel .kc-qs details{border:0;border-bottom:1px solid rgba(255,255,255,.35)}
+.kciel .kc-qs details:last-of-type{border-bottom:1px solid rgba(255,255,255,.35)}
+.kciel .kc-qs summary{color:#fff;font-family:var(--serif);font-weight:400;font-size:26px;line-height:1.1;padding:18px 12px 18px 0}
+.kciel .kc-qs summary::after{color:#fff}
+.kciel .kc-qs details p{color:rgba(255,255,255,.88);font-size:15px;margin:0 0 20px;max-width:520px}
+.kciel .kc-trivia p{font-family:var(--serif);font-weight:400;font-size:clamp(26px,3vw,38px);line-height:1.1;margin:16px 0 18px;color:#fff;text-wrap:pretty}
+.kciel .kc-trivia p+p{margin-top:0}
+@media(max-width:860px){.kciel .kc-qs summary{font-size:22px}}
