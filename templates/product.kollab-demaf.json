@@ -47,7 +47,7 @@
             "style": "red"
           }
         },
-        "ev_sleep": {
+        "ev_sleep": {"disabled":true,
           "type": "event",
           "settings": {
             "date_label": "Oct 23 · 2026",
