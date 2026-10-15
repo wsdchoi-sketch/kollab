@@ -308,6 +308,94 @@
 		outline: 0;
 	}
 
+	/* Shop mega menu — KOLLAB site style (compact card, red offset shadow) */
+	.kollab-header__mega {
+		left: -14px;
+		width: min(520px, calc(100vw - 48px));
+		margin-top: 0;
+		padding: 26px 30px 22px;
+		background: #fff;
+		border: 1.5px solid #0a0a0a;
+		border-top-width: 1.5px;
+		box-shadow: 8px 8px 0 #e3001b;
+	}
+
+	.kollab-header__mega-inner {
+		grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+		gap: 34px;
+	}
+
+	.kollab-header__mega-title {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin: 0 0 14px;
+		padding-bottom: 10px;
+		border-bottom: 1.5px solid #0a0a0a;
+		color: #0a0a0a;
+		font-family: "Enkel", "Helvetica Neue", Arial, sans-serif !important;
+		font-size: 11px;
+		font-weight: 700;
+		letter-spacing: .16em;
+		text-transform: uppercase;
+	}
+
+	.kollab-header__mega-title::before {
+		content: "";
+		width: 7px;
+		height: 7px;
+		background: #e3001b;
+		border-radius: 50%;
+		flex: none;
+	}
+
+	.kollab-header__mega-list {
+		gap: 9px 24px;
+	}
+
+	.kollab-header__mega-inner > div:first-child .kollab-header__mega-list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.kollab-header__mega-link {
+		width: auto;
+		color: #0a0a0a;
+		font-family: "Enkel", "Helvetica Neue", Arial, sans-serif !important;
+		font-size: 14.5px;
+		font-weight: 500;
+		line-height: 1.25;
+		letter-spacing: 0;
+		transition: color 160ms ease, transform 160ms ease;
+	}
+
+	.kollab-header__mega-link:hover,
+	.kollab-header__mega-link:focus-visible {
+		color: #e3001b;
+		transform: translateX(3px);
+	}
+
+	.kollab-header__mega-all {
+		grid-column: 1 / -1;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 4px;
+		padding-top: 14px;
+		border-top: 1px solid #e4e4e2;
+		color: #0a0a0a;
+		font-family: "Enkel", "Helvetica Neue", Arial, sans-serif !important;
+		font-size: 13px;
+		font-weight: 700;
+		letter-spacing: .04em;
+		text-decoration: none;
+	}
+
+	.kollab-header__mega-all:hover,
+	.kollab-header__mega-all:focus-visible {
+		color: #e3001b;
+		outline: 0;
+	}
+
 	.kollab-cart-drawer {
 		position: fixed;
 		inset: 0;
@@ -718,6 +806,7 @@
 									{%- endif -%}
 								</ul>
 							</div>
+							<a class="kollab-header__mega-all" href="{{ routes.all_products_collection_url }}"><span>Shop all products</span><span aria-hidden="true">→</span></a>
 						</div>
 					</div>
 				</li>
