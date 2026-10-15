@@ -1,5 +1,12 @@
 {%- render 'kollab-home-head' -%}
 {%- assign s = section.settings -%}
+<style>
+.khome .post .cover.photo{background-color:#0A0A0A;background-size:cover;background-position:center;color:#fff;position:relative;overflow:hidden}
+.khome .post .cover.photo::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,.82) 0%,rgba(10,10,10,.35) 45%,rgba(10,10,10,.15) 70%,rgba(10,10,10,.45) 100%);z-index:0}
+.khome .post .cover.photo>*{position:relative;z-index:1}
+.khome .post .cover.photo .t,.khome .post .cover.photo .mast,.khome .post .cover.photo .no{color:#fff}
+.khome .post .cover.photo .t .i{color:#FBD3DC}
+</style>
 <section class="sec" id="blog">
 <div class="wrap">
 <div class="rv">
@@ -14,8 +21,17 @@
 <div class="blog-grid">
 {%- for block in section.blocks -%}
 {%- assign b = block.settings -%}
-<a class="post rv d{{ forloop.index }}" href="{{ b.url | default: s.all_url | default: '/blogs/news' }}" aria-label="{{ b.aria | default: b.t1 | escape }}" {{ block.shopify_attributes }}>
-<div class="cover{% if b.style != 'black' %} {{ b.style }}{% endif %}"><div class="mast"><span>KOLLAB Journal</span><span>{{ b.tag | escape }}</span></div><span class="no">0{{ forloop.index }}</span><div class="t">{{ b.t1 | escape }}<span class="i">{{ b.t2 | escape }}</span></div></div>
+{%- assign art = b.article -%}
+{%- assign href = b.url | default: s.all_url | default: '/blogs/news' -%}
+{%- assign aria = b.aria | default: b.t1 -%}
+{%- assign img = b.image -%}
+{%- if art != blank -%}
+{%- assign href = art.url -%}
+{%- assign aria = art.title -%}
+{%- if img == blank and art.image -%}{%- assign img = art.image -%}{%- endif -%}
+{%- endif -%}
+<a class="post rv d{{ forloop.index }}" href="{{ href }}" aria-label="{{ aria | escape }}" {{ block.shopify_attributes }}>
+<div class="cover{% if img %} photo{% elsif b.style != 'black' %} {{ b.style }}{% endif %}"{% if img %} style="background-image:url({{ img | image_url: width: 900 }})"{% endif %}><div class="mast"><span>KOLLAB Journal</span><span>{{ b.tag | escape }}</span></div><span class="no">0{{ forloop.index }}</span><div class="t">{{ b.t1 | escape }}<span class="i">{{ b.t2 | escape }}</span></div></div>
 <div class="cap"><span>{{ b.cap | escape }}</span><span class="more">Read <i></i></span></div>
 </a>
 {%- endfor -%}
@@ -31,12 +47,14 @@
 {"type":"url","id":"all_url","label":"Read all 링크"},
 {"type":"image_picker","id":"clip","label":"클립 그래픽"}
 ],"blocks":[{"type":"story","name":"글 (매거진 표지)","settings":[
-{"type":"select","id":"style","label":"표지 색","options":[{"value":"black","label":"검정"},{"value":"red","label":"빨강"},{"value":"foil","label":"실버 호일"}],"default":"black"},
+{"type":"article","id":"article","label":"블로그 글 (선택하면 링크·썸네일 자동)"},
+{"type":"image_picker","id":"image","label":"표지 사진 (비우면 글 썸네일 사용)"},
+{"type":"select","id":"style","label":"표지 색 (사진 없을 때)","options":[{"value":"black","label":"검정"},{"value":"red","label":"빨강"},{"value":"foil","label":"실버 호일"}],"default":"black"},
 {"type":"text","id":"tag","label":"분류","default":"Community"},
 {"type":"text","id":"t1","label":"표지 제목 1줄","default":"Why we"},
 {"type":"text","id":"t2","label":"표지 제목 2줄 (이탤릭)","default":"host workshops"},
 {"type":"text","id":"cap","label":"아래 캡션","default":"Workshops"},
-{"type":"url","id":"url","label":"글 링크"},
+{"type":"url","id":"url","label":"글 링크 (글 선택 안 했을 때)"},
 {"type":"text","id":"aria","label":"전체 제목 (접근성)"}
 ]}],"presets":[{"name":"KOLLAB Home · Journal","blocks":[{"type":"story"},{"type":"story"},{"type":"story"}]}]}
 {% endschema %}
