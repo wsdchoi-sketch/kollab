@@ -23,3 +23,5 @@
 #judgeme_product_reviews .jm-carousel__button,#judgeme_product_reviews [class*="carousel__nav"]{border:1.5px solid var(--jm-k-black);border-radius:50%;background:#fff;color:var(--jm-k-black)}
 /* Judge.me modal/form accents */
 .jm-modal .jm-button--primary,.jdgm-form__submit-btn{background:#0A0A0A!important;border-radius:0!important;text-transform:uppercase;letter-spacing:.12em}
+#judgeme_product_reviews .jm-verified-badge .jm-text{font-size:11px!important;letter-spacing:.08em;text-transform:uppercase;font-weight:700;line-height:1}
+#judgeme_product_reviews .jm-verified-badge{transform:none}
