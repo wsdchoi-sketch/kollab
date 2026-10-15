@@ -104,3 +104,6 @@
 .khome .kc-empty .ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 
 @media (prefers-reduced-motion:reduce){.khome .kc-hero h1 .w>span{transform:none!important}}
+
+/* base.css forces Enkel on span (0,2,1 + !important) — re-assert serif on headline spans */
+.khome .kc-hero h1 span,.khome .kc-tile .t span,.khome .kc-empty .t span{font-family:var(--serif)!important}
