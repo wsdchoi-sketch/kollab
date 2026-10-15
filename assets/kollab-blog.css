@@ -1,5 +1,5 @@
 /* KOLLAB Blog index — builds on kollab-home.css tokens (.khome) */
-body:has(.kb-hero) .breadcrumb{display:none}
+body:has(.kb-hero) .breadcrumb,body:has(.kb-hero) .breadcrumb_margin{display:none}
 .khome .kb-hero{background:var(--black);color:#fff;position:relative;overflow:hidden;border-bottom:1.5px solid var(--black)}
 .khome .kb-hero .bg{position:absolute;inset:0;z-index:1}
 .khome .kb-hero .grid{position:absolute;inset:-20%;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:120px 120px}
