@@ -1,0 +1,49 @@
+/* RAUME / nest-wip-v2 buy box — matches KOLLAB PDP templates (Ciel / De:maf / MUZMAK). Loaded after nest-wip-product.css */
+.nwip{--serif:'Instrument Serif',Georgia,'Times New Roman',serif;--red:#E3001B;--black:#0A0A0A;--paper:#F7F7F6;--line:#E4E4E2;--ink2:#4a4a4a;color:var(--black)}
+.nwip-announce{display:none}
+@media (min-width:901px){
+.nwip-grid{max-width:1180px;margin:0 auto;padding:clamp(28px,4vw,56px) clamp(16px,4vw,48px);gap:clamp(28px,4.5vw,72px);grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
+}
+.nwip-gallery{background:none;padding:0}
+.nwip-shot{aspect-ratio:1/1;background:var(--paper);overflow:hidden}
+.nwip-shot img,.nwip-main-img{width:100%;height:100%;object-fit:cover}
+.nwip-thumbs{gap:8px;margin-top:8px}
+.nwip-thumbs button{aspect-ratio:1;background:var(--paper);border:1px solid var(--line);overflow:hidden}
+.nwip-thumbs button.on{border:2px solid var(--black)}
+.nwip-thumbs img{width:100%;height:100%;object-fit:cover}
+.nwip-buy{padding:0}
+.nwip-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:9px 18px;border-radius:999px;margin:0}
+.nwip-eyebrow::before{content:'\2726';font-size:11px;letter-spacing:0}
+.nwip-title{font-family:var(--serif)!important;font-weight:400;font-size:clamp(40px,5vw,60px);line-height:.98;letter-spacing:-.02em;text-transform:none;margin:18px 0 10px;text-wrap:balance}
+.nwip-desc{font-family:var(--serif);font-style:italic;font-size:clamp(24px,2.6vw,32px);line-height:1;letter-spacing:-.01em;color:var(--black);margin:0 0 16px}
+.nwip-hero{font-size:16px;line-height:1.55;font-weight:500;color:var(--ink2);max-width:480px;margin:0 0 22px;text-wrap:pretty}
+.nwip-price-row{display:flex;align-items:baseline;gap:14px;margin:0 0 22px;padding:18px 0;border-top:1px solid var(--black);border-bottom:1px solid var(--line)}
+.nwip-price-row .price-item--sale,.nwip-price-row .price__regular .price-item--regular{font-family:var(--serif);font-size:38px;font-weight:400;line-height:1;color:var(--black)}
+.nwip-price-row .price__compare .price-item--regular{font-size:18px;font-weight:500;color:var(--ink2);margin-left:0}
+.nwip-sizes{margin:0 0 4px;gap:8px}
+.nwip-size{border:1.5px solid var(--black);border-radius:999px;padding:10px 18px;font-size:13px;font-weight:700;background:#fff;color:var(--black)}
+.nwip-size[aria-pressed="true"]{background:var(--black);color:#fff;border-color:var(--black)}
+#nwip-form{display:grid;grid-template-columns:90px minmax(0,1fr);grid-template-rows:auto 54px 54px;gap:12px;margin-bottom:24px}
+#nwip-form .nwip-sizes{grid-column:1/-1;grid-row:1;margin-top:0}
+.nwip-qty-row,.nwip-dynamic-checkout{display:contents}
+.nwip-qty{grid-column:1;grid-row:2/span 2;flex-direction:column-reverse;align-items:stretch;border:1.5px solid var(--black);border-radius:0;height:100%}
+.nwip-qty button{flex:1;width:auto;height:auto;display:flex;align-items:center;justify-content:center;background:none;padding:0}
+.nwip-qty button::before{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;color:#fff;font-size:18px;line-height:1;transition:transform .2s}
+.nwip-qty button[onclick*="(1)"]::before{content:'+';background:var(--red)}
+.nwip-qty button[onclick*="(-1)"]::before{content:'\2212';background:var(--black)}
+.nwip-qty button{font-size:0}
+.nwip-qty button:hover{background:none}
+.nwip-qty button:hover::before{transform:scale(1.12)}
+.nwip-qty input{flex:1.4;width:100%;min-width:0;border:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:transparent;font-family:var(--serif);font-size:36px;line-height:1;color:var(--black);padding:0}
+.nwip-atc{grid-column:2;grid-row:2;height:54px;background:var(--black);color:#fff;border-radius:0;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:0 22px;transition:background .2s}
+.nwip-atc:hover{background:var(--red)}
+.nwip-atc[disabled]{opacity:.45;background:var(--black);color:#fff;border:0}
+.nwip-dynamic-checkout>div{display:none}
+.nwip-more-payment{grid-column:2;grid-row:3;width:100%;height:54px;border-radius:0;background:none;border:1.5px solid var(--black);color:var(--black);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:0 22px}
+.nwip-more-payment:hover{background:var(--paper)}
+.nwip-policies{margin-top:0;gap:8px}
+.nwip-policy-row{font-size:13px;font-weight:500}
+@media (max-width:900px){
+.nwip-grid{padding:20px 16px 8px}
+.nwip-title{font-size:clamp(36px,10vw,48px)}
+}
