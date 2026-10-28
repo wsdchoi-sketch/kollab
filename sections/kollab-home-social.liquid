@@ -1,4 +1,9 @@
 {%- render 'kollab-home-head' -%}
+<style>
+.khome .polaroid .ig.photo{background:var(--black);padding:0;display:block}
+.khome .polaroid .ig.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.khome .polaroid:hover .ig.photo img{transform:scale(1.06)}
+</style>
 <section class="sec social" id="social">
 <div class="wrap">
 <div class="soc-row rv">
@@ -12,13 +17,41 @@
 <a class="pill ghost" href="{{ section.settings.yt }}">YouTube</a>
 </div>
 </div>
-<div class="ig-grid rv d1" aria-label="Instagram feed">
-<div class="polaroid"><span class="washi foil tc"></span><a class="ig r" href="{{ section.settings.ig }}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#kh-star" fill="url(#kh-ch)"/></svg></a><span class="cap">new reel →</span></div>
-<div class="polaroid"><a class="ig" href="{{ section.settings.ig }}" target="_blank" rel="noopener">Seoul<br>Social<br>Club</a><span class="cap">atlanta, oct 16</span></div>
-<div class="polaroid"><span class="washi tl"></span><a class="ig k" href="{{ section.settings.ig }}" target="_blank" rel="noopener">LA:ON</a><span class="cap">k-zone @ KCCLA</span></div>
-<div class="polaroid"><a class="ig f" href="{{ section.settings.ig }}" target="_blank" rel="noopener">오늘도<br>예쁘다</a><span class="cap">at the shop ♥</span></div>
-<div class="polaroid"><span class="washi foil tr"></span><a class="ig" href="{{ section.settings.ig }}" target="_blank" rel="noopener">Bloom<br>Haus</a><span class="cap">dallas, soon</span></div>
+<div class="ig-grid rv d1" aria-label="KOLLAB on Instagram">
+{%- if section.blocks.size > 0 -%}
+{%- for block in section.blocks -%}
+{%- assign b = block.settings -%}
+{%- assign href = b.link | default: section.settings.ig -%}
+<div class="polaroid" {{ block.shopify_attributes }}>
+{%- if b.washi != 'none' -%}<span class="washi {{ b.washi }}"></span>{%- endif -%}
+{%- if b.image != blank -%}
+<a class="ig photo" href="{{ href }}" target="_blank" rel="noopener">{{ b.image | image_url: width: 700 | image_tag: loading: 'lazy', alt: b.cap, sizes: '(max-width: 900px) 33vw, 200px' }}</a>
+{%- else -%}
+<a class="ig {{ b.style }}" href="{{ href }}" target="_blank" rel="noopener">{{ b.label | escape | newline_to_br }}</a>
+{%- endif -%}
+<span class="cap">{{ b.cap | escape }}</span>
+</div>
+{%- endfor -%}
+{%- else -%}
+{%- comment -%} Default tiles: photos from Content > Files. Add blocks in the theme editor to change them. {%- endcomment -%}
+{%- assign shots = 'KakaoTalk_Photo_2026-10-21-15-54-00_011.jpg|KakaoTalk_Photo_2026-10-21-15-54-02_013.jpg|SUN04969_compressed.jpg|Slumber_Party_1.png|De_maf_workshop_1.jpg' | split: '|' -%}
+{%- assign caps = 'atlanta, oct 16–18|passport stamps ✓|bloom haus, dallas|at the shop ♥|workshop night' | split: '|' -%}
+{%- assign alts = 'A guest laughing while showing a swatch at Seoul Social Club, Atlanta|A guest with her Seoul Social Club passport|Guests at the Bloom Haus pop-up in Dallas|Guests shopping under the neon KOLLAB sign|KOLLAB staff laughing with a guest at a workshop' | split: '|' -%}
+{%- assign tapes = 'washi foil tc||washi tl||washi foil tr' | split: '|' -%}
+{%- for f in shots -%}
+{%- assign img = images[f] -%}
+<div class="polaroid">
+{%- if tapes[forloop.index0] != blank -%}<span class="{{ tapes[forloop.index0] }}"></span>{%- endif -%}
+{%- if img -%}
+<a class="ig photo" href="{{ section.settings.ig }}" target="_blank" rel="noopener">{{ img | image_url: width: 700 | image_tag: loading: 'lazy', alt: alts[forloop.index0], sizes: '(max-width: 900px) 33vw, 200px' }}</a>
+{%- else -%}
+<a class="ig" href="{{ section.settings.ig }}" target="_blank" rel="noopener">KOLLAB</a>
+{%- endif -%}
+<span class="cap">{{ caps[forloop.index0] }}</span>
+</div>
+{%- endfor -%}
 <div class="polaroid"><a class="ig r" href="{{ section.settings.ig }}" target="_blank" rel="noopener">Let's<br>kollab.</a><span class="cap">follow us!</span></div>
+{%- endif -%}
 </div>
 <div class="logos rv d2">
 <div class="lbl">Brands we kollab with</div>
@@ -27,5 +60,14 @@
 </div>
 </section>
 {% schema %}
-{"name":"KOLLAB Home · Social","tag":"div","class":"khome","settings":[{"type":"text","id":"ig","label":"Instagram 주소","default":"https://instagram.com/kollab_la"},{"type":"text","id":"tt","label":"TikTok 주소","default":"https://www.tiktok.com/@kollab_la"},{"type":"text","id":"yt","label":"YouTube 주소","default":"https://www.youtube.com/@kollab_la"}],"presets":[{"name":"KOLLAB Home · Social"}]}
+{"name":"KOLLAB Home · Social","tag":"div","class":"khome","max_blocks":6,"settings":[{"type":"text","id":"ig","label":"Instagram 주소","default":"https://instagram.com/kollab_la"},{"type":"text","id":"tt","label":"TikTok 주소","default":"https://www.tiktok.com/@kollab_la"},{"type":"text","id":"yt","label":"YouTube 주소","default":"https://www.youtube.com/@kollab_la"}],
+"blocks":[{"type":"tile","name":"폴라로이드 사진","settings":[
+{"type":"image_picker","id":"image","label":"사진","info":"비우면 아래 글자 타일이 나와요"},
+{"type":"text","id":"cap","label":"손글씨 캡션","default":"at the shop ♥"},
+{"type":"url","id":"link","label":"링크","info":"비우면 인스타그램으로 연결"},
+{"type":"select","id":"washi","label":"마스킹테이프","options":[{"value":"none","label":"없음"},{"value":"foil tc","label":"실버 · 가운데"},{"value":"tl","label":"빨강 · 왼쪽"},{"value":"foil tr","label":"실버 · 오른쪽"}],"default":"none"},
+{"type":"textarea","id":"label","label":"글자 타일 문구 (사진 없을 때)","default":"Let's\nkollab."},
+{"type":"select","id":"style","label":"글자 타일 색 (사진 없을 때)","options":[{"value":"r","label":"빨강"},{"value":"k","label":"검정"},{"value":"f","label":"실버 호일"},{"value":"w","label":"흰색"}],"default":"r"}
+]}],
+"presets":[{"name":"KOLLAB Home · Social"}]}
 {% endschema %}
